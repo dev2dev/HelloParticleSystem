@@ -1,0 +1,56 @@
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m dealloc
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m init
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m GetGLColor
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m GetGLFormat
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m NGIsPowerOfTwo
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m NextPowerOfTwo
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m GetImageFormat
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m GetImageData
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m initWithTextureFile:mipmap:
+In ActionCheckerMemoryManagement
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m:285:70: warning: 'autorelease' should be called right after alloc & init. Do not leave the responsibility of calling 'release' until later stages.
+                NSData *texture_data    = [[NSData  alloc] initWithContentsOfFile:name];
+                                                                                      ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m:286:66: warning: 'autorelease' should be called right after alloc & init. Do not leave the responsibility of calling 'release' until later stages.
+                UIImage *ui_image               = [[UIImage alloc] initWithData:texture_data];
+                                                                                            ^
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m initWithImageFile:extension:mipmap:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m initWithPVRTextureFile:mipmap:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m ingestPVRTextureFile:
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m:437:53: warning: Value stored to 'hasAlpha' is never read
+        else                                               hasAlpha = FALSE;
+                                                           ^          ~~~~~
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m:436:53: warning: Value stored to 'hasAlpha' is never read
+        if (CFSwapInt32LittleToHost(header->bitmaskAlpha)) hasAlpha = TRUE;
+                                                           ^          ~~~~
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m makeCheckImage
+In ActionCheckerMemoryManagement
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m:404:1: warning: Cyclomatic complexity for method 'ingestPVRTextureFile:' is 22 (larger than threshold value of 20).
+- (BOOL)ingestPVRTextureFile:(NSData *)data {
+^
+In file included from /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.m:9:
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.h:20:9: warning: the name of instance variable '_width' doesn't start with the 'm' prefix.
+        GLuint _width;
+               ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.h:23:18: warning: the name of instance variable '_pvrTextureData' doesn't start with the 'm' prefix.
+        NSMutableArray *_pvrTextureData;
+                        ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.h:21:9: warning: the name of instance variable '_height' doesn't start with the 'm' prefix.
+        GLuint _height;
+               ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.h:18:9: warning: the name of instance variable '_name' doesn't start with the 'm' prefix.
+        GLuint _name;
+               ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/TEITexture.h:18:9: warning: Instance variable '_name' in class 'TEITexture' is read but never written to in its @implementation (although it may be written to in category methods).
+10 diagnostics generated.

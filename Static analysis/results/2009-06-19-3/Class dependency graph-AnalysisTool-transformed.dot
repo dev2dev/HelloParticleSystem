@@ -1,0 +1,115 @@
+digraph G
+{
+  rankdir="BT"
+  overlap = scale
+  layers="associations:instantiations:extensions:inheritance"
+
+  subgraph cluster_project_Default_project
+  {
+    label="Default project"
+
+    subgraph cluster_target_Default_target
+    {
+      label="Default target"
+
+      node[label="GLView"] class_GLView_Default_target_Default_project
+      node[label="UIView"] class_UIView_Default_target_Default_project
+      node[label="EAGLContext"] class_EAGLContext_Default_target_Default_project
+      node[label="NSTimer"] class_NSTimer_Default_target_Default_project
+      node[label="CAEAGLLayer"] class_CAEAGLLayer_Default_target_Default_project
+      node[label="GLViewController"] class_GLViewController_Default_target_Default_project
+      node[label="UIResponder"] class_UIResponder_Default_target_Default_project
+      node[label="NSNumber(NSNumberCreation)"] category_NSNumber_NSNumberCreation__Default_target_Default_project
+      node[label="EAGLContext(EAGLContextDrawableAdditions)"] category_EAGLContext_EAGLContextDrawableAdditions__Default_target_Default_project
+      node[label="GLView(private)"] category_GLView_private__Default_target_Default_project
+      node[label="NSDictionary(NSDictionaryCreation)"] category_NSDictionary_NSDictionaryCreation__Default_target_Default_project
+      node[label="UIViewController"] class_UIViewController_Default_target_Default_project
+      node[label="NSBundle"] class_NSBundle_Default_target_Default_project
+      node[label="NSMutableArray"] class_NSMutableArray_Default_target_Default_project
+      node[label="ParticleSystem"] class_ParticleSystem_Default_target_Default_project
+      node[label="UIScreen"] class_UIScreen_Default_target_Default_project
+      node[label="NSURL"] class_NSURL_Default_target_Default_project
+      node[label="UITouch"] class_UITouch_Default_target_Default_project
+      node[label="NSDate(NSExtendedDate)"] category_NSDate_NSExtendedDate__Default_target_Default_project
+      node[label="NSMutableArray(NSExtendedMutableArray)"] category_NSMutableArray_NSExtendedMutableArray__Default_target_Default_project
+      node[label="NSSet(NSExtendedSet)"] category_NSSet_NSExtendedSet__Default_target_Default_project
+      node[label="NSObject"] class_NSObject_Default_target_Default_project
+      node[label="GLTexture"] class_GLTexture_Default_target_Default_project
+      node[label="TEIParticle"] class_TEIParticle_Default_target_Default_project
+      node[label="NSString"] class_NSString_Default_target_Default_project
+      node[label="HelloParticleSystemAppDelegate"] class_HelloParticleSystemAppDelegate_Default_target_Default_project
+      node[label="UIWindow"] class_UIWindow_Default_target_Default_project
+      node[label="UIView(UIViewHierarchy)"] category_UIView_UIViewHierarchy__Default_target_Default_project
+      node[label="UIImage"] class_UIImage_Default_target_Default_project
+    }
+
+  }
+
+  edge [arrowhead = open, style = solid, layer = "associations"]
+  class_GLView_Default_target_Default_project -> category_EAGLContext_EAGLContextDrawableAdditions__Default_target_Default_project
+  class_GLView_Default_target_Default_project -> category_GLView_private__Default_target_Default_project
+  class_GLView_Default_target_Default_project -> category_NSDictionary_NSDictionaryCreation__Default_target_Default_project
+  class_GLView_Default_target_Default_project -> class_CAEAGLLayer_Default_target_Default_project
+  class_GLView_Default_target_Default_project -> class_EAGLContext_Default_target_Default_project
+  class_GLView_Default_target_Default_project -> class_GLViewController_Default_target_Default_project
+  class_GLView_Default_target_Default_project -> class_NSTimer_Default_target_Default_project
+  class_GLView_Default_target_Default_project -> class_UIResponder_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> category_NSDate_NSExtendedDate__Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> category_NSMutableArray_NSExtendedMutableArray__Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> category_NSSet_NSExtendedSet__Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_GLView_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_NSBundle_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_NSMutableArray_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_NSURL_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_ParticleSystem_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_UIScreen_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_UITouch_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> category_NSDate_NSExtendedDate__Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> category_NSMutableArray_NSExtendedMutableArray__Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_GLTexture_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_NSMutableArray_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_NSString_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_TEIParticle_Default_target_Default_project
+  class_HelloParticleSystemAppDelegate_Default_target_Default_project -> category_UIView_UIViewHierarchy__Default_target_Default_project
+  class_HelloParticleSystemAppDelegate_Default_target_Default_project -> class_GLViewController_Default_target_Default_project
+  class_HelloParticleSystemAppDelegate_Default_target_Default_project -> class_UIWindow_Default_target_Default_project
+  class_GLTexture_Default_target_Default_project -> class_UIImage_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> category_NSDate_NSExtendedDate__Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> category_NSMutableArray_NSExtendedMutableArray__Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_GLTexture_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_NSMutableArray_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_NSString_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_TEIParticle_Default_target_Default_project
+
+  edge [arrowhead = open, style = dashed, layer = "instantiations"]
+  class_GLView_Default_target_Default_project -> category_NSNumber_NSNumberCreation__Default_target_Default_project
+  class_GLView_Default_target_Default_project -> class_EAGLContext_Default_target_Default_project
+  class_GLView_Default_target_Default_project -> class_NSTimer_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_GLView_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_NSBundle_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_NSMutableArray_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_ParticleSystem_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_UIScreen_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> category_NSNumber_NSNumberCreation__Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_GLTexture_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_NSMutableArray_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_TEIParticle_Default_target_Default_project
+  class_GLTexture_Default_target_Default_project -> class_UIImage_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> category_NSNumber_NSNumberCreation__Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_GLTexture_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_NSMutableArray_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_TEIParticle_Default_target_Default_project
+
+  edge [arrowhead = ediamond, style = solid, layer = "extensions"]
+
+  edge [arrowhead = empty, style = solid, layer = "inheritance"]
+  class_GLView_Default_target_Default_project -> class_UIView_Default_target_Default_project
+  class_GLViewController_Default_target_Default_project -> class_UIViewController_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_NSObject_Default_target_Default_project
+  class_TEIParticle_Default_target_Default_project -> class_NSObject_Default_target_Default_project
+  class_HelloParticleSystemAppDelegate_Default_target_Default_project -> class_NSObject_Default_target_Default_project
+  class_GLTexture_Default_target_Default_project -> class_NSObject_Default_target_Default_project
+  class_ParticleSystem_Default_target_Default_project -> class_NSObject_Default_target_Default_project
+  class_TEIParticle_Default_target_Default_project -> class_NSObject_Default_target_Default_project
+
+}

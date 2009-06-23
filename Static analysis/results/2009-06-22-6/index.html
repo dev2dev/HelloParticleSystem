@@ -1,0 +1,246 @@
+<html>
+<head>
+<title>HelloParticleSystem - scan-build results</title>
+<link type="text/css" rel="stylesheet" href="scanview.css"/>
+<script src="sorttable.js"></script>
+<script language='javascript' type="text/javascript">
+function SetDisplay(RowClass, DisplayVal)
+{
+  var Rows = document.getElementsByTagName("tr");
+  for ( var i = 0 ; i < Rows.length; ++i ) {
+    if (Rows[i].className == RowClass) {
+      Rows[i].style.display = DisplayVal;
+    }
+  }
+}
+
+function CopyCheckedStateToCheckButtons(SummaryCheckButton) {
+  var Inputs = document.getElementsByTagName("input");
+  for ( var i = 0 ; i < Inputs.length; ++i ) {
+    if (Inputs[i].type == "checkbox") {
+      if(Inputs[i] != SummaryCheckButton) {
+        Inputs[i].checked = SummaryCheckButton.checked;
+        Inputs[i].onclick();
+	  }
+    }
+  }
+}
+
+function returnObjById( id ) {
+    if (document.getElementById) 
+        var returnVar = document.getElementById(id);
+    else if (document.all)
+        var returnVar = document.all[id];
+    else if (document.layers) 
+        var returnVar = document.layers[id];
+    return returnVar; 
+}
+
+var NumUnchecked = 0;
+
+function ToggleDisplay(CheckButton, ClassName) {
+  if (CheckButton.checked) {
+    SetDisplay(ClassName, "");
+    if (--NumUnchecked == 0) {
+      returnObjById("AllBugsCheck").checked = true;
+    }
+  }
+  else {
+    SetDisplay(ClassName, "none");
+    NumUnchecked++;
+    returnObjById("AllBugsCheck").checked = false;
+  }
+}
+</script>
+<!-- SUMMARYENDHEAD -->
+</head>
+<body>
+<h1>HelloParticleSystem - scan-build results</h1>
+
+<table>
+<tr><th>User:</th><td>turner@new-host.home</td></tr>
+<tr><th>Working Directory:</th><td>/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem</td></tr>
+<tr><th>Command Line:</th><td>xcodebuild 'CONFIGURATION_BUILD_DIR=/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Static analysis/build' 'CONFIGURATION_TEMP_DIR=/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Static analysis/build' -configuration Debug -sdk iphonesimulator3.0 -target HelloParticleSystem clean build</td></tr>
+<tr><th>Date:</th><td>Mon Jun 22 13:52:57 2009</td></tr>
+</table>
+<h2>Bug Summary</h2><table>
+<thead><tr><td>Bug Type</td><td>Quantity</td><td class="sorttable_nosort">Display?</td></tr></thead>
+<tr style="font-weight:bold"><td class="SUMM_DESC">All Bugs</td><td class="Q">50</td><td><center><input type="checkbox" id="AllBugsCheck" onClick="CopyCheckedStateToCheckButtons(this);" checked/></center></td></tr>
+<tr><th>AnalysisTool : Complexity</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">high cyclomatic complexity</td><td class="Q">1</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_analysistool_complexity_high_cyclomatic_complexity');" checked/></center></td></tr>
+<tr><th>AnalysisTool : Memory management</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">'autorelease' not called after alloc & init</td><td class="Q">5</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_analysistool_memory_management_autorelease_not_called_after_alloc_&_init');" checked/></center></td></tr>
+<tr><th>AnalysisTool : Naming conventions</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">ivar naming convention violation</td><td class="Q">39</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_analysistool_naming_conventions_ivar_naming_convention_violation');" checked/></center></td></tr>
+<tr><th>Dead store</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Dead assignment</td><td class="Q">2</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_dead_store_dead_assignment');" checked/></center></td></tr>
+<tr><th>Other</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">ivar never written</td><td class="Q">3</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_other_ivar_never_written');" checked/></center></td></tr>
+</table>
+<h2>Reports</h2>
+
+<table class="sortable" style="table-layout:automatic">
+<thead><tr>
+  <td>Bug Group</td>
+  <td class="sorttable_sorted">Bug Type<span id="sorttable_sortfwdind">&nbsp;&#x25BE;</span></td>
+  <td>File</td>
+  <td class="Q">Line</td>
+  <td class="Q">Path Length</td>
+  <td class="sorttable_nosort"></td>
+  <!-- REPORTBUGCOL -->
+</tr></thead>
+<tbody>
+<tr class="bt_analysistool_memory_management_autorelease_not_called_after_alloc_&_init"><td class="DESC">AnalysisTool : Memory management</td><td class="DESC">'autorelease' not called after alloc & init</td><td>TEITexture.m</td><td class="Q">286</td><td class="Q">1</td><td><a href="report-0uYj6a.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-0uYj6a.html" -->
+</tr>
+<tr class="bt_analysistool_memory_management_autorelease_not_called_after_alloc_&_init"><td class="DESC">AnalysisTool : Memory management</td><td class="DESC">'autorelease' not called after alloc & init</td><td>TEITexture.m</td><td class="Q">285</td><td class="Q">1</td><td><a href="report-5x0SR7.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-5x0SR7.html" -->
+</tr>
+<tr class="bt_analysistool_memory_management_autorelease_not_called_after_alloc_&_init"><td class="DESC">AnalysisTool : Memory management</td><td class="DESC">'autorelease' not called after alloc & init</td><td>GLViewController.m</td><td class="Q">30</td><td class="Q">1</td><td><a href="report-8hkzZT.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-8hkzZT.html" -->
+</tr>
+<tr class="bt_analysistool_memory_management_autorelease_not_called_after_alloc_&_init"><td class="DESC">AnalysisTool : Memory management</td><td class="DESC">'autorelease' not called after alloc & init</td><td>ParticleSystem.m</td><td class="Q">266</td><td class="Q">1</td><td><a href="report-F9qV4q.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-F9qV4q.html" -->
+</tr>
+<tr class="bt_analysistool_memory_management_autorelease_not_called_after_alloc_&_init"><td class="DESC">AnalysisTool : Memory management</td><td class="DESC">'autorelease' not called after alloc & init</td><td>ParticleSystem.m</td><td class="Q">256</td><td class="Q">1</td><td><a href="report-jJAao9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-jJAao9.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>TEITexture.m</td><td class="Q">436</td><td class="Q">1</td><td><a href="report-8MJ7cf.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-8MJ7cf.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>TEITexture.m</td><td class="Q">437</td><td class="Q">1</td><td><a href="report-nKGsuu.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-nKGsuu.html" -->
+</tr>
+<tr class="bt_analysistool_complexity_high_cyclomatic_complexity"><td class="DESC">AnalysisTool : Complexity</td><td class="DESC">high cyclomatic complexity</td><td>TEITexture.m</td><td class="Q">404</td><td class="Q">1</td><td><a href="report-FLElq7.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-FLElq7.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">46</td><td class="Q">1</td><td><a href="report-058f2e.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-058f2e.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">49</td><td class="Q">1</td><td><a href="report-0y5CR6.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-0y5CR6.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">61</td><td class="Q">1</td><td><a href="report-11Qhtc.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-11Qhtc.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">13</td><td class="Q">1</td><td><a href="report-4vb4pP.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-4vb4pP.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">15</td><td class="Q">1</td><td><a href="report-8vACmj.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-8vACmj.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">59</td><td class="Q">1</td><td><a href="report-9P3cNY.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-9P3cNY.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">19</td><td class="Q">1</td><td><a href="report-A94fuc.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-A94fuc.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">51</td><td class="Q">1</td><td><a href="report-AS7ExK.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-AS7ExK.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">30</td><td class="Q">1</td><td><a href="report-aw6HY4.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-aw6HY4.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>TEITexture.h</td><td class="Q">21</td><td class="Q">1</td><td><a href="report-dFEKll.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-dFEKll.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">58</td><td class="Q">1</td><td><a href="report-doonie.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-doonie.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">24</td><td class="Q">1</td><td><a href="report-dqetep.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-dqetep.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">47</td><td class="Q">1</td><td><a href="report-Ey7djN.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Ey7djN.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">54</td><td class="Q">1</td><td><a href="report-FuvBF3.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-FuvBF3.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">23</td><td class="Q">1</td><td><a href="report-gIUxIZ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-gIUxIZ.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">10</td><td class="Q">1</td><td><a href="report-hDFkLH.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-hDFkLH.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>TEITexture.h</td><td class="Q">20</td><td class="Q">1</td><td><a href="report-HycOY8.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-HycOY8.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>TEITexture.h</td><td class="Q">18</td><td class="Q">1</td><td><a href="report-J5dTCl.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-J5dTCl.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">17</td><td class="Q">1</td><td><a href="report-jbHyWR.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-jbHyWR.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">26</td><td class="Q">1</td><td><a href="report-KeQoh5.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-KeQoh5.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">7</td><td class="Q">1</td><td><a href="report-kjVvKc.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-kjVvKc.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">20</td><td class="Q">1</td><td><a href="report-MLgCx3.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-MLgCx3.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">53</td><td class="Q">1</td><td><a href="report-MyQPNx.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-MyQPNx.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>HelloParticleSystemAppDelegate.h</td><td class="Q">14</td><td class="Q">1</td><td><a href="report-OhY48O.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-OhY48O.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">20</td><td class="Q">1</td><td><a href="report-oqvKpU.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-oqvKpU.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">27</td><td class="Q">1</td><td><a href="report-p8kgip.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-p8kgip.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">19</td><td class="Q">1</td><td><a href="report-rh0OBU.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-rh0OBU.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">9</td><td class="Q">1</td><td><a href="report-rLSZSD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-rLSZSD.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLViewController.h</td><td class="Q">20</td><td class="Q">1</td><td><a href="report-S0DSqX.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-S0DSqX.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">22</td><td class="Q">1</td><td><a href="report-sDSI0p.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-sDSI0p.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLViewController.h</td><td class="Q">21</td><td class="Q">1</td><td><a href="report-SkXQm9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-SkXQm9.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">25</td><td class="Q">1</td><td><a href="report-sXQMDQ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-sXQMDQ.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">6</td><td class="Q">1</td><td><a href="report-Whymwq.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Whymwq.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLView.h</td><td class="Q">29</td><td class="Q">1</td><td><a href="report-WYrLLR.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-WYrLLR.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>TEITexture.h</td><td class="Q">23</td><td class="Q">1</td><td><a href="report-X76ILv.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-X76ILv.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>HelloParticleSystemAppDelegate.h</td><td class="Q">15</td><td class="Q">1</td><td><a href="report-XqeUr0.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-XqeUr0.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">12</td><td class="Q">1</td><td><a href="report-XUUKHt.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-XUUKHt.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>ParticleSystem.h</td><td class="Q">56</td><td class="Q">1</td><td><a href="report-YfXmM3.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-YfXmM3.html" -->
+</tr>
+<tr class="bt_analysistool_naming_conventions_ivar_naming_convention_violation"><td class="DESC">AnalysisTool : Naming conventions</td><td class="DESC">ivar naming convention violation</td><td>GLViewController.h</td><td class="Q">22</td><td class="Q">1</td><td><a href="report-yg3X8p.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-yg3X8p.html" -->
+</tr>
+<tr class="bt_other_ivar_never_written"><td class="DESC">Other</td><td class="DESC">ivar never written</td><td>GLView.h</td><td class="Q">20</td><td class="Q">1</td><td><a href="report-CMFwWc.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-CMFwWc.html" -->
+</tr>
+<tr class="bt_other_ivar_never_written"><td class="DESC">Other</td><td class="DESC">ivar never written</td><td>GLView.h</td><td class="Q">19</td><td class="Q">1</td><td><a href="report-tjVVrm.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-tjVVrm.html" -->
+</tr>
+<tr class="bt_other_ivar_never_written"><td class="DESC">Other</td><td class="DESC">ivar never written</td><td>TEITexture.h</td><td class="Q">18</td><td class="Q">1</td><td><a href="report-XPv09V.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-XPv09V.html" -->
+</tr>
+</tbody>
+</table>
+
+</body></html>

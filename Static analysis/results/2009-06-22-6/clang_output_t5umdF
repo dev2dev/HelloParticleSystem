@@ -1,0 +1,106 @@
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m _checkGLError
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m _addVertex
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m dealloc
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m init
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m initAtLocation:birthTime:willPush:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m dealloc
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m init
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m initAtLocation:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m setDecay:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m fill:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m animateBetter:
+In ActionCheckerMemoryManagement
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m:266:100: warning: 'autorelease' should be called right after alloc & init. Do not leave the responsibility of calling 'release' until later stages.
+                        TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO];
+                                                                                                                        ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m:256:102: warning: 'autorelease' should be called right after alloc & init. Do not leave the responsibility of calling 'release' until later stages.
+                                TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES];
+                                                                                                                                 ^
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m VFPFastAbs
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m VFPFastSin
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m TEIFastCos
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m drawBetter
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m buildBackdropTextureWithWidth:andHeight:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m buildTextureCoordinateTable
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m initializeTextures
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m render
+In ActionCheckerMemoryManagement
+In file included from /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.m:2:
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:12:9: warning: the name of instance variable 'textureAtlasS' doesn't start with the 'm' prefix.
+    int textureAtlasS;
+        ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:13:9: warning: the name of instance variable 'textureAtlasT' doesn't start with the 'm' prefix.
+    int textureAtlasT;
+        ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:9:10: warning: the name of instance variable 'location' doesn't start with the 'm' prefix.
+        CGPoint location;
+                ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:15:11: warning: the name of instance variable 'alpha' doesn't start with the 'm' prefix.
+    float alpha;
+          ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:17:11: warning: the name of instance variable 'size' doesn't start with the 'm' prefix.
+    float size;
+          ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:19:11: warning: the name of instance variable 'rotation' doesn't start with the 'm' prefix.
+    float rotation;
+          ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:10:10: warning: the name of instance variable 'velocity' doesn't start with the 'm' prefix.
+        CGPoint velocity;
+                ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:20:11: warning: the name of instance variable 'rotationDirection' doesn't start with the 'm' prefix.
+    float rotationDirection;
+          ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:7:10: warning: the name of instance variable 'alive' doesn't start with the 'm' prefix.
+    BOOL alive;
+         ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:6:9: warning: the name of instance variable 'birth' doesn't start with the 'm' prefix.
+        double birth;
+               ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:53:20: warning: the name of instance variable '_birth' doesn't start with the 'm' prefix.
+    NSTimeInterval _birth;
+                   ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:54:17: warning: the name of instance variable '_mostRecentTime' doesn't start with the 'm' prefix.
+        NSTimeInterval _mostRecentTime;
+                       ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:56:10: warning: the name of instance variable '_initialAnimationStep' doesn't start with the 'm' prefix.
+    BOOL _initialAnimationStep;
+         ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:49:6: warning: the name of instance variable '_particleTraunch' doesn't start with the 'm' prefix.
+        int _particleTraunch;
+            ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:51:13: warning: the name of instance variable '_location' doesn't start with the 'm' prefix.
+    CGPoint _location;
+            ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:61:12: warning: the name of instance variable 'touchPhaseName' doesn't start with the 'm' prefix.
+        NSString* touchPhaseName;
+                  ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:58:12: warning: the name of instance variable '_lastTime' doesn't start with the 'm' prefix.
+    double _lastTime;
+           ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:59:10: warning: the name of instance variable '_decay' doesn't start with the 'm' prefix.
+    BOOL _decay;
+         ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:47:22: warning: the name of instance variable '_particles' doesn't start with the 'm' prefix.
+        NSMutableArray*     _particles;
+                            ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/ParticleSystem.h:46:18: warning: the name of instance variable '_openglPackedVertices' doesn't start with the 'm' prefix.
+        NSMutableArray* _openglPackedVertices;
+                        ^
+22 diagnostics generated.

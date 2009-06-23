@@ -1,0 +1,43 @@
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m GetImageFormat
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m GetBPP
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m GetGLColor
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m GetGLFormat
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m NGIsPowerOfTwo
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m NextPowerOfTwo
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m GetImageData
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m:287:20: warning: coercion from 'unsigned int' to 'unsigned short' may alter its value.
+                        *outPixel16++ = ((((*inPixel32 >> 0) & 0xFF) >> 3) << 11) 
+                                        ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m:259:18: warning: coercion from 'int' to 'unsigned short' may alter its value.
+                        *outPixel16 = *outPixel16 << 1 | 0x0001;
+                                      ^
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m initWithName:andWidth:andHeight:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m initWithName:storeAsPowerOfTwo:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m bind
+In ActionCheckerMemoryManagement
+In file included from /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.m:30:
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.h:38:6: warning: the name of instance variable 'height' doesn't start with the 'm' prefix.
+        int height;
+            ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.h:37:6: warning: the name of instance variable 'width' doesn't start with the 'm' prefix.
+        int width;
+            ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.h:40:12: warning: the name of instance variable '_textureID' doesn't start with the 'm' prefix.
+    GLuint _textureID;
+           ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.h:35:7: warning: the name of instance variable 'isPowerOfTwo' doesn't start with the 'm' prefix.
+        BOOL isPowerOfTwo;
+             ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLTexture.h:40:12: warning: Instance variable '_textureID' in class 'GLTexture' is read but never written to in its @implementation (although it may be written to in category methods).
+    GLuint _textureID;
+           ^
+7 diagnostics generated.

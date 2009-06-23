@@ -1,0 +1,12 @@
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/HelloParticleSystemAppDelegate.m dealloc
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/HelloParticleSystemAppDelegate.m applicationDidFinishLaunching:
+In ActionCheckerMemoryManagement
+In file included from /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/HelloParticleSystemAppDelegate.m:9:
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/HelloParticleSystemAppDelegate.h:14:15: warning: the name of instance variable 'window' doesn't start with the 'm' prefix.
+        UIWindow                                *window;
+                                                 ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/HelloParticleSystemAppDelegate.h:15:21: warning: the name of instance variable 'controller' doesn't start with the 'm' prefix.
+        GLViewController                *controller;
+                                         ^
+2 diagnostics generated.

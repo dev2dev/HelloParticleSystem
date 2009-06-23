@@ -1,0 +1,40 @@
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m dealloc
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m loadView
+In ActionCheckerMemoryManagement
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m:30:57: warning: 'autorelease' should be called right after alloc & init. Do not leave the responsibility of calling 'release' until later stages.
+        glView = [[GLView alloc] initWithFrame:applicationFrame];
+                                                               ^
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m viewDidLoad
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m viewWillAppear:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m viewWillDisappear:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m setupView:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m drawView:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m _playBoom
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m phaseName:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m touchesBegan:withEvent:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m touchesMoved:withEvent:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m touchesEnded:withEvent:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m touchesCancelled:withEvent:
+In ActionCheckerMemoryManagement
+In file included from /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.m:12:
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.h:20:19: warning: the name of instance variable '_touchedParticleSystem' doesn't start with the 'm' prefix.
+        ParticleSystem          *_touchedParticleSystem;
+                                 ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.h:22:22: warning: the name of instance variable '_deadParticleSystems' doesn't start with the 'm' prefix.
+    NSMutableArray              *_deadParticleSystems;
+                                 ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLViewController.h:21:22: warning: the name of instance variable '_particleSystems' doesn't start with the 'm' prefix.
+    NSMutableArray              *_particleSystems;
+                                 ^
+4 diagnostics generated.

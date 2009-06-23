@@ -1,0 +1,74 @@
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m layerClass
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m initWithFrame:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m initWithCoder:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m initGLES
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m controller
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m setController:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m layoutSubviews
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m createFramebuffer
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m destroyFramebuffer
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m startAnimation
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m stopAnimation
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m setAnimationInterval:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m drawView
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m dealloc
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m touchesBegan:withEvent:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m touchesMoved:withEvent:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m touchesEnded:withEvent:
+In ActionCheckerMemoryManagement
+ANALYZE: /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m touchesCancelled:withEvent:
+In ActionCheckerMemoryManagement
+In file included from /Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.m:11:
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:25:9: warning: the name of instance variable 'depthRenderbuffer' doesn't start with the 'm' prefix.
+        GLuint depthRenderbuffer;
+               ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:19:8: warning: the name of instance variable 'backingWidth' doesn't start with the 'm' prefix.
+        GLint backingWidth;
+              ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:20:8: warning: the name of instance variable 'backingHeight' doesn't start with the 'm' prefix.
+        GLint backingHeight;
+              ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:29:20: warning: the name of instance variable 'controller' doesn't start with the 'm' prefix.
+        GLViewController *controller;
+                          ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:30:7: warning: the name of instance variable 'controllerSetup' doesn't start with the 'm' prefix.
+        BOOL controllerSetup;
+             ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:22:15: warning: the name of instance variable 'context' doesn't start with the 'm' prefix.
+        EAGLContext *context;
+                     ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:23:9: warning: the name of instance variable 'viewRenderbuffer' doesn't start with the 'm' prefix.
+        GLuint viewRenderbuffer;
+               ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:24:9: warning: the name of instance variable 'viewFramebuffer' doesn't start with the 'm' prefix.
+        GLuint viewFramebuffer;
+               ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:26:11: warning: the name of instance variable 'animationTimer' doesn't start with the 'm' prefix.
+        NSTimer *animationTimer;
+                 ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:27:17: warning: the name of instance variable 'animationInterval' doesn't start with the 'm' prefix.
+        NSTimeInterval animationInterval;
+                       ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:19:8: warning: Instance variable 'backingWidth' in class 'GLView' is read but never written to in its @implementation (although it may be written to in category methods).
+        GLint backingWidth;
+              ^
+/Users/turner/iPhoneDevelopment/play/opengl/HelloParticleSystem/Classes/GLView.h:20:8: warning: Instance variable 'backingHeight' in class 'GLView' is read but never written to in its @implementation (although it may be written to in category methods).
+        GLint backingHeight;
+              ^
+12 diagnostics generated.
