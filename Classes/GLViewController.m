@@ -56,10 +56,10 @@ static SystemSoundID _boomSoundIDs[3];
 	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
 
-	[ParticleSystem initializeTextures];
+	[ParticleSystem buildParticleTextureAtlas];
 	
 	GLView *glView = (GLView *)self.view;
-	[ParticleSystem buildBackdropTextureWithWidth:glView.backingWidth andHeight:glView.backingHeight];
+	[ParticleSystem buildBackdropWithWidth:[glView backingWidth] andHeight:[glView backingHeight]];
 		
 }
 
@@ -133,14 +133,7 @@ static SystemSoundID _boomSoundIDs[3];
 
 - (void)drawView:(GLView*)view {
 	
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-//	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
 	
-	// draw particles
-	glBindTexture(GL_TEXTURE_2D, [[ParticleSystem particleTexture] name]);
-
     NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
 	
 	if (nil != _touchedParticleSystem) {
@@ -158,9 +151,6 @@ static SystemSoundID _boomSoundIDs[3];
 	} // if (nil != _touchedParticleSystem)
 
 	
-//	NSMutableArray* ds = [NSMutableArray array];
-
-//	int i = 0;
     for (ParticleSystem *ps in _particleSystems) {
 		
 		if ([ps animateBetter:time]) {
@@ -169,20 +159,12 @@ static SystemSoundID _boomSoundIDs[3];
 			
 		} else {
 			
-//			[ds						addObject:[NSNumber numberWithInt:i]];
 			[_deadParticleSystems	addObject:ps];
         }
-		
-//		++i;
 		
     } // for (_particleSystems)
 
 	
-//	for (NSNumber *n in ds) {
-//		
-//        [_particleSystems removeObjectAtIndex:[n intValue]];
-//    }
-
 	for (ParticleSystem *ps in _deadParticleSystems) {
 		
         [_particleSystems removeObjectIdenticalTo:ps];
@@ -190,8 +172,17 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	[_deadParticleSystems removeAllObjects];
 	
+
+
 	
-    [ParticleSystem render];
+	
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	//	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
+	
+    [ParticleSystem renderParticles];
 	
 }
 

@@ -77,13 +77,14 @@
 
 - (void)setDecay:(BOOL)decay;
 
-+ (void)buildTextureCoordinateTable;
-+ (void)buildBackdropTextureWithWidth:(int)width andHeight:(int)height;
-+ (void)initializeTextures;
++ (void)buildTextureAtlasIndexTable;
++ (void)buildBackdropWithWidth:(int)width andHeight:(int)height;
++ (void)buildParticleTextureAtlas;
 
 + (TEITexture *)particleTexture;
 + (TEITexture *)backdropTexture;
 
-+ (void)render;
++ (void)renderParticles;
++ (void)renderBackground;
 
 @end

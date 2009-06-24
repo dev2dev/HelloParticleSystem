@@ -2,8 +2,6 @@
 #import <OpenGLES/ES1/gl.h>
 #import "ParticleSystem.h"
 
-#define MAX_VERTS (20000)
-static unsigned _vertexCount = 0;
 
 static void _checkGLError(void) {
 	
@@ -14,13 +12,20 @@ static void _checkGLError(void) {
     }
 }
 
-typedef struct _openGLVertexData { short xy[2]; unsigned argb; float st[2]; } openGLVertexData;
+typedef struct _ParticleSystemOpenGLVertexData { short xy[2]; unsigned argb; float st[2]; } ParticleSystemOpenGLVertexData;
 
-static openGLVertexData _interleavedOpenGLVertices[MAX_VERTS];
+static unsigned ParticleSystemParticleVertexCount = 0;
 
-static void _addVertex(float x, float y, float s, float t, unsigned argb) {
+#define MAX_VERTS (20000)
+static ParticleSystemOpenGLVertexData ParticleSystemParticleVertices[MAX_VERTS];
+
+static ParticleSystemOpenGLVertexData ParticleSystemBackdropRectangeVertices[4];
+
+static void 
+ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb) {
 	
-    openGLVertexData *vert = &_interleavedOpenGLVertices[_vertexCount];
+//    ParticleSystemOpenGLVertexData *vert = &ParticleSystemParticleVertices[ParticleSystemParticleVertexCount];
+    ParticleSystemOpenGLVertexData *vert = &vertices[ParticleSystemParticleVertexCount];	
 	
 	// spatial vertex
     vert->xy[0] = (short)x;
@@ -33,7 +38,7 @@ static void _addVertex(float x, float y, float s, float t, unsigned argb) {
 	// alpha | red | green | blue
     vert->argb = argb;
 	
-    _vertexCount++;
+    ParticleSystemParticleVertexCount++;
 }
 
 #define TEXTURE_ATLAS_NXN_DIMENSION (3)
@@ -180,7 +185,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
     return self;
 }
 
-+ (void)initializeTextures {
++ (void)buildParticleTextureAtlas {
 	
 	ParticleSystemParticleTexture = 
 	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3"				extension:@"png" mipmap:YES ];
@@ -191,11 +196,11 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 //	ParticleSystemParticleTexture = 
 //	[ [TEITexture alloc] initWithImageFile:@"particles_dugla"			extension:@"png" mipmap:YES ];
 	
-	[self buildTextureCoordinateTable];
+	[self buildTextureAtlasIndexTable];
 		
 }
 
-+ (void)buildTextureCoordinateTable {
++ (void)buildTextureAtlasIndexTable {
 	
 	static BOOL textureCoordinateTableIsBuilt = NO;
 	
@@ -217,14 +222,34 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 }
 
-+ (void)buildBackdropTextureWithWidth:(int)width andHeight:(int)height {
++ (void)buildBackdropWithWidth:(int)width andHeight:(int)height {
 	
-    if (!ParticleSystemBackdropTexture) {
-		
-		ParticleSystemBackdropTexture = 
-		[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2" extension:@"png" mipmap:YES ];
-		
-	}
+	// OpenGL defaults to CCW winding rule for triangles.
+	// The patten is: V0 -> V1 -> V2 then V2 -> V1 -> V3 ... etc.
+	// At draw time I use glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertexCount)
+	// addVertex(x,y,  r,g,b,a,  s,t)
+	
+//	ParticleSystemOpenGLVertexData { short xy[2]; unsigned argb; float st[2]; } ParticleSystemOpenGLVertexData;
+//	ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb)	
+
+	unsigned char a = 255;       
+	unsigned char rgb[3] = { 255, 255, 255 };
+	unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
+	
+	// V0
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, -1.0f, -1.0f, 0.0f, 0.0f, argb);
+	
+	// V1
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices,  1.0f, -1.0f, 1.0f, 0.0f, argb);
+	
+	// V2
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, -1.0f,  1.0f, 0.0f, 1.0f, argb);
+	
+	// V3
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices,  1.0f,  1.0f, 1.0f, 1.0f, argb);
+	
+	ParticleSystemBackdropTexture = 
+	[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2" extension:@"png" mipmap:YES ];
 	
 }
 
@@ -472,27 +497,27 @@ static inline float TEIFastCos(float x) {
         unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
         
         // Triangle #1
-        _addVertex(   topLeftX,    topLeftY, minST[0], minST[1], argb);
-        _addVertex(  topRightX,   topRightY, maxST[0], minST[1], argb);
-        _addVertex(bottomLeftX, bottomLeftY, minST[0], maxST[1], argb);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topLeftX,    topLeftY, minST[0], minST[1], argb);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,   topRightY, maxST[0], minST[1], argb);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX, bottomLeftY, minST[0], maxST[1], argb);
         
         // Triangle #2
-        _addVertex(   topRightX,    topRightY, maxST[0], minST[1], argb);
-        _addVertex( bottomLeftX,  bottomLeftY, minST[0], maxST[1], argb);
-        _addVertex(bottomRightX, bottomRightY, maxST[0], maxST[1], argb);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,    topRightY, maxST[0], minST[1], argb);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,  bottomLeftY, minST[0], maxST[1], argb);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomRightX, bottomRightY, maxST[0], maxST[1], argb);
         
-//        _vertexCount += 6;
+//        ParticleSystemParticleVertexCount += 6;
         
         // Don't go over vert limit!
-        if (_vertexCount >= MAX_VERTS) {
+        if (ParticleSystemParticleVertexCount >= MAX_VERTS) {
 			
-            _vertexCount = MAX_VERTS;
+            ParticleSystemParticleVertexCount = MAX_VERTS;
             break;
         }
         
     } // for (_particles)
 
-//	NSLog(@"drawBetter: Particles(%d) Vertices(%d)", _particles.count, _vertexCount);
+//	NSLog(@"drawBetter: Particles(%d) Vertices(%d)", _particles.count, ParticleSystemParticleVertexCount);
 
 }
 
@@ -504,19 +529,34 @@ static inline float TEIFastCos(float x) {
 	return ParticleSystemBackdropTexture;
 }
 
-+ (void)render {
++ (void)renderBackground {
 	
-    if (!_vertexCount) {
-		return;
-	}
+	glBindTexture(GL_TEXTURE_2D, [[ParticleSystem backdropTexture] name]);
 	
-    glVertexPointer(  2, GL_SHORT,         sizeof(openGLVertexData), &_interleavedOpenGLVertices[0].xy  );
-    glTexCoordPointer(2, GL_FLOAT,         sizeof(openGLVertexData), &_interleavedOpenGLVertices[0].st  );
-    glColorPointer(   4, GL_UNSIGNED_BYTE, sizeof(openGLVertexData), &_interleavedOpenGLVertices[0].argb);
+    glVertexPointer(  2, GL_SHORT,         sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemBackdropRectangeVertices[0].xy  );
+    glTexCoordPointer(2, GL_FLOAT,         sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemBackdropRectangeVertices[0].st  );
+    glColorPointer(   4, GL_UNSIGNED_BYTE, sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemBackdropRectangeVertices[0].argb);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
-    glDrawArrays(GL_TRIANGLES, 0, _vertexCount);
+}
+
++ (void)renderParticles {
 	
-    _vertexCount = 0;
+	//    if (!ParticleSystemParticleVertexCount) {
+	//		return;
+	//	}
+	
+	glBindTexture(GL_TEXTURE_2D, [[ParticleSystem particleTexture] name]);
+	
+    glVertexPointer(  2, GL_SHORT,         sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemParticleVertices[0].xy  );
+    glTexCoordPointer(2, GL_FLOAT,         sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemParticleVertices[0].st  );
+    glColorPointer(   4, GL_UNSIGNED_BYTE, sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemParticleVertices[0].argb);
+	
+    glDrawArrays(GL_TRIANGLES, 0, ParticleSystemParticleVertexCount);
+	
+	//	NSLog(@"render: ParticleSystemParticleVertexCount(%d)", ParticleSystemParticleVertexCount);
+	
+    ParticleSystemParticleVertexCount = 0;
 }
 
 @end
