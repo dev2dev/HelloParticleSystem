@@ -116,9 +116,10 @@ static SystemSoundID _boomSoundIDs[3];
 	
     glEnable(GL_BLEND);
 
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	glBlendFunc(GL_ONE,			GL_ONE_MINUS_SRC_ALPHA);
+	
+	// THIS IS SUPPOSED TO DO STREAKING
+//	glBlendFunc(GL_SRC_ALPHA,	GL_ONE);	
 	
 	
     glEnableClientState(GL_VERTEX_ARRAY);
