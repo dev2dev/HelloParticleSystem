@@ -1,9 +1,6 @@
 
-#import "ParticleSystem.h"
-
 #import <OpenGLES/ES1/gl.h>
-
-#import "TEITexture.h"
+#import "ParticleSystem.h"
 
 #define MAX_VERTS (20000)
 static unsigned _vertexCount = 0;
@@ -41,11 +38,6 @@ static void _addVertex(float x, float y, float s, float t, unsigned argb) {
 
 #define TEXTURE_ATLAS_NXN_DIMENSION (3)
 #define NUM_TEXTURES (TEXTURE_ATLAS_NXN_DIMENSION * TEXTURE_ATLAS_NXN_DIMENSION)
-
-static TEITexture *_particleTexture = nil;
-static TEITexture *_backDropTexture = nil;
-
-static NSMutableArray* _texture_coordinates = nil;
 
 @implementation TEIParticle
 
@@ -139,6 +131,10 @@ static NSMutableArray* _texture_coordinates = nil;
 
 @implementation ParticleSystem
 
+static TEITexture		*ParticleSystemParticleTexture		= nil;
+static TEITexture		*ParticleSystemBackdropTexture		= nil;
+static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
+
 @synthesize location=_location;
 @synthesize particleTraunch=_particleTraunch;
 @synthesize touchPhaseName;
@@ -186,14 +182,17 @@ static NSMutableArray* _texture_coordinates = nil;
 
 + (void)initializeTextures {
 	
-	_particleTexture = [ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3"				extension:@"png" mipmap:YES ];
-//	_particleTexture = [ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"	extension:@"png" mipmap:YES ];
-//	_particleTexture = [ [TEITexture alloc] initWithImageFile:@"particles_dugla"			extension:@"png" mipmap:YES ];
+	ParticleSystemParticleTexture = 
+	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3"				extension:@"png" mipmap:YES ];
+	
+//	ParticleSystemParticleTexture = 
+//	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"	extension:@"png" mipmap:YES ];
+	
+//	ParticleSystemParticleTexture = 
+//	[ [TEITexture alloc] initWithImageFile:@"particles_dugla"			extension:@"png" mipmap:YES ];
 	
 	[self buildTextureCoordinateTable];
-	
-//	[ParticleSystem buildBackdropTextureWithWidth:backingWidth andHeight:backingHeight];	
-	
+		
 }
 
 + (void)buildTextureCoordinateTable {
@@ -204,14 +203,14 @@ static NSMutableArray* _texture_coordinates = nil;
 		return;
 	}
 	
-	_texture_coordinates = [[NSMutableArray alloc] init];
+	ParticleSystemTextureCoordinates = [[NSMutableArray alloc] init];
 	
 	for (int i = 0; i < TEXTURE_ATLAS_NXN_DIMENSION; i++) {
 		
 		float t = (float)i;
 		
 		t /= ((float)TEXTURE_ATLAS_NXN_DIMENSION);
-		[_texture_coordinates addObject:[NSNumber numberWithFloat:t]];
+		[ParticleSystemTextureCoordinates addObject:[NSNumber numberWithFloat:t]];
 	}
 	
 	textureCoordinateTableIsBuilt = YES;
@@ -220,12 +219,10 @@ static NSMutableArray* _texture_coordinates = nil;
 
 + (void)buildBackdropTextureWithWidth:(int)width andHeight:(int)height {
 	
-    if (!_backDropTexture) {
+    if (!ParticleSystemBackdropTexture) {
 		
-		_backDropTexture = 
-		[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent" extension:@"png" mipmap:YES ];
-		
-		//		[[GLTexture alloc] initWithName:@"kids_grid_3x3_translucent.png" andWidth:width andHeight:height];
+		ParticleSystemBackdropTexture = 
+		[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2" extension:@"png" mipmap:YES ];
 		
 	}
 	
@@ -464,8 +461,8 @@ static inline float TEIFastCos(float x) {
 		int s_index = (int)particle.textureAtlasS;
 		int t_index = (int)particle.textureAtlasT;
 		
-		minST[0] = [[_texture_coordinates objectAtIndex:s_index] floatValue];
-		minST[1] = [[_texture_coordinates objectAtIndex:t_index] floatValue];
+		minST[0] = [[ParticleSystemTextureCoordinates objectAtIndex:s_index] floatValue];
+		minST[1] = [[ParticleSystemTextureCoordinates objectAtIndex:t_index] floatValue];
 		
 		maxST[0] = minST[0] + delta; 
 		maxST[1] = minST[1] + delta;        
@@ -499,6 +496,14 @@ static inline float TEIFastCos(float x) {
 
 }
 
++ (TEITexture *)particleTexture {
+	return ParticleSystemParticleTexture;
+}
+
++ (TEITexture *)backdropTexture {
+	return ParticleSystemBackdropTexture;
+}
+
 + (void)render {
 	
     if (!_vertexCount) {
@@ -513,6 +518,7 @@ static inline float TEIFastCos(float x) {
 	
     _vertexCount = 0;
 }
+
 @end
 
 

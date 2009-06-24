@@ -30,8 +30,10 @@
 	BOOL controllerSetup;
 }
 
-@property(nonatomic, assign) GLViewController *controller;
+@property GLint backingWidth;
+@property GLint backingHeight;
 @property NSTimeInterval animationInterval;
+@property(nonatomic, assign) GLViewController *controller;
 
 -(void)startAnimation;
 -(void)stopAnimation;

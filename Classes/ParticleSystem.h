@@ -1,6 +1,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "TEITexture.h"
+
 @interface TEIParticle : NSObject {
 	
 	double birth;
@@ -78,6 +80,10 @@
 + (void)buildTextureCoordinateTable;
 + (void)buildBackdropTextureWithWidth:(int)width andHeight:(int)height;
 + (void)initializeTextures;
+
++ (TEITexture *)particleTexture;
++ (TEITexture *)backdropTexture;
+
 + (void)render;
 
 @end

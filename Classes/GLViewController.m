@@ -57,6 +57,9 @@ static SystemSoundID _boomSoundIDs[3];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
 
 	[ParticleSystem initializeTextures];
+	
+	GLView *glView = (GLView *)self.view;
+	[ParticleSystem buildBackdropTextureWithWidth:glView.backingWidth andHeight:glView.backingHeight];
 		
 }
 
@@ -133,7 +136,11 @@ static SystemSoundID _boomSoundIDs[3];
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 //	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
 	
+	// draw particles
+	glBindTexture(GL_TEXTURE_2D, [[ParticleSystem particleTexture] name]);
+
     NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
 	
 	if (nil != _touchedParticleSystem) {

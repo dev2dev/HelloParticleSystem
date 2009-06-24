@@ -21,7 +21,10 @@
 
 @implementation GLView
 
+@synthesize backingWidth;
+@synthesize backingHeight;
 @synthesize animationInterval;
+
 + (Class) layerClass {
 	return [CAEAGLLayer class];
 }
