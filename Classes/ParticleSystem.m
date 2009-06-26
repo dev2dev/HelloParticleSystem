@@ -14,15 +14,18 @@ static void _checkGLError(void) {
 
 typedef struct _ParticleSystemOpenGLVertexData { short xy[2]; unsigned argb; float st[2]; } ParticleSystemOpenGLVertexData;
 
-static unsigned ParticleSystemParticleVertexCount = 0;
 
+// Particle vertext array
 #define MAX_VERTS (20000)
+static int ParticleSystemParticleVertexCount = 0;
 static ParticleSystemOpenGLVertexData ParticleSystemParticleVertices[MAX_VERTS];
 
+// Background rectangular card
+static int ParticleSystemBackdropRectangeVertexCount = 0;
 static ParticleSystemOpenGLVertexData ParticleSystemBackdropRectangeVertices[4];
 
 static void 
-ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb) {
+ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb, int *counter) {
 	
 //    ParticleSystemOpenGLVertexData *vert = &ParticleSystemParticleVertices[ParticleSystemParticleVertexCount];
     ParticleSystemOpenGLVertexData *vert = &vertices[ParticleSystemParticleVertexCount];	
@@ -38,7 +41,7 @@ ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float
 	// alpha | red | green | blue
     vert->argb = argb;
 	
-    ParticleSystemParticleVertexCount++;
+	(*counter)++;
 }
 
 #define TEXTURE_ATLAS_NXN_DIMENSION (3)
@@ -222,31 +225,63 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 }
 
-+ (void)buildBackdropWithWidth:(int)width andHeight:(int)height {
++ (void)buildBackdropWidth:(int)width Height:(int)height {
 	
 	// OpenGL defaults to CCW winding rule for triangles.
 	// The patten is: V0 -> V1 -> V2 then V2 -> V1 -> V3 ... etc.
 	// At draw time I use glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertexCount)
 	// addVertex(x,y,  r,g,b,a,  s,t)
 	
-//	ParticleSystemOpenGLVertexData { short xy[2]; unsigned argb; float st[2]; } ParticleSystemOpenGLVertexData;
-//	ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb)	
-
 	unsigned char a = 255;       
 	unsigned char rgb[3] = { 255, 255, 255 };
 	unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
 	
 	// V0
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, -1.0f, -1.0f, 0.0f, 0.0f, argb);
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, -1.0f, -1.0f, 0.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
 	
 	// V1
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices,  1.0f, -1.0f, 1.0f, 0.0f, argb);
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices,  1.0f, -1.0f, 1.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
 	
 	// V2
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, -1.0f,  1.0f, 0.0f, 1.0f, argb);
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, -1.0f,  1.0f, 0.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
 	
 	// V3
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices,  1.0f,  1.0f, 1.0f, 1.0f, argb);
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices,  1.0f,  1.0f, 1.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+	
+	ParticleSystemBackdropTexture = 
+	[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2" extension:@"png" mipmap:YES ];
+	
+}
+
++ (void)buildBackdropWithBounds:(CGRect)bounds {
+	
+	// OpenGL defaults to CCW winding rule for triangles.
+	// The patten is: V0 -> V1 -> V2 then V2 -> V1 -> V3 ... etc.
+	// At draw time I use glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertexCount)
+	// addVertex(x,y,  r,g,b,a,  s,t)
+		
+	// Good ole 8-bit pixels. Format is: a r g b
+	unsigned char a = 255;       
+	unsigned char rgb[3] = { 255, 255, 255 };
+	unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
+	
+	GLfloat n = bounds.origin.y;
+	GLfloat s = bounds.size.width;
+	
+	GLfloat w = bounds.origin.x;
+	GLfloat e = bounds.size.height;
+	
+	// V0
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, s, w, 0.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+	
+	// V1
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, s, e, 1.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+	
+	// V2
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, n, w, 0.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+	
+	// V3
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, n, e, 1.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
 	
 	ParticleSystemBackdropTexture = 
 	[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2" extension:@"png" mipmap:YES ];
@@ -497,14 +532,14 @@ static inline float TEIFastCos(float x) {
         unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
         
         // Triangle #1
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topLeftX,    topLeftY, minST[0], minST[1], argb);
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,   topRightY, maxST[0], minST[1], argb);
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX, bottomLeftY, minST[0], maxST[1], argb);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topLeftX,		topLeftY,		minST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,		topRightY,		maxST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,	bottomLeftY,	minST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
         
         // Triangle #2
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,    topRightY, maxST[0], minST[1], argb);
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,  bottomLeftY, minST[0], maxST[1], argb);
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomRightX, bottomRightY, maxST[0], maxST[1], argb);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,		topRightY,		maxST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,	bottomLeftY,	minST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomRightX,	bottomRightY,	maxST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
         
 //        ParticleSystemParticleVertexCount += 6;
         

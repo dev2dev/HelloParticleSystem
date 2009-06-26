@@ -59,7 +59,8 @@ static SystemSoundID _boomSoundIDs[3];
 	[ParticleSystem buildParticleTextureAtlas];
 	
 	GLView *glView = (GLView *)self.view;
-	[ParticleSystem buildBackdropWithWidth:[glView backingWidth] andHeight:[glView backingHeight]];
+//	[ParticleSystem buildBackdropWidth:[glView backingWidth] Height:[glView backingHeight]];
+	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
 		
 }
 

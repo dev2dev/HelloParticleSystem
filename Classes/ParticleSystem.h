@@ -78,7 +78,8 @@
 - (void)setDecay:(BOOL)decay;
 
 + (void)buildTextureAtlasIndexTable;
-+ (void)buildBackdropWithWidth:(int)width andHeight:(int)height;
++ (void)buildBackdropWidth:(int)width Height:(int)height;
++ (void)buildBackdropWithBounds:(CGRect)bounds;
 + (void)buildParticleTextureAtlas;
 
 + (TEITexture *)particleTexture;
