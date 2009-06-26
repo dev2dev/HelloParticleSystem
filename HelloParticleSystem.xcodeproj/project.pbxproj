@@ -12,7 +12,8 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		314520DD0FF2820C0032465B /* farrow-design-2x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 314520DC0FF2820C0032465B /* farrow-design-2x2.png */; };
+		312CDD880FF569490007E3D7 /* swirl-rose.png in Resources */ = {isa = PBXBuildFile; fileRef = 312CDD870FF569490007E3D7 /* swirl-rose.png */; };
+		312CDDB20FF56C390007E3D7 /* kids_grid_3x3_translucent.png in Resources */ = {isa = PBXBuildFile; fileRef = 312CDDB10FF56C390007E3D7 /* kids_grid_3x3_translucent.png */; };
 		315FA3EC0FE6CB9B0059E81D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 315FA3EB0FE6CB9B0059E81D /* AudioToolbox.framework */; };
 		31B30A500FE699060024849F /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31B30A4F0FE699060024849F /* MainWindow.xib */; };
 		31B30A580FE699400024849F /* GLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B30A560FE699400024849F /* GLViewController.m */; };
@@ -20,7 +21,6 @@
 		31B30A690FE69C020024849F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31B30A670FE69C020024849F /* QuartzCore.framework */; };
 		31B30AE40FE6A2D40024849F /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B30AE30FE6A2D40024849F /* GLView.m */; };
 		31E31A7D0FF114E000B81100 /* kids_grid_3x3.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E31A7A0FF114E000B81100 /* kids_grid_3x3.png */; };
-		31E31A7E0FF114E000B81100 /* kids_grid_3x3_translucent.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E31A7B0FF114E000B81100 /* kids_grid_3x3_translucent.png */; };
 		31E31A7F0FF114E000B81100 /* particles_dugla.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E31A7C0FF114E000B81100 /* particles_dugla.png */; };
 		31ECF9B40FEC34CF00F0A982 /* TEITexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 31ECF9B30FEC34CF00F0A982 /* TEITexture.m */; };
 		31FB3ABC0FE6C7EB00630959 /* ParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FB3ABA0FE6C7EB00630959 /* ParticleSystem.m */; };
@@ -37,7 +37,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		314520DC0FF2820C0032465B /* farrow-design-2x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "farrow-design-2x2.png"; path = "artwork/farrow-design-2x2.png"; sourceTree = "<group>"; };
+		312CDD870FF569490007E3D7 /* swirl-rose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "swirl-rose.png"; path = "../HelloTexture/swirl-rose.png"; sourceTree = SOURCE_ROOT; };
+		312CDDB10FF56C390007E3D7 /* kids_grid_3x3_translucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kids_grid_3x3_translucent.png; path = artwork/kids_grid_3x3_translucent.png; sourceTree = "<group>"; };
 		315FA3EB0FE6CB9B0059E81D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		31B30A4F0FE699060024849F /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		31B30A520FE699400024849F /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantsAndMacros.h; sourceTree = "<group>"; };
@@ -48,7 +49,6 @@
 		31B30AE20FE6A2D40024849F /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
 		31B30AE30FE6A2D40024849F /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
 		31E31A7A0FF114E000B81100 /* kids_grid_3x3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kids_grid_3x3.png; path = artwork/kids_grid_3x3.png; sourceTree = "<group>"; };
-		31E31A7B0FF114E000B81100 /* kids_grid_3x3_translucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kids_grid_3x3_translucent.png; path = artwork/kids_grid_3x3_translucent.png; sourceTree = "<group>"; };
 		31E31A7C0FF114E000B81100 /* particles_dugla.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = particles_dugla.png; path = artwork/particles_dugla.png; sourceTree = "<group>"; };
 		31ECF9B20FEC34CF00F0A982 /* TEITexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEITexture.h; sourceTree = "<group>"; };
 		31ECF9B30FEC34CF00F0A982 /* TEITexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEITexture.m; sourceTree = "<group>"; };
@@ -162,9 +162,9 @@
 		31FB3B070FE6CA4C00630959 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				314520DC0FF2820C0032465B /* farrow-design-2x2.png */,
+				312CDDB10FF56C390007E3D7 /* kids_grid_3x3_translucent.png */,
+				312CDD870FF569490007E3D7 /* swirl-rose.png */,
 				31E31A7A0FF114E000B81100 /* kids_grid_3x3.png */,
-				31E31A7B0FF114E000B81100 /* kids_grid_3x3_translucent.png */,
 				31E31A7C0FF114E000B81100 /* particles_dugla.png */,
 			);
 			name = Textures;
@@ -217,9 +217,9 @@
 				31FB3B050FE6CA4700630959 /* firework_3.wav in Resources */,
 				31FB3B060FE6CA4700630959 /* firework_6.wav in Resources */,
 				31E31A7D0FF114E000B81100 /* kids_grid_3x3.png in Resources */,
-				31E31A7E0FF114E000B81100 /* kids_grid_3x3_translucent.png in Resources */,
 				31E31A7F0FF114E000B81100 /* particles_dugla.png in Resources */,
-				314520DD0FF2820C0032465B /* farrow-design-2x2.png in Resources */,
+				312CDD880FF569490007E3D7 /* swirl-rose.png in Resources */,
+				312CDDB20FF56C390007E3D7 /* kids_grid_3x3_translucent.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

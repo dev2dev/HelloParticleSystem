@@ -21,25 +21,35 @@ static int ParticleSystemParticleVertexCount = 0;
 static ParticleSystemOpenGLVertexData ParticleSystemParticleVertices[MAX_VERTS];
 
 // Background rectangular card
-static int ParticleSystemBackdropRectangeVertexCount = 0;
 static ParticleSystemOpenGLVertexData ParticleSystemBackdropRectangeVertices[4];
 
 static void 
 ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb, int *counter) {
 	
-//    ParticleSystemOpenGLVertexData *vert = &ParticleSystemParticleVertices[ParticleSystemParticleVertexCount];
-    ParticleSystemOpenGLVertexData *vert = &vertices[ParticleSystemParticleVertexCount];	
-	
+//    ParticleSystemOpenGLVertexData *vert = &vertices[ParticleSystemParticleVertexCount];	
+//	
+//	// spatial vertex
+//    vert->xy[0] = (short)x;
+//    vert->xy[1] = (short)y;
+//	
+//	// teture vertex
+//    vert->st[0] = s;
+//    vert->st[1] = t;
+//	
+//	// alpha | red | green | blue
+//    vert->argb = argb;
+
 	// spatial vertex
-    vert->xy[0] = (short)x;
-    vert->xy[1] = (short)y;
+    vertices[(*counter)].xy[0] = (short)x;
+    vertices[(*counter)].xy[1] = (short)y;
 	
 	// teture vertex
-    vert->st[0] = s;
-    vert->st[1] = t;
+    vertices[(*counter)].st[0] = s;
+    vertices[(*counter)].st[1] = t;
 	
 	// alpha | red | green | blue
-    vert->argb = argb;
+    vertices[(*counter)].argb = argb;
+	
 	
 	(*counter)++;
 }
@@ -149,15 +159,11 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 
 - (void)dealloc {
 
-//	NSLog(@"ParticleSystem: dealloc");
-	
 	[_openglPackedVertices	removeAllObjects];
 	[_particles				removeAllObjects];
-//	[_deadParticles			removeAllObjects];
 	
 	[_openglPackedVertices	release];
 	[_particles				release];
-//	[_deadParticles			release];
     
 	[touchPhaseName			release];
 	
@@ -190,11 +196,11 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 
 + (void)buildParticleTextureAtlas {
 	
-	ParticleSystemParticleTexture = 
-	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3"				extension:@"png" mipmap:YES ];
-	
 //	ParticleSystemParticleTexture = 
-//	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"	extension:@"png" mipmap:YES ];
+//	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3"				extension:@"png" mipmap:YES ];
+	
+	ParticleSystemParticleTexture = 
+	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"	extension:@"png" mipmap:YES ];
 	
 //	ParticleSystemParticleTexture = 
 //	[ [TEITexture alloc] initWithImageFile:@"particles_dugla"			extension:@"png" mipmap:YES ];
@@ -225,34 +231,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 }
 
-+ (void)buildBackdropWidth:(int)width Height:(int)height {
-	
-	// OpenGL defaults to CCW winding rule for triangles.
-	// The patten is: V0 -> V1 -> V2 then V2 -> V1 -> V3 ... etc.
-	// At draw time I use glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertexCount)
-	// addVertex(x,y,  r,g,b,a,  s,t)
-	
-	unsigned char a = 255;       
-	unsigned char rgb[3] = { 255, 255, 255 };
-	unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
-	
-	// V0
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, -1.0f, -1.0f, 0.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
-	
-	// V1
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices,  1.0f, -1.0f, 1.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
-	
-	// V2
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, -1.0f,  1.0f, 0.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
-	
-	// V3
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices,  1.0f,  1.0f, 1.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
-	
-	ParticleSystemBackdropTexture = 
-	[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2" extension:@"png" mipmap:YES ];
-	
-}
-
 + (void)buildBackdropWithBounds:(CGRect)bounds {
 	
 	// OpenGL defaults to CCW winding rule for triangles.
@@ -265,26 +243,48 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	unsigned char rgb[3] = { 255, 255, 255 };
 	unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
 	
-	GLfloat n = bounds.origin.y;
-	GLfloat s = bounds.size.width;
+	GLfloat n_xy = bounds.origin.y;
+	GLfloat s_xy = bounds.size.height;
 	
-	GLfloat w = bounds.origin.x;
-	GLfloat e = bounds.size.height;
+	GLfloat w_xy = bounds.origin.x;
+	GLfloat e_xy = bounds.size.width;
+	
+	GLfloat n_st = 1.0f;
+	GLfloat s_st = 0.0f;
+	
+	GLfloat w_st = 0.0f;
+	GLfloat e_st = 1.0f;
+//	
+//	// V0
+//	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, w_xy, s_xy, 0.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+//	
+//	// V1
+//	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, e_xy, s_xy, 1.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+//	
+//	// V2
+//	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, w_xy, n_xy, 0.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+//	
+//	// V3
+//	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, e_xy, n_xy, 1.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+
+	static int unused = 0;
 	
 	// V0
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, s, w, 0.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, w_xy, s_xy, w_st, s_st, argb, &unused);
 	
 	// V1
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, s, e, 1.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, e_xy, s_xy, e_st, s_st, argb, &unused);
 	
 	// V2
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, n, w, 0.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, w_xy, n_xy, w_st, n_st, argb, &unused);
 	
 	// V3
-	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, n, e, 1.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
+	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, e_xy, n_xy, e_st, n_st, argb, &unused);
+	
 	
 	ParticleSystemBackdropTexture = 
-	[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2" extension:@"png" mipmap:YES ];
+//	[ [TEITexture alloc] initWithImageFile:@"mandrill"		extension:@"png" mipmap:YES ];
+	[ [TEITexture alloc] initWithImageFile:@"swirl-rose"	extension:@"png" mipmap:YES ];
 	
 }
 
@@ -571,15 +571,12 @@ static inline float TEIFastCos(float x) {
     glVertexPointer(  2, GL_SHORT,         sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemBackdropRectangeVertices[0].xy  );
     glTexCoordPointer(2, GL_FLOAT,         sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemBackdropRectangeVertices[0].st  );
     glColorPointer(   4, GL_UNSIGNED_BYTE, sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemBackdropRectangeVertices[0].argb);
+	
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
 }
 
 + (void)renderParticles {
-	
-	//    if (!ParticleSystemParticleVertexCount) {
-	//		return;
-	//	}
 	
 	glBindTexture(GL_TEXTURE_2D, [[ParticleSystem particleTexture] name]);
 	
@@ -588,8 +585,6 @@ static inline float TEIFastCos(float x) {
     glColorPointer(   4, GL_UNSIGNED_BYTE, sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemParticleVertices[0].argb);
 	
     glDrawArrays(GL_TRIANGLES, 0, ParticleSystemParticleVertexCount);
-	
-	//	NSLog(@"render: ParticleSystemParticleVertexCount(%d)", ParticleSystemParticleVertexCount);
 	
     ParticleSystemParticleVertexCount = 0;
 }

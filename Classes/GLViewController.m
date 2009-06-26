@@ -112,9 +112,9 @@ static SystemSoundID _boomSoundIDs[3];
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-//	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+//	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+////	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
+//    glClear(GL_COLOR_BUFFER_BIT);
     
     glEnable(GL_TEXTURE_2D);
 	
@@ -129,6 +129,7 @@ static SystemSoundID _boomSoundIDs[3];
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
+	
 	
 }
 
@@ -177,13 +178,13 @@ static SystemSoundID _boomSoundIDs[3];
 
 	
 	
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	//	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+//	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+//	//	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
+//    glClear(GL_COLOR_BUFFER_BIT);
 
-
+	[ParticleSystem renderBackground];
 	
-    [ParticleSystem renderParticles];
+	[ParticleSystem renderParticles];
 	
 }
 
