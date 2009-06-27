@@ -13,6 +13,9 @@
 #import "GLView.h"
 #import "ParticleSystem.h"
 
+// Accelerometer sampling frequency in hertz (hz)
+#define kAccelerometerFrequency		(30.0)
+
 @implementation GLViewController
 
 - (void)dealloc {
@@ -61,7 +64,11 @@ static SystemSoundID _boomSoundIDs[3];
 	GLView *glView = (GLView *)self.view;
 //	[ParticleSystem buildBackdropWidth:[glView backingWidth] Height:[glView backingHeight]];
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
-		
+	
+	//Configure and start accelerometer
+	[[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1.0 / kAccelerometerFrequency)];
+	[[UIAccelerometer sharedAccelerometer] setDelegate:self];
+	
 }
 
 // The Stanford Pattern
@@ -317,5 +324,15 @@ static SystemSoundID _boomSoundIDs[3];
 	[_deadParticleSystems	release];
 	
 }
+
+#define kFilteringFactor			(0.1)
+- (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration {
+	
+	//Use a basic low-pass filter to only keep the gravity in the accelerometer values
+	accel[0] = acceleration.x * kFilteringFactor + accel[0] * (1.0 - kFilteringFactor);
+	accel[1] = acceleration.y * kFilteringFactor + accel[1] * (1.0 - kFilteringFactor);
+	accel[2] = acceleration.z * kFilteringFactor + accel[2] * (1.0 - kFilteringFactor);
+}
+
 
 @end
