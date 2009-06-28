@@ -15,7 +15,9 @@
 @class GLView;
 @class ParticleSystem;
 
-@interface GLViewController : UIViewController {
+@interface GLViewController : UIViewController <UIAccelerometerDelegate>{
+	
+	UIAccelerationValue		accel[3];
 	
 	ParticleSystem		*_touchedParticleSystem;
     NSMutableArray		*_particleSystems;

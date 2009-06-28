@@ -13,6 +13,9 @@
 #import "GLView.h"
 #import "ParticleSystem.h"
 
+// Accelerometer sampling frequency in hertz (hz)
+#define kAccelerometerFrequency		(30.0)
+
 @implementation GLViewController
 
 - (void)dealloc {
@@ -59,9 +62,12 @@ static SystemSoundID _boomSoundIDs[3];
 	[ParticleSystem buildParticleTextureAtlas];
 	
 	GLView *glView = (GLView *)self.view;
-//	[ParticleSystem buildBackdropWidth:[glView backingWidth] Height:[glView backingHeight]];
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
-		
+	
+	//Configure and start accelerometer
+	[[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1.0 / kAccelerometerFrequency)];
+	[[UIAccelerometer sharedAccelerometer] setDelegate:self];
+	
 }
 
 // The Stanford Pattern
@@ -112,18 +118,11 @@ static SystemSoundID _boomSoundIDs[3];
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	
-//	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-////	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
-    
     glEnable(GL_TEXTURE_2D);
 	
     glEnable(GL_BLEND);
 
 	glBlendFunc(GL_ONE,			GL_ONE_MINUS_SRC_ALPHA);
-	
-	// THIS IS SUPPOSED TO DO STREAKING
-//	glBlendFunc(GL_SRC_ALPHA,	GL_ONE);	
 	
 	
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -174,14 +173,9 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	[_deadParticleSystems removeAllObjects];
 	
-
-
 	
-	
-//	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-//	//	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
-
+	// NOTE: The background should completely fill the window, eliminating the
+	// need for a costly clearing of depth and color every frame.
 	[ParticleSystem renderBackground];
 	
 	[ParticleSystem renderParticles];
@@ -317,5 +311,15 @@ static SystemSoundID _boomSoundIDs[3];
 	[_deadParticleSystems	release];
 	
 }
+
+#define kFilteringFactor			(0.1)
+- (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration {
+	
+	//Use a basic low-pass filter to only keep the gravity in the accelerometer values
+	accel[0] = acceleration.x * kFilteringFactor + accel[0] * (1.0 - kFilteringFactor);
+	accel[1] = acceleration.y * kFilteringFactor + accel[1] * (1.0 - kFilteringFactor);
+	accel[2] = acceleration.z * kFilteringFactor + accel[2] * (1.0 - kFilteringFactor);
+}
+
 
 @end
