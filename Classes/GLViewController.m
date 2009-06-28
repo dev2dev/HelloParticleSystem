@@ -62,7 +62,6 @@ static SystemSoundID _boomSoundIDs[3];
 	[ParticleSystem buildParticleTextureAtlas];
 	
 	GLView *glView = (GLView *)self.view;
-//	[ParticleSystem buildBackdropWidth:[glView backingWidth] Height:[glView backingHeight]];
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
 	
 	//Configure and start accelerometer
@@ -119,18 +118,11 @@ static SystemSoundID _boomSoundIDs[3];
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	
-//	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-////	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
-    
     glEnable(GL_TEXTURE_2D);
 	
     glEnable(GL_BLEND);
 
 	glBlendFunc(GL_ONE,			GL_ONE_MINUS_SRC_ALPHA);
-	
-	// THIS IS SUPPOSED TO DO STREAKING
-//	glBlendFunc(GL_SRC_ALPHA,	GL_ONE);	
 	
 	
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -181,14 +173,9 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	[_deadParticleSystems removeAllObjects];
 	
-
-
 	
-	
-//	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-//	//	glClearColor(1.0f/2.0f, 0.0f, 0.0f, 1.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
-
+	// NOTE: The background should completely fill the window, eliminating the
+	// need for a costly clearing of depth and color every frame.
 	[ParticleSystem renderBackground];
 	
 	[ParticleSystem renderParticles];

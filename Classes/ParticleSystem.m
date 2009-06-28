@@ -26,19 +26,6 @@ static ParticleSystemOpenGLVertexData ParticleSystemBackdropRectangeVertices[4];
 static void 
 ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb, int *counter) {
 	
-//    ParticleSystemOpenGLVertexData *vert = &vertices[ParticleSystemParticleVertexCount];	
-//	
-//	// spatial vertex
-//    vert->xy[0] = (short)x;
-//    vert->xy[1] = (short)y;
-//	
-//	// teture vertex
-//    vert->st[0] = s;
-//    vert->st[1] = t;
-//	
-//	// alpha | red | green | blue
-//    vert->argb = argb;
-
 	// spatial vertex
     vertices[(*counter)].xy[0] = (short)x;
     vertices[(*counter)].xy[1] = (short)y;
@@ -254,18 +241,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	GLfloat w_st = 0.0f;
 	GLfloat e_st = 1.0f;
-//	
-//	// V0
-//	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, w_xy, s_xy, 0.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
-//	
-//	// V1
-//	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, e_xy, s_xy, 1.0f, 0.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
-//	
-//	// V2
-//	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, w_xy, n_xy, 0.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
-//	
-//	// V3
-//	ParticleSystemAddVertex(ParticleSystemBackdropRectangeVertices, e_xy, n_xy, 1.0f, 1.0f, argb, &ParticleSystemBackdropRectangeVertexCount);
 
 	static int unused = 0;
 	
@@ -551,8 +526,6 @@ static inline float TEIFastCos(float x) {
         }
         
     } // for (_particles)
-
-//	NSLog(@"drawBetter: Particles(%d) Vertices(%d)", _particles.count, ParticleSystemParticleVertexCount);
 
 }
 
