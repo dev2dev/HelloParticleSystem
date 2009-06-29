@@ -167,15 +167,21 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	if (self = [super init]) {
 		
-		_openglPackedVertices =	[[NSMutableArray alloc] init];
-		_particles		=		[[NSMutableArray alloc] init];
+		_openglPackedVertices	=	[[NSMutableArray alloc] init];
+		_particles				=	[[NSMutableArray alloc] init];
+		
+		_particleTraunch		=	16;
+		
+		_location				= location;
+		
+		_birth					= [NSDate timeIntervalSinceReferenceDate];
+		_mostRecentTime			= [NSDate timeIntervalSinceReferenceDate];
 		
 		_initialAnimationStep	= YES;
 		
-		_location				= location;
-		_particleTraunch		= 16;
-		_birth					= [NSDate timeIntervalSinceReferenceDate];
-		_mostRecentTime			= [NSDate timeIntervalSinceReferenceDate];
+		_decay					= NO;
+		
+		
 	}
 	
     return self;
@@ -330,10 +336,12 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
     _lastTime = time;
 	
-	// :::::::::::::::::::::::::::::: bring particles to life :::::::::::::::::::::::::
-    if (_decay == NO || _initialAnimationStep == YES) {
+	// bring particles to life. At birth we create a traunch of particles in one go. After birth we incrementally add a particle.
+    if (_decay == NO) {
 		
 		if (_birth == time) {
+			
+//			NSLog(@"animate: touchPhaseName(%@) decay(%d) initialAnimationStep(%d) birth.", touchPhaseName, _decay, _initialAnimationStep);
 			
 			for (int i = 0; i < _particleTraunch; i++) {
 				
@@ -347,6 +355,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			
 		} else {
 			
+//			NSLog(@"animate: touchPhaseName(%@) decay(%d) initialAnimationStep(%d). Incremental particle addition.", touchPhaseName, _decay, _initialAnimationStep);
+
 			TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO];
 			
 			[_particles addObject:particle];
@@ -354,13 +364,12 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			[particle release];
 			
 		}
-				
-    } // if (_decay == NO || _initialAnimationStep == YES)
-
+	
+    } // if (_decay == NO)
+	
 	_initialAnimationStep = NO;
 
 	// Take a time step in particle system state. Cull dead particles as needed.
-	
 	for (TEIParticle* particle in _particles) {
 		
 		if (particle.alive == NO) {
@@ -559,9 +568,14 @@ static inline float TEIFastCos(float x) {
 	
 }
 
+static int maxParticleVerticesRendered = 0;
 + (void)renderParticles {
 
-//	NSLog(@"renderParticles: rendering %d particles with %d vertices", ParticleSystemParticleVertexCount/6, ParticleSystemParticleVertexCount);
+	if (maxParticleVerticesRendered < ParticleSystemParticleVertexCount) {
+		maxParticleVerticesRendered = ParticleSystemParticleVertexCount;
+	}
+	
+//	NSLog(@"renderParticles: MaxVertices(%d) CurrentVertices(%d)", maxParticleVerticesRendered, ParticleSystemParticleVertexCount);
 
 	glBindTexture(GL_TEXTURE_2D, [[ParticleSystem particleTexture] name]);
 	

@@ -46,21 +46,21 @@
 @interface ParticleSystem : NSObject {
 
 	NSMutableArray*	_openglPackedVertices;
-	NSMutableArray*     _particles;
+	NSMutableArray*	_particles;
 	
-	int _particleTraunch;
+	int				_particleTraunch;
 	
-    CGPoint _location;
+    CGPoint			_location;
 	
-    NSTimeInterval _birth;
-	NSTimeInterval _mostRecentTime;
+    NSTimeInterval	_birth;
+	NSTimeInterval	_mostRecentTime;
 	
-    BOOL _initialAnimationStep;
+    BOOL			_initialAnimationStep;
 	
-    double _lastTime;
-    BOOL _decay;
+    double			_lastTime;
+    BOOL			_decay;
 
-	NSString* touchPhaseName;
+	NSString*		touchPhaseName;
 }
 
 @property CGPoint						location;
