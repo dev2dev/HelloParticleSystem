@@ -314,7 +314,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
     _location = location;
 }
 
-- (BOOL)animateBetter:(NSTimeInterval)time {
+- (BOOL)animate:(NSTimeInterval)time {
 
 	NSTimeInterval step;
 	
@@ -466,9 +466,15 @@ static inline float TEIFastCos(float x) {
 	
 }
 
-- (void)drawBetter {
+- (void)draw {
 	
     for (TEIParticle* particle in _particles) {
+		
+		// No need to draw dead particles
+		if (particle.alive == NO) {
+			continue;
+		}
+		
 		
         // half width and height
         float w = particle.size * 42.0f;
@@ -521,8 +527,7 @@ static inline float TEIFastCos(float x) {
         ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,	bottomLeftY,	minST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
         ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomRightX,	bottomRightY,	maxST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
         
-//        ParticleSystemParticleVertexCount += 6;
-        
+
         // Don't go over vert limit!
         if (ParticleSystemParticleVertexCount >= MAX_VERTS) {
 			
@@ -555,7 +560,9 @@ static inline float TEIFastCos(float x) {
 }
 
 + (void)renderParticles {
-	
+
+//	NSLog(@"renderParticles: rendering %d particles with %d vertices", ParticleSystemParticleVertexCount/6, ParticleSystemParticleVertexCount);
+
 	glBindTexture(GL_TEXTURE_2D, [[ParticleSystem particleTexture] name]);
 	
     glVertexPointer(  2, GL_SHORT,         sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemParticleVertices[0].xy  );

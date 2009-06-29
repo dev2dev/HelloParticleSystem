@@ -139,9 +139,9 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	if (nil != _touchedParticleSystem) {
 		
-		if ([_touchedParticleSystem animateBetter:time]) {
+		if ([_touchedParticleSystem animate:time]) {
 			
-			[_touchedParticleSystem drawBetter];
+			[_touchedParticleSystem draw];
 			
 		} else {
 			
@@ -154,9 +154,9 @@ static SystemSoundID _boomSoundIDs[3];
 	
     for (ParticleSystem *ps in _particleSystems) {
 		
-		if ([ps animateBetter:time]) {
+		if ([ps animate:time]) {
 			
-            [ps drawBetter];			
+            [ps draw];			
 			
 		} else {
 			

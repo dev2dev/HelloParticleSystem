@@ -69,9 +69,9 @@
 
 - (id)initAtLocation:(CGPoint)location;
 
-- (BOOL)animateBetter:(NSTimeInterval)time;
+- (BOOL)animate:(NSTimeInterval)time;
 
-- (void)drawBetter;
+- (void)draw;
 
 - (void)fill:(CGPoint)location;
 
