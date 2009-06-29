@@ -13,9 +13,6 @@
 #import "GLView.h"
 #import "ParticleSystem.h"
 
-// Accelerometer sampling frequency in hertz (hz)
-#define kAccelerometerFrequency		(30.0)
-
 @implementation GLViewController
 
 - (void)dealloc {
@@ -44,9 +41,10 @@ static SystemSoundID _boomSoundIDs[3];
 - (void)viewDidLoad {
 	
 	// Prepare particle system arrays
+	_touchedParticleSystem	= nil;
 	_particleSystems		= [[NSMutableArray alloc] init];
 	_deadParticleSystems	= [[NSMutableArray alloc] init];
-
+	
 	// set up sound effects
 	NSURL *soundURL = nil;
 	
@@ -138,7 +136,10 @@ static SystemSoundID _boomSoundIDs[3];
     NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
 	
 	if (nil != _touchedParticleSystem) {
-		
+
+//		NSLog(@"GLViewController.drawView - drawing touchedParticleSystem touchPhaseName(%@) touchedParticleSystem(%d) particleSystems(%d)", 
+//			  _touchedParticleSystem.touchPhaseName, _touchedParticleSystem, [_particleSystems count]);
+
 		if ([_touchedParticleSystem animate:time]) {
 			
 			[_touchedParticleSystem draw];
@@ -153,6 +154,9 @@ static SystemSoundID _boomSoundIDs[3];
 
 	
     for (ParticleSystem *ps in _particleSystems) {
+		
+//		NSLog(@"GLViewController.drawView - drawing particle(%d) of particleSystems(%d) touchPhaseName(%@) touchedParticleSystem(%d)", 
+//			  [_particleSystems indexOfObject:ps], [_particleSystems count], ps.touchPhaseName, _touchedParticleSystem);
 		
 		if ([ps animate:time]) {
 			
@@ -238,7 +242,9 @@ static SystemSoundID _boomSoundIDs[3];
 //		  );
 	
 	_touchedParticleSystem = [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]];	
-	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];
+	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
+	
+//	NSLog(@"touchesBegan: _touchedParticleSystem(%d) _particleSystems(%d)", _touchedParticleSystem, _particleSystems.count); 
 	
 }
 
@@ -257,16 +263,20 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];
+	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
+	
 	_touchedParticleSystem.location = [touch locationInView:self.view];
 //	[_touchedParticleSystem fill:[touch locationInView:self.view]];
+	
+//	NSLog(@"touchesMoved: _touchedParticleSystem(%d) _particleSystems(%d)", _touchedParticleSystem, _particleSystems.count); 
 	
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	
 	// Only single touch for now
-	UITouch *touch	= [touches anyObject];	
+	UITouch *touch	= [touches anyObject];
+	
 //	NSObject *o		= touch;
 //	NSLog(@"touchesEnded: touch(%p) phase(%@) tapCount(%d) time(%f) location( previous(%f %f) current(%f %f) )", 
 //		  o, 
@@ -278,15 +288,15 @@ static SystemSoundID _boomSoundIDs[3];
 //		  );
 	
 	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];
+	
 	[_touchedParticleSystem setDecay:YES];
 	[_particleSystems addObject:_touchedParticleSystem];
 	
-//	NSLog(@"touchesEnded: _particleSystems.length(%d)", _particleSystems.count); 
 	
 	[_touchedParticleSystem release];
 	_touchedParticleSystem = nil;
 	
-//	NSLog(@" ");
+//	NSLog(@"touchesEnded: _touchedParticleSystem(%d) _particleSystems(%d)", _touchedParticleSystem, _particleSystems.count); 
 	
 }
 
@@ -315,10 +325,13 @@ static SystemSoundID _boomSoundIDs[3];
 	
 }
 
+#define kFilteringFactor			(0.10)
+#define kAccelerometerFrequency		(30.0)
+
 - (void)enableAcclerometerEvents {
-
+	
 	UIAccelerometer *theAccelerometer = [UIAccelerometer sharedAccelerometer];
-
+	
 	[theAccelerometer setUpdateInterval:(1.0 / kAccelerometerFrequency)];
 	[theAccelerometer setDelegate:self];
 	
@@ -332,13 +345,16 @@ static SystemSoundID _boomSoundIDs[3];
 	
 }
 
-#define kFilteringFactor			(0.1)
 - (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration {
 	
+//	NSLog(@"ParticleSystem accelerometer: acc(%f, %f, %f)", _accelerationValue[0], _accelerationValue[1], _accelerationValue[2]);
+	
 	//Use a basic low-pass filter to only keep the gravity in the accelerometer values
-	accel[0] = acceleration.x * kFilteringFactor + accel[0] * (1.0 - kFilteringFactor);
-	accel[1] = acceleration.y * kFilteringFactor + accel[1] * (1.0 - kFilteringFactor);
-	accel[2] = acceleration.z * kFilteringFactor + accel[2] * (1.0 - kFilteringFactor);
+	_accelerationValue[0] = acceleration.x * kFilteringFactor + _accelerationValue[0] * (1.0 - kFilteringFactor);
+	_accelerationValue[1] = acceleration.y * kFilteringFactor + _accelerationValue[1] * (1.0 - kFilteringFactor);
+	_accelerationValue[2] = acceleration.z * kFilteringFactor + _accelerationValue[2] * (1.0 - kFilteringFactor);
+	
+	[ParticleSystem setGravity:CGPointMake(_accelerationValue[0], _accelerationValue[1])];
 }
 
 

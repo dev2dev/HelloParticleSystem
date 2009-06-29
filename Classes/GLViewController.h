@@ -15,19 +15,21 @@
 @class GLView;
 @class ParticleSystem;
 
-@interface GLViewController : UIViewController <UIAccelerometerDelegate>{
+@interface GLViewController : UIViewController  <UIAccelerometerDelegate> {
 	
-	UIAccelerationValue		accel[3];
-	
+	UIAccelerationValue _accelerationValue[3];
+		
 	ParticleSystem		*_touchedParticleSystem;
     NSMutableArray		*_particleSystems;
     NSMutableArray		*_deadParticleSystems;
-	
 }
 
 - (NSString*) phaseName:(UITouchPhase) phase;
+
 - (void)drawView:(GLView*)view;
 - (void)setupView:(GLView*)view;
+
 - (void)enableAcclerometerEvents;
 - (void)disableAcclerometerEvents;
+
 @end

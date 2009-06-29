@@ -43,6 +43,8 @@
 
 @end
 
+
+
 @interface ParticleSystem : NSObject {
 
 	NSMutableArray*	_openglPackedVertices;
@@ -64,6 +66,7 @@
 }
 
 @property CGPoint						location;
+
 @property int							particleTraunch;
 @property (nonatomic, retain) NSString	*touchPhaseName;
 
@@ -86,5 +89,6 @@
 
 + (void)renderParticles;
 + (void)renderBackground;
++ (void)setGravity:(CGPoint)gravityVector;
 
 @end

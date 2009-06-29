@@ -2,15 +2,7 @@
 #import <OpenGLES/ES1/gl.h>
 #import "ParticleSystem.h"
 
-
-static void _checkGLError(void) {
-	
-    GLenum error = glGetError();
-    if (error) {
-        fprintf(stderr, "GL Error: %x\n", error);
-        exit(0);
-    }
-}
+static CGPoint ParticleSystemGravity = { 0.0, 1.0 };
 
 typedef struct _ParticleSystemOpenGLVertexData { short xy[2]; unsigned argb; float st[2]; } ParticleSystemOpenGLVertexData;
 
@@ -68,11 +60,8 @@ ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float
 
 - (id)init {
 	
-	if(self = [super init]) {
-		// do stuff
-	}
+	return [self initAtLocation:CGPointMake(0.0, 0.0) birthTime:0.0 willPush:NO];
 	
-	return self;
 }
 
 - (id)initAtLocation:(CGPoint)newLocation birthTime:(double)time willPush:(BOOL)push {
@@ -87,7 +76,12 @@ ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float
 		location = newLocation;
 		
 		// rotation
-		float angle = (arc4random() % 360) * (M_PI / 180.0f);
+		
+		// Original ngmoco
+//		float angle = (arc4random() % 360) * (M_PI / 180.0f);
+		
+		// Dugla
+		float angle = (arc4random() % 360);
 		
 		// scalefactor
 		float scale = 30.0f + (arc4random() % 120);
@@ -96,10 +90,10 @@ ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float
 		velocity.x = cosf(angle) * scale;
 		velocity.y = sinf(angle) * scale;
 		
-		// give particles slightly different vertical velocities
-		if (push == YES) {
-			velocity.y -= 30.0f + (arc4random() % 30);
-		}
+		// Original ngmoco
+//		if (push == YES) {
+//			velocity.y -= 30.0f + (arc4random() % 30);
+//		}
 		
 		// birth time
 		self.birth = time;
@@ -140,6 +134,7 @@ static TEITexture		*ParticleSystemBackdropTexture		= nil;
 static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 
 @synthesize location=_location;
+
 @synthesize particleTraunch=_particleTraunch;
 @synthesize touchPhaseName;
 
@@ -160,16 +155,18 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 
 	return [self initAtLocation:CGPointMake(0.0, 0.0)];
 	
-		}
+}
 
 - (id)initAtLocation:(CGPoint)location {
 	
 	if (self = [super init]) {
 		
+//		NSLog(@"ParticleSystem - initAtLocation");
+				
 		_openglPackedVertices	=	[[NSMutableArray alloc] init];
 		_particles				=	[[NSMutableArray alloc] init];
 		
-		_particleTraunch		=	16;
+		_particleTraunch		=	16 * 2;
 		
 		_location				= location;
 		
@@ -340,7 +337,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		if (_birth == time) {
 			
-//			NSLog(@"animate: touchPhaseName(%@) decay(%d) initialAnimationStep(%d) birth.", touchPhaseName, _decay, _initialAnimationStep);
 			
 			for (int i = 0; i < _particleTraunch; i++) {
 				
@@ -351,7 +347,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 				[particle release];
 				
 			} // for (count)
-			
+
+//			NSLog(@"animate: birth. touchPhaseName(%@) decay(%d) initialAnimationStep(%d) particles(%d).", touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
+
 		} else {
 			
 //			NSLog(@"animate: touchPhaseName(%@) decay(%d) initialAnimationStep(%d). Incremental particle addition.", touchPhaseName, _decay, _initialAnimationStep);
@@ -375,11 +373,16 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			continue;
 		}
 
-		// gravity
-		static const float gravity = 120.0f;
+		static const float gravityScaleFactor = 120.0 * 2.0;
+		
+//		NSLog(@"animate: ParticleSystemGravity(%f, %f)", ParticleSystemGravity.x, ParticleSystemGravity.y);
 		
 		// velocity
-		particle.velocity = CGPointMake(particle.velocity.x, particle.velocity.y + (gravity * step));
+//		particle.velocity = CGPointMake(particle.velocity.x, particle.velocity.y + (gravityScaleFactor * step));
+		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * step);
+		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * step);
+		particle.velocity = CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
+
 				
 		// take a step in time to integrate velocity into distance
 		float dx = particle.velocity.x * step;
@@ -396,7 +399,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			continue;
 		}
 		
-		static const float fadeTime = 3.0f;
+		static const float fadeTime = 3.0 * 2.0;
 		float elapsedTimeSinceBirth	= (time - particle.birth);		
 		float fadeFraction			= MIN(1.0f, elapsedTimeSinceBirth / fadeTime);
 
@@ -476,6 +479,10 @@ static inline float TEIFastCos(float x) {
 
 - (void)draw {
 	
+//	if ([_particles count] > 0) {
+//		NSLog(@"draw: touchPhaseName(%@) particles(%d)", touchPhaseName, [_particles count]);
+//	}
+
     for (TEIParticle* particle in _particles) {
 		
 		// No need to draw dead particles
@@ -585,6 +592,19 @@ static int maxParticleVerticesRendered = 0;
     glDrawArrays(GL_TRIANGLES, 0, ParticleSystemParticleVertexCount);
 	
     ParticleSystemParticleVertexCount = 0;
+}
+
++ (void)setGravity:(CGPoint)gravityVector {
+	
+	float length = sqrtf(gravityVector.x * gravityVector.x + gravityVector.y * gravityVector.y);
+	ParticleSystemGravity.x = gravityVector.x / length;
+	ParticleSystemGravity.y = gravityVector.y / length;
+	
+	// !!! NOTE !!!
+	// Flip the y-component of the gravity vector to be consistent with the screen space coordinate
+	// system used in ParticleSystem. Gravity is world space. ParticleSystem is screen space.
+	ParticleSystemGravity.y = -(ParticleSystemGravity.y);
+	
 }
 
 @end
