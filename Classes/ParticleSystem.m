@@ -15,7 +15,6 @@ static void _checkGLError(void) {
 typedef struct _ParticleSystemOpenGLVertexData { short xy[2]; unsigned argb; float st[2]; } ParticleSystemOpenGLVertexData;
 
 
-// Particle vertext array
 #define MAX_VERTS (20000)
 static int ParticleSystemParticleVertexCount = 0;
 static ParticleSystemOpenGLVertexData ParticleSystemParticleVertices[MAX_VERTS];

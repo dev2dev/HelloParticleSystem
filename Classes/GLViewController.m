@@ -64,10 +64,6 @@ static SystemSoundID _boomSoundIDs[3];
 	GLView *glView = (GLView *)self.view;
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
 	
-	//Configure and start accelerometer
-	[[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1.0 / kAccelerometerFrequency)];
-	[[UIAccelerometer sharedAccelerometer] setDelegate:self];
-	
 }
 
 // The Stanford Pattern
@@ -81,13 +77,17 @@ static SystemSoundID _boomSoundIDs[3];
 	glView.animationInterval = 1.0 / kRenderingFrequency;
 	[glView startAnimation];
 	
-//	[self beginLoadingDataFromWeb];
-//	[self showLoadingProgress];
+	[self enableAcclerometerEvents];
 
 }
 
 // The Stanford Pattern
 - (void)viewWillDisappear:(BOOL)animated {
+	
+	//	[self rememberState];
+	//	[self saveStateToDisk];
+	
+	[self disableAcclerometerEvents];
 	
 	// Do stuff
 	GLView *glView = (GLView *)self.view;
@@ -99,12 +99,11 @@ static SystemSoundID _boomSoundIDs[3];
 	[_particleSystems		release];
 	[_deadParticleSystems	release];
 
-	//	[self rememberState];
-	//	[self saveStateToDisk];
 	
 	[super viewWillDisappear:animated];
 }
 
+// Initialize OpenGL Schmutz
 -(void)setupView:(GLView*)view {
 	
 	GLfloat w		= view.bounds.size.width;
@@ -132,6 +131,7 @@ static SystemSoundID _boomSoundIDs[3];
 	
 }
 
+// Draw a frame
 - (void)drawView:(GLView*)view {
 	
 	
@@ -182,6 +182,7 @@ static SystemSoundID _boomSoundIDs[3];
 	
 }
 
+// Boom! Boom! Boom!
 - (void)_playBoom {
 	
     int index = (random() % 3);
@@ -189,6 +190,7 @@ static SystemSoundID _boomSoundIDs[3];
 	
 }
 
+// String name for touch phase
 - (NSString*) phaseName:(UITouchPhase) phase {
 	
 	NSString* result = nil;
@@ -217,6 +219,7 @@ static SystemSoundID _boomSoundIDs[3];
 	return result;
 };
 
+// The touch phase quartet
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	
 	[self _playBoom];
@@ -309,6 +312,23 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	[_particleSystems		release];
 	[_deadParticleSystems	release];
+	
+}
+
+- (void)enableAcclerometerEvents {
+
+	UIAccelerometer *theAccelerometer = [UIAccelerometer sharedAccelerometer];
+
+	[theAccelerometer setUpdateInterval:(1.0 / kAccelerometerFrequency)];
+	[theAccelerometer setDelegate:self];
+	
+}
+
+- (void)disableAcclerometerEvents {
+	
+	UIAccelerometer *theAccelerometer = [UIAccelerometer sharedAccelerometer];
+	
+	theAccelerometer.delegate = nil;
 	
 }
 

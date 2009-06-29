@@ -28,5 +28,6 @@
 - (NSString*) phaseName:(UITouchPhase) phase;
 - (void)drawView:(GLView*)view;
 - (void)setupView:(GLView*)view;
-
+- (void)enableAcclerometerEvents;
+- (void)disableAcclerometerEvents;
 @end
