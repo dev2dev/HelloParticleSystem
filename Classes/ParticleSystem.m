@@ -190,6 +190,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"	extension:@"png" mipmap:YES ];
 	
 //	ParticleSystemParticleTexture = 
+//	[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2"	extension:@"png" mipmap:YES ];
+	
+//	ParticleSystemParticleTexture = 
 //	[ [TEITexture alloc] initWithImageFile:@"particles_dugla"			extension:@"png" mipmap:YES ];
 	
 	[self buildTextureAtlasIndexTable];
@@ -259,7 +262,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	ParticleSystemBackdropTexture = 
 //	[ [TEITexture alloc] initWithImageFile:@"mandrill"		extension:@"png" mipmap:YES ];
-	[ [TEITexture alloc] initWithImageFile:@"swirl-rose"	extension:@"png" mipmap:YES ];
+//	[ [TEITexture alloc] initWithImageFile:@"swirl-rose"	extension:@"png" mipmap:YES ];
+//	[ [TEITexture alloc] initWithImageFile:@"case-identity"	extension:@"png" mipmap:YES ];
+	[ [TEITexture alloc] initWithImageFile:@"mash"	extension:@"png" mipmap:YES ];
 	
 }
 
