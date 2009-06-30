@@ -184,6 +184,449 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
     return self;
 }
 
+- (void)giveBirth:(NSTimeInterval)time incrementally:(BOOL)incrementally {
+	
+	if (incrementally == YES) {
+		
+		TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO];
+		
+		[_particles addObject:particle];
+		
+		[particle release];
+		
+	} else {
+		
+		for (int i = 0; i < _particleTraunch; i++) {
+			
+			TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES];
+			
+			[_particles addObject:particle];
+			
+			[particle release];
+			
+		} // for (_particleTraunch)
+		
+	}
+	
+	NSLog(@"giveBirth: touchPhaseName(%@) particles(%d).",  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
+	
+}
+
+- (BOOL)timeStep:(NSTimeInterval)time {
+	
+	NSTimeInterval step;
+	
+	if (_initialAnimationStep == YES) {
+		
+		_birth					= time;
+		step					= (NSTimeInterval)0.0;
+		_initialAnimationStep	= NO;
+		
+    } else {
+		
+		step = (time - _lastTime);
+	}
+	
+    _lastTime = time;
+	
+	// Take a time step in particle system state. Cull dead particles as needed.
+	for (TEIParticle* particle in _particles) {
+		
+		if (particle.alive == NO) {
+			continue;
+		}
+		
+		static const float gravityScaleFactor = 120.0 * 2.0;
+		
+		//		NSLog(@"animate: ParticleSystemGravity(%f, %f)", ParticleSystemGravity.x, ParticleSystemGravity.y);
+		
+		// velocity
+		//		particle.velocity = CGPointMake(particle.velocity.x, particle.velocity.y + (gravityScaleFactor * step));
+		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * step);
+		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * step);
+		particle.velocity = CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
+		
+		
+		// take a step in time to integrate velocity into distance
+		float dx = particle.velocity.x * step;
+		float dy = particle.velocity.y * step;
+		
+		// add delta step to location to compute new location
+		particle.location = CGPointMake(particle.location.x + dx, particle.location.y + dy);
+		
+		
+		// fall off bottom of screen
+		//		if (particle.location.y > 500) {
+		//			
+		//			particle.alive = NO;
+		//			continue;
+		//		}
+		
+		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
+			
+			//			NSLog(@"animate: particle X is offscreen %f X(%f) %f", ParticleSystemBBox.origin.x, particle.location.x, ParticleSystemBBox.size.width);			
+			particle.alive = NO;
+			continue;
+		}
+		
+		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
+			
+			//			NSLog(@"animate: particle Y is offscreen %f Y(%f) %f", ParticleSystemBBox.origin.y, particle.location.y, ParticleSystemBBox.size.height);			
+			particle.alive = NO;
+			continue;
+		}
+		
+		static const float fadeTime = 3.0 * 2.0;
+		float elapsedTimeSinceBirth	= (time - particle.birth);		
+		float fadeFraction			= MIN(1.0f, elapsedTimeSinceBirth / fadeTime);
+		
+		
+		
+		// ::::::::::::::::::::::::::::: IGNORE FADING OUT THE SPRITE FOR NOW :::::::::::::::::::::::::::::
+		// fade
+		//		particle.alpha = 0.8f;
+		//		
+		//		particle.alpha *= 1.0 - fadeFraction;
+		//		
+		//		if (fadeFraction >= 1.0f) {
+		//			
+		//			particle.alive = NO;
+		//			continue;
+		//		}
+		// ::::::::::::::::::::::::::::: IGNORE FADING OUT THE SPRITE FOR NOW :::::::::::::::::::::::::::::
+		
+		
+		
+		
+		
+		// scale
+		if (fadeFraction < 0.08f)     particle.size = fadeFraction / 0.08f;
+		else if (fadeFraction > 0.8f) particle.size = 1.0 - ((fadeFraction - 0.8f) / 0.2f);
+		else                          particle.size = 1.0f;
+		
+		
+		// rotate
+		float rotationRate = 5.0f/2.0f;
+		particle.rotation += rotationRate * step * particle.rotationDirection;
+		
+		
+		
+	} // for (_particles)
+	
+	for (TEIParticle *particle in _particles) {
+		
+		if (particle.alive == YES) {
+			
+			return YES;
+			
+		} // if (particle.alive = YES)
+		
+	} // for (_particles)
+	
+	return NO;
+	
+}
+
+- (BOOL)animate:(NSTimeInterval)time {
+	
+	NSTimeInterval step;
+	
+	if (_initialAnimationStep == YES) {
+		
+		_birth	= time;
+		step	= (NSTimeInterval)0.0;	
+		
+    } else {
+		
+		step = (time - _lastTime);
+	}
+	
+    _lastTime = time;
+	
+	// bring particles to life. At birth we create a traunch of particles in one go. After birth we incrementally add a particle.
+    if (_decay == NO || _initialAnimationStep == YES) {
+		
+		if (_birth == time) {
+			
+			
+			for (int i = 0; i < _particleTraunch; i++) {
+				
+				TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES];
+				
+				[_particles addObject:particle];
+				
+				[particle release];
+				
+			} // for (count)
+			
+//			NSLog(@"animate:     BIRTH. touchPhaseName(%@) decay(%d) initialAnimationStep(%d) particles(%d).",  
+//				  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
+			
+		} else {
+			
+			TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO];
+			
+			[_particles addObject:particle];
+			
+			[particle release];
+			
+			//			NSLog(@"animate: INCREMENT. touchPhaseName(%@) decay(%d) initialAnimationStep(%d) particles(%d).", 
+			//				  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
+			
+		}
+		
+    } // if (_decay == NO || _initialAnimationStep == YES)
+	
+	_initialAnimationStep	= NO;
+	
+	// Take a time step in particle system state. Cull dead particles as needed.
+	for (TEIParticle* particle in _particles) {
+		
+		if (particle.alive == NO) {
+			continue;
+		}
+		
+		static const float gravityScaleFactor = 120.0 * 2.0;
+		
+		//		NSLog(@"animate: ParticleSystemGravity(%f, %f)", ParticleSystemGravity.x, ParticleSystemGravity.y);
+		
+		// velocity
+		//		particle.velocity = CGPointMake(particle.velocity.x, particle.velocity.y + (gravityScaleFactor * step));
+		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * step);
+		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * step);
+		particle.velocity = CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
+		
+		
+		// take a step in time to integrate velocity into distance
+		float dx = particle.velocity.x * step;
+		float dy = particle.velocity.y * step;
+		
+		// add delta step to location to compute new location
+		particle.location = CGPointMake(particle.location.x + dx, particle.location.y + dy);
+		
+		
+		// fall off bottom of screen
+		//		if (particle.location.y > 500) {
+		//			
+		//			particle.alive = NO;
+		//			continue;
+		//		}
+		
+		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
+			
+			//			NSLog(@"animate: particle X is offscreen %f X(%f) %f", ParticleSystemBBox.origin.x, particle.location.x, ParticleSystemBBox.size.width);			
+			particle.alive = NO;
+			continue;
+		}
+		
+		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
+			
+			//			NSLog(@"animate: particle Y is offscreen %f Y(%f) %f", ParticleSystemBBox.origin.y, particle.location.y, ParticleSystemBBox.size.height);			
+			particle.alive = NO;
+			continue;
+		}
+		
+		static const float fadeTime = 3.0 * 2.0;
+		float elapsedTimeSinceBirth	= (time - particle.birth);		
+		float fadeFraction			= MIN(1.0f, elapsedTimeSinceBirth / fadeTime);
+		
+		
+		
+		// ::::::::::::::::::::::::::::: IGNORE FADING OUT THE SPRITE FOR NOW :::::::::::::::::::::::::::::
+		// fade
+		//		particle.alpha = 0.8f;
+		//		
+		//		particle.alpha *= 1.0 - fadeFraction;
+		//		
+		//		if (fadeFraction >= 1.0f) {
+		//			
+		//			particle.alive = NO;
+		//			continue;
+		//		}
+		// ::::::::::::::::::::::::::::: IGNORE FADING OUT THE SPRITE FOR NOW :::::::::::::::::::::::::::::
+		
+		
+		
+		
+		
+		// scale
+		if (fadeFraction < 0.08f)     particle.size = fadeFraction / 0.08f;
+		else if (fadeFraction > 0.8f) particle.size = 1.0 - ((fadeFraction - 0.8f) / 0.2f);
+		else                          particle.size = 1.0f;
+		
+		
+		// rotate
+		float rotationRate = 5.0f/2.0f;
+		particle.rotation += rotationRate * step * particle.rotationDirection;
+		
+		
+		
+	} // for (_particles)
+	
+	
+	for (TEIParticle *particle in _particles) {
+		
+		if (particle.alive == YES) {
+			
+			return YES;
+			
+		} // if (particle.alive = YES)
+		
+	} // for (TEIParticle *particle in _particles)
+	
+	return NO;
+	
+}
+
+static inline float VFPFastAbs(float x) { 
+	return (x < 0) ? -x : x; 
+}
+
+static inline float VFPFastSin(float x) {
+	
+	// fast sin function; maximum error is 0.001
+	const float P = 0.225f;
+	
+	x = x * M_1_PI;
+	int k = (int) roundf(x);
+	x = x - k;
+    
+	float y = (4.0f - 4.0f * VFPFastAbs(x)) * x;
+    
+	y = P * (y * VFPFastAbs(y) - y) + y;
+    
+	return (k&1) ? -y : y;
+}
+
+static inline float TEIFastCos(float x) {
+	
+	return VFPFastSin(x + M_PI_2);
+	
+}
+
+- (void)draw {
+	
+	//	if ([_particles count] > 0) {
+	//		NSLog(@"draw: touchPhaseName(%@) particles(%d)", touchPhaseName, [_particles count]);
+	//	}
+	
+    for (TEIParticle* particle in _particles) {
+		
+		// No need to draw dead particles
+		if (particle.alive == NO) {
+			continue;
+		}
+		
+		
+        // half width and height
+        float w = particle.size * 42.0f;
+		
+		// Jiggle the sprites
+        float radians = particle.rotation + (M_PI / 4.0f) * particle.rotationDirection;
+        float topRightX = particle.location.x + (TEIFastCos(radians) * w);
+        float topRightY = particle.location.y + (VFPFastSin(radians) * w);
+		
+        radians = particle.rotation + (M_PI * 3.0f / 4.0f) * particle.rotationDirection;
+        float topLeftX = particle.location.x + (TEIFastCos(radians) * w);
+        float topLeftY = particle.location.y + (VFPFastSin(radians) * w);
+		
+        radians = particle.rotation + (M_PI * 5.0f / 4.0f) * particle.rotationDirection;
+        float bottomLeftX = particle.location.x + (TEIFastCos(radians) * w);
+        float bottomLeftY = particle.location.y + (VFPFastSin(radians) * w);
+		
+        radians = particle.rotation + (M_PI * 7.0f / 4.0f) * particle.rotationDirection;
+        float bottomRightX = particle.location.x + (TEIFastCos(radians) * w);
+        float bottomRightY = particle.location.y + (VFPFastSin(radians) * w);
+		
+        // Texture atlas hackery.
+        float minST[2];
+        float maxST[2];
+		
+		float delta = ((float)TEXTURE_ATLAS_NXN_DIMENSION);
+		delta = 1.0f/delta;
+		
+		
+		int s_index = (int)particle.textureAtlasS;
+		int t_index = (int)particle.textureAtlasT;
+		
+		minST[0] = [[ParticleSystemTextureCoordinates objectAtIndex:s_index] floatValue];
+		minST[1] = [[ParticleSystemTextureCoordinates objectAtIndex:t_index] floatValue];
+		
+		maxST[0] = minST[0] + delta; 
+		maxST[1] = minST[1] + delta;        
+		
+        unsigned char a = 255;       
+		unsigned char rgb[3];
+        unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
+        
+        // Triangle #1
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topLeftX,		topLeftY,		minST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,		topRightY,		maxST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,	bottomLeftY,	minST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
+        
+        // Triangle #2
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,		topRightY,		maxST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,	bottomLeftY,	minST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
+        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomRightX,	bottomRightY,	maxST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
+        
+		
+        // Don't go over vert limit!
+        if (ParticleSystemParticleVertexCount >= MAX_VERTS) {
+			
+            ParticleSystemParticleVertexCount = MAX_VERTS;
+            break;
+        }
+        
+    } // for (_particles)
+	
+}
+
+- (void)fill:(CGPoint)location  {
+	
+	if (CGPointEqualToPoint(_location, location) == YES) {
+		
+		return;
+	}
+	
+	//    double now = [NSDate timeIntervalSinceReferenceDate];
+	//	
+	//	float dx = _location.x - location.x;
+	//	float dy = _location.y - location.y;
+	//	float distance = sqrt((dx * dx) + (dy * dy));
+	//	
+	//	static const float step = 5.0f;
+	//	
+	//	unsigned count = distance / step;
+	//	
+	//	for (unsigned i = 0; i < count; i++) {
+	//		
+	//		float fraction = (float)i / (float)count;
+	//		
+	//		CGPoint loc;
+	//		loc.x = _location.x + (dx * fraction);
+	//		loc.y = _location.y + (dy * fraction);
+	//		
+	//		TEIParticle* particle = [[TEIParticle alloc] initAtLocation:loc birthTime:now willPush:NO ];
+	//		
+	//		[_particles addObject:particle];
+	//		
+	//		[particle release];
+	//		
+	//	} // for (count)
+	
+    _location = location;
+}
+
+- (void)setDecay:(BOOL)decay {
+	
+    if (decay == _decay) {
+		
+		return;
+	}
+	
+    _decay = decay;
+}
+
 + (void)buildParticleTextureAtlas {
 	
 //	ParticleSystemParticleTexture = 
@@ -281,304 +724,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	[ [TEITexture alloc] initWithImageFile:@"case-identity"	extension:@"png" mipmap:YES ];
 //	[ [TEITexture alloc] initWithImageFile:@"mash"	extension:@"png" mipmap:YES ];
 	
-}
-
-- (void)setDecay:(BOOL)decay {
-	
-    if (decay == _decay) {
-		
-		return;
-	}
-	
-    _decay = decay;
-}
-
-- (void)fill:(CGPoint)location  {
-	
-	if (CGPointEqualToPoint(_location, location) == YES) {
-		
-		return;
-	}
-	
-//    double now = [NSDate timeIntervalSinceReferenceDate];
-//	
-//	float dx = _location.x - location.x;
-//	float dy = _location.y - location.y;
-//	float distance = sqrt((dx * dx) + (dy * dy));
-//	
-//	static const float step = 5.0f;
-//	
-//	unsigned count = distance / step;
-//	
-//	for (unsigned i = 0; i < count; i++) {
-//		
-//		float fraction = (float)i / (float)count;
-//		
-//		CGPoint loc;
-//		loc.x = _location.x + (dx * fraction);
-//		loc.y = _location.y + (dy * fraction);
-//		
-//		TEIParticle* particle = [[TEIParticle alloc] initAtLocation:loc birthTime:now willPush:NO ];
-//		
-//		[_particles addObject:particle];
-//		
-//		[particle release];
-//		
-//	} // for (count)
-	
-    _location = location;
-}
-
-- (BOOL)animate:(NSTimeInterval)time {
-
-	NSTimeInterval step;
-	
-	if (_initialAnimationStep == YES) {
-		
-		_birth	= time;
-		step	= (NSTimeInterval)0.0;	
-		
-    } else {
-		
-		step = (time - _lastTime);
-	}
-	
-    _lastTime = time;
-	
-	// bring particles to life. At birth we create a traunch of particles in one go. After birth we incrementally add a particle.
-    if (_decay == NO || _initialAnimationStep == YES) {
-		
-		if (_birth == time) {
-			
-			
-			for (int i = 0; i < _particleTraunch; i++) {
-				
-				TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES];
-				
-				[_particles addObject:particle];
-				
-				[particle release];
-				
-			} // for (count)
-
-//			NSLog(@"animate: birth. touchPhaseName(%@) decay(%d) initialAnimationStep(%d) particles(%d).", touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
-
-		} else {
-			
-//			NSLog(@"animate: touchPhaseName(%@) decay(%d) initialAnimationStep(%d). Incremental particle addition.", touchPhaseName, _decay, _initialAnimationStep);
-
-			TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO];
-			
-			[_particles addObject:particle];
-			
-			[particle release];
-			
-		}
-	
-    } // if (_decay == NO || _initialAnimationStep == YES)
-	
-	_initialAnimationStep = NO;
-
-	// Take a time step in particle system state. Cull dead particles as needed.
-	for (TEIParticle* particle in _particles) {
-		
-		if (particle.alive == NO) {
-			continue;
-		}
-
-		static const float gravityScaleFactor = 120.0 * 2.0;
-		
-//		NSLog(@"animate: ParticleSystemGravity(%f, %f)", ParticleSystemGravity.x, ParticleSystemGravity.y);
-		
-		// velocity
-//		particle.velocity = CGPointMake(particle.velocity.x, particle.velocity.y + (gravityScaleFactor * step));
-		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * step);
-		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * step);
-		particle.velocity = CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
-
-				
-		// take a step in time to integrate velocity into distance
-		float dx = particle.velocity.x * step;
-		float dy = particle.velocity.y * step;
-		
-		// add delta step to location to compute new location
-		particle.location = CGPointMake(particle.location.x + dx, particle.location.y + dy);
-		
-		
-		// fall off bottom of screen
-//		if (particle.location.y > 500) {
-//			
-//			particle.alive = NO;
-//			continue;
-//		}
-		
-		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
-			
-//			NSLog(@"animate: particle X is offscreen %f X(%f) %f", ParticleSystemBBox.origin.x, particle.location.x, ParticleSystemBBox.size.width);			
-			particle.alive = NO;
-			continue;
-		}
-		
-		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
-			
-//			NSLog(@"animate: particle Y is offscreen %f Y(%f) %f", ParticleSystemBBox.origin.y, particle.location.y, ParticleSystemBBox.size.height);			
-			particle.alive = NO;
-			continue;
-		}
-		
-		static const float fadeTime = 3.0 * 2.0;
-		float elapsedTimeSinceBirth	= (time - particle.birth);		
-		float fadeFraction			= MIN(1.0f, elapsedTimeSinceBirth / fadeTime);
-
-		
-		
-		// ::::::::::::::::::::::::::::: IGNORE FADING OUT THE SPRITE FOR NOW :::::::::::::::::::::::::::::
-		// fade
-//		particle.alpha = 0.8f;
-//		
-//		particle.alpha *= 1.0 - fadeFraction;
-//		
-//		if (fadeFraction >= 1.0f) {
-//			
-//			particle.alive = NO;
-//			continue;
-//		}
-		// ::::::::::::::::::::::::::::: IGNORE FADING OUT THE SPRITE FOR NOW :::::::::::::::::::::::::::::
-
-		
-		
-		
-		
-		// scale
-		if (fadeFraction < 0.08f)     particle.size = fadeFraction / 0.08f;
-		else if (fadeFraction > 0.8f) particle.size = 1.0 - ((fadeFraction - 0.8f) / 0.2f);
-		else                          particle.size = 1.0f;
-		
-		
-		// rotate
-		float rotationRate = 5.0f/2.0f;
-		particle.rotation += rotationRate * step * particle.rotationDirection;
-
-		
-		
-	} // for (_particles)
-
-			
-	for (TEIParticle *particle in _particles) {
-		
-		if (particle.alive == YES) {
-						
-			return YES;
-			
-		} // if (particle.alive = YES)
-		
-	} // for (TEIParticle *particle in _particles)
-
-	return NO;
-	
-}
-
-static inline float VFPFastAbs(float x) { 
-	return (x < 0) ? -x : x; 
-}
-
-static inline float VFPFastSin(float x) {
-	
-	// fast sin function; maximum error is 0.001
-	const float P = 0.225f;
-	
-	x = x * M_1_PI;
-	int k = (int) roundf(x);
-	x = x - k;
-    
-	float y = (4.0f - 4.0f * VFPFastAbs(x)) * x;
-    
-	y = P * (y * VFPFastAbs(y) - y) + y;
-    
-	return (k&1) ? -y : y;
-}
-
-static inline float TEIFastCos(float x) {
-	
-	return VFPFastSin(x + M_PI_2);
-	
-}
-
-- (void)draw {
-	
-//	if ([_particles count] > 0) {
-//		NSLog(@"draw: touchPhaseName(%@) particles(%d)", touchPhaseName, [_particles count]);
-//	}
-
-    for (TEIParticle* particle in _particles) {
-		
-		// No need to draw dead particles
-		if (particle.alive == NO) {
-			continue;
-		}
-		
-		
-        // half width and height
-        float w = particle.size * 42.0f;
-		
-		// Jiggle the sprites
-        float radians = particle.rotation + (M_PI / 4.0f) * particle.rotationDirection;
-        float topRightX = particle.location.x + (TEIFastCos(radians) * w);
-        float topRightY = particle.location.y + (VFPFastSin(radians) * w);
-		
-        radians = particle.rotation + (M_PI * 3.0f / 4.0f) * particle.rotationDirection;
-        float topLeftX = particle.location.x + (TEIFastCos(radians) * w);
-        float topLeftY = particle.location.y + (VFPFastSin(radians) * w);
-		
-        radians = particle.rotation + (M_PI * 5.0f / 4.0f) * particle.rotationDirection;
-        float bottomLeftX = particle.location.x + (TEIFastCos(radians) * w);
-        float bottomLeftY = particle.location.y + (VFPFastSin(radians) * w);
-		
-        radians = particle.rotation + (M_PI * 7.0f / 4.0f) * particle.rotationDirection;
-        float bottomRightX = particle.location.x + (TEIFastCos(radians) * w);
-        float bottomRightY = particle.location.y + (VFPFastSin(radians) * w);
-		
-        // Texture atlas hackery.
-        float minST[2];
-        float maxST[2];
-		
-		float delta = ((float)TEXTURE_ATLAS_NXN_DIMENSION);
-		delta = 1.0f/delta;
-		
-		
-		int s_index = (int)particle.textureAtlasS;
-		int t_index = (int)particle.textureAtlasT;
-		
-		minST[0] = [[ParticleSystemTextureCoordinates objectAtIndex:s_index] floatValue];
-		minST[1] = [[ParticleSystemTextureCoordinates objectAtIndex:t_index] floatValue];
-		
-		maxST[0] = minST[0] + delta; 
-		maxST[1] = minST[1] + delta;        
-		
-        unsigned char a = 255;       
-		unsigned char rgb[3];
-        unsigned argb = (a << 24) | (rgb[0] << 16) | (rgb[1] << 8) | (rgb[2] << 0);
-        
-        // Triangle #1
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topLeftX,		topLeftY,		minST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,		topRightY,		maxST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,	bottomLeftY,	minST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
-        
-        // Triangle #2
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	topRightX,		topRightY,		maxST[0], minST[1], argb, &ParticleSystemParticleVertexCount);
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomLeftX,	bottomLeftY,	minST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
-        ParticleSystemAddVertex(ParticleSystemParticleVertices,	bottomRightX,	bottomRightY,	maxST[0], maxST[1], argb, &ParticleSystemParticleVertexCount);
-        
-
-        // Don't go over vert limit!
-        if (ParticleSystemParticleVertexCount >= MAX_VERTS) {
-			
-            ParticleSystemParticleVertexCount = MAX_VERTS;
-            break;
-        }
-        
-    } // for (_particles)
-
 }
 
 + (TEITexture *)particleTexture {

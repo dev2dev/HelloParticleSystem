@@ -17,6 +17,13 @@
 
 - (void)dealloc {
 	
+	[_touchedParticleSystem release];
+	
+	[_particleSystems		removeAllObjects];	
+	[_particleSystems		release];
+	
+	[_deadParticleSystems	removeAllObjects];	
+	[_deadParticleSystems	release];
 	
     [super dealloc];
 }
@@ -90,13 +97,6 @@ static SystemSoundID _boomSoundIDs[3];
 	// Do stuff
 	GLView *glView = (GLView *)self.view;
 	[glView stopAnimation];
-
-	[_particleSystems		removeAllObjects];	
-	[_deadParticleSystems	removeAllObjects];
-	
-	[_particleSystems		release];
-	[_deadParticleSystems	release];
-
 	
 	[super viewWillDisappear:animated];
 }
@@ -241,11 +241,9 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	_touchedParticleSystem = [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]];	
+	_touchedParticleSystem = [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]];
 	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
-	
-//	NSLog(@"touchesBegan: _touchedParticleSystem(%d) _particleSystems(%d)", _touchedParticleSystem, _particleSystems.count); 
-	
+		
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -268,8 +266,6 @@ static SystemSoundID _boomSoundIDs[3];
 	_touchedParticleSystem.location = [touch locationInView:self.view];
 //	[_touchedParticleSystem fill:[touch locationInView:self.view]];
 	
-//	NSLog(@"touchesMoved: _touchedParticleSystem(%d) _particleSystems(%d)", _touchedParticleSystem, _particleSystems.count); 
-	
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -287,16 +283,13 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];
-	
+	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
 	[_touchedParticleSystem setDecay:YES];
-	[_particleSystems addObject:_touchedParticleSystem];
 	
+	[_particleSystems addObject:_touchedParticleSystem];
 	
 	[_touchedParticleSystem release];
 	_touchedParticleSystem = nil;
-	
-//	NSLog(@"touchesEnded: _touchedParticleSystem(%d) _particleSystems(%d)", _touchedParticleSystem, _particleSystems.count); 
 	
 }
 
@@ -313,16 +306,11 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	// Do stuff
+	[self disableAcclerometerEvents];
+	
 	GLView *glView = (GLView *)self.view;
 	[glView stopAnimation];
-	
-	[_particleSystems		removeAllObjects];	
-	[_deadParticleSystems	removeAllObjects];
-	
-	[_particleSystems		release];
-	[_deadParticleSystems	release];
-	
+		
 }
 
 #define kFilteringFactor			(0.10)

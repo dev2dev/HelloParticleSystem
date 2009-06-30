@@ -72,23 +72,25 @@
 
 - (id)initAtLocation:(CGPoint)location;
 
-- (BOOL)animate:(NSTimeInterval)time;
+- (void)giveBirth:(NSTimeInterval)time incrementally:(BOOL)incrementally;
+- (BOOL)timeStep:(NSTimeInterval)time;
 
+- (BOOL)animate:(NSTimeInterval)time;
 - (void)draw;
 
 - (void)fill:(CGPoint)location;
 
 - (void)setDecay:(BOOL)decay;
 
++ (void)buildParticleTextureAtlas;
 + (void)buildTextureAtlasIndexTable;
 + (void)buildBackdropWithBounds:(CGRect)bounds;
-+ (void)buildParticleTextureAtlas;
 
 + (TEITexture *)particleTexture;
 + (TEITexture *)backdropTexture;
 
-+ (void)renderParticles;
 + (void)renderBackground;
++ (void)renderParticles;
 + (void)setGravity:(CGPoint)gravityVector;
 
 @end
