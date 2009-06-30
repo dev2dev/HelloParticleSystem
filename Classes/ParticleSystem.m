@@ -4,6 +4,9 @@
 
 static CGPoint ParticleSystemGravity = { 0.0, 1.0 };
 
+static float ParticleSystemBBoxBorder = 20.0;
+static CGRect  ParticleSystemBBox;
+
 typedef struct _ParticleSystemOpenGLVertexData { short xy[2]; unsigned argb; float st[2]; } ParticleSystemOpenGLVertexData;
 
 
@@ -223,6 +226,18 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 
 + (void)buildBackdropWithBounds:(CGRect)bounds {
 	
+	// When a particle goes offscreen kill it off
+	ParticleSystemBBox = bounds;
+	
+	// allow an offscreen border for killing of particles
+	ParticleSystemBBox.origin.x		-= ParticleSystemBBoxBorder;
+	ParticleSystemBBox.origin.y		-= ParticleSystemBBoxBorder;
+	
+	ParticleSystemBBox.size.width	+= ParticleSystemBBoxBorder;
+	ParticleSystemBBox.size.height	+= ParticleSystemBBoxBorder;
+
+	
+	
 	// OpenGL defaults to CCW winding rule for triangles.
 	// The patten is: V0 -> V1 -> V2 then V2 -> V1 -> V3 ... etc.
 	// At draw time I use glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertexCount)
@@ -391,8 +406,22 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		
 		// fall off bottom of screen
-		if (particle.location.y > 500) {
+//		if (particle.location.y > 500) {
+//			
+//			particle.alive = NO;
+//			continue;
+//		}
+		
+		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
 			
+//			NSLog(@"animate: particle X is offscreen %f X(%f) %f", ParticleSystemBBox.origin.x, particle.location.x, ParticleSystemBBox.size.width);			
+			particle.alive = NO;
+			continue;
+		}
+		
+		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
+			
+//			NSLog(@"animate: particle Y is offscreen %f Y(%f) %f", ParticleSystemBBox.origin.y, particle.location.y, ParticleSystemBBox.size.height);			
 			particle.alive = NO;
 			continue;
 		}
