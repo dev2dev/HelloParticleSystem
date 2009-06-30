@@ -161,12 +161,10 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	if (self = [super init]) {
 		
-//		NSLog(@"ParticleSystem - initAtLocation");
-				
 		_openglPackedVertices	=	[[NSMutableArray alloc] init];
 		_particles				=	[[NSMutableArray alloc] init];
 		
-		_particleTraunch		=	16 * 2;
+		_particleTraunch		=	24;
 		
 		_location				= location;
 		
@@ -265,8 +263,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	ParticleSystemBackdropTexture = 
 //	[ [TEITexture alloc] initWithImageFile:@"mandrill"		extension:@"png" mipmap:YES ];
 //	[ [TEITexture alloc] initWithImageFile:@"swirl-rose"	extension:@"png" mipmap:YES ];
-//	[ [TEITexture alloc] initWithImageFile:@"case-identity"	extension:@"png" mipmap:YES ];
-	[ [TEITexture alloc] initWithImageFile:@"mash"	extension:@"png" mipmap:YES ];
+	[ [TEITexture alloc] initWithImageFile:@"case-identity"	extension:@"png" mipmap:YES ];
+//	[ [TEITexture alloc] initWithImageFile:@"mash"	extension:@"png" mipmap:YES ];
 	
 }
 
@@ -333,7 +331,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
     _lastTime = time;
 	
 	// bring particles to life. At birth we create a traunch of particles in one go. After birth we incrementally add a particle.
-    if (_decay == NO) {
+    if (_decay == NO || _initialAnimationStep == YES) {
 		
 		if (_birth == time) {
 			
@@ -362,7 +360,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			
 		}
 	
-    } // if (_decay == NO)
+    } // if (_decay == NO || _initialAnimationStep == YES)
 	
 	_initialAnimationStep = NO;
 

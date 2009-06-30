@@ -347,13 +347,12 @@ static SystemSoundID _boomSoundIDs[3];
 
 - (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration {
 	
-//	NSLog(@"ParticleSystem accelerometer: acc(%f, %f, %f)", _accelerationValue[0], _accelerationValue[1], _accelerationValue[2]);
-	
-	//Use a basic low-pass filter to only keep the gravity in the accelerometer values
+	// Compute "G"
 	_accelerationValue[0] = acceleration.x * kFilteringFactor + _accelerationValue[0] * (1.0 - kFilteringFactor);
 	_accelerationValue[1] = acceleration.y * kFilteringFactor + _accelerationValue[1] * (1.0 - kFilteringFactor);
 	_accelerationValue[2] = acceleration.z * kFilteringFactor + _accelerationValue[2] * (1.0 - kFilteringFactor);
 	
+	// ParticleSystem particles live in 2D. Use x and y compoments of "G"
 	[ParticleSystem setGravity:CGPointMake(_accelerationValue[0], _accelerationValue[1])];
 }
 
