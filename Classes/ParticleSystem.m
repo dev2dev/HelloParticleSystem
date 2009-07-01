@@ -222,7 +222,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 	}
 	
-	NSLog(@"giveBirth: touchPhaseName(%@) particles(%d).",  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
+	NSLog(@"giveBirth: touchPhaseName(%@) particles(%d).",  touchPhaseName, [_particles count]);
 	
 }
 
