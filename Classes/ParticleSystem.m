@@ -184,6 +184,20 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
     return self;
 }
 
+- (int)countLiveParticles {
+	
+	int c = 0;
+	for (TEIParticle *p in _particles) {
+		
+		if (p.alive == YES) {
+			++c;
+		}
+		
+	} // for (_particles)
+	
+	return c;
+}
+
 - (void)giveBirth:(NSTimeInterval)time incrementally:(BOOL)incrementally {
 	
 	if (incrementally == YES) {
@@ -370,12 +384,14 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			
 			[particle release];
 			
-			//			NSLog(@"animate: INCREMENT. touchPhaseName(%@) decay(%d) initialAnimationStep(%d) particles(%d).", 
-			//				  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
+//			NSLog(@"animate: INCREMENT. touchPhaseName(%@) decay(%d) initialAnimationStep(%d) particles(%d).", 
+//				  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
 			
 		}
 		
     } // if (_decay == NO || _initialAnimationStep == YES)
+	
+//	NSLog(@"animate: Living particles(%d).", [self countLiveParticles]);
 	
 	_initialAnimationStep	= NO;
 	
@@ -387,11 +403,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		}
 		
 		static const float gravityScaleFactor = 120.0 * 2.0;
-		
-		//		NSLog(@"animate: ParticleSystemGravity(%f, %f)", ParticleSystemGravity.x, ParticleSystemGravity.y);
-		
+				
 		// velocity
-		//		particle.velocity = CGPointMake(particle.velocity.x, particle.velocity.y + (gravityScaleFactor * step));
 		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * step);
 		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * step);
 		particle.velocity = CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
@@ -402,26 +415,16 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		float dy = particle.velocity.y * step;
 		
 		// add delta step to location to compute new location
-		particle.location = CGPointMake(particle.location.x + dx, particle.location.y + dy);
-		
-		
-		// fall off bottom of screen
-		//		if (particle.location.y > 500) {
-		//			
-		//			particle.alive = NO;
-		//			continue;
-		//		}
+		particle.location = CGPointMake(particle.location.x + dx, particle.location.y + dy);		
 		
 		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
 			
-			//			NSLog(@"animate: particle X is offscreen %f X(%f) %f", ParticleSystemBBox.origin.x, particle.location.x, ParticleSystemBBox.size.width);			
 			particle.alive = NO;
 			continue;
 		}
 		
 		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
 			
-			//			NSLog(@"animate: particle Y is offscreen %f Y(%f) %f", ParticleSystemBBox.origin.y, particle.location.y, ParticleSystemBBox.size.height);			
 			particle.alive = NO;
 			continue;
 		}

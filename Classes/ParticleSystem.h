@@ -72,6 +72,8 @@
 
 - (id)initAtLocation:(CGPoint)location;
 
+- (int)countLiveParticles;
+
 - (void)giveBirth:(NSTimeInterval)time incrementally:(BOOL)incrementally;
 - (BOOL)timeStep:(NSTimeInterval)time;
 

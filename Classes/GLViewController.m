@@ -137,8 +137,7 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	if (nil != _touchedParticleSystem) {
 
-//		NSLog(@"GLViewController.drawView - drawing touchedParticleSystem touchPhaseName(%@) touchedParticleSystem(%d) particleSystems(%d)", 
-//			  _touchedParticleSystem.touchPhaseName, _touchedParticleSystem, [_particleSystems count]);
+//		NSLog(@"GLViewController.drawView - drawing touchedParticleSystem touchPhaseName(%@)", _touchedParticleSystem.touchPhaseName);
 
 		if ([_touchedParticleSystem animate:time]) {
 			
@@ -155,8 +154,7 @@ static SystemSoundID _boomSoundIDs[3];
 	
     for (ParticleSystem *ps in _particleSystems) {
 		
-//		NSLog(@"GLViewController.drawView - drawing particle(%d) of particleSystems(%d) touchPhaseName(%@) touchedParticleSystem(%d)", 
-//			  [_particleSystems indexOfObject:ps], [_particleSystems count], ps.touchPhaseName, _touchedParticleSystem);
+//		NSLog(@"GLViewController.drawView - drawing       particleSystems touchPhaseName(%@)", ps.touchPhaseName);
 		
 		if ([ps animate:time]) {
 			
