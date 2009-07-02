@@ -241,7 +241,7 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	_touchedParticleSystem = [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]];
 	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
-		
+	
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {

@@ -46,6 +46,8 @@
 
 
 @interface ParticleSystem : NSObject {
+	
+    BOOL alive;
 
 	NSMutableArray*	_openglPackedVertices;
 	NSMutableArray*	_particles;
@@ -64,6 +66,8 @@
 
 	NSString*		touchPhaseName;
 }
+
+@property BOOL alive;
 
 @property CGPoint						location;
 

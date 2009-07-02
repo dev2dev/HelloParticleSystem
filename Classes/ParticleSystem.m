@@ -73,7 +73,8 @@ ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float
 	
 	if(nil != self) {
 		
-		alive = YES;
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"alive"];
+//		alive = YES;
 		
 		// location
 		location = newLocation;
@@ -136,6 +137,8 @@ static TEITexture		*ParticleSystemParticleTexture		= nil;
 static TEITexture		*ParticleSystemBackdropTexture		= nil;
 static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 
+@synthesize alive;
+
 @synthesize location=_location;
 
 @synthesize particleTraunch=_particleTraunch;
@@ -164,6 +167,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	if (self = [super init]) {
 		
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"alive"];
+		
 		_openglPackedVertices	=	[[NSMutableArray alloc] init];
 		_particles				=	[[NSMutableArray alloc] init];
 		
@@ -189,7 +194,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	int c = 0;
 	for (TEIParticle *p in _particles) {
 		
-		if (p.alive == YES) {
+//		if (p.alive == YES) {
+		if ([ [ p valueForKey:@"alive" ] boolValue ] == YES) {
 			++c;
 		}
 		
@@ -277,15 +283,13 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		//		}
 		
 		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
-			
-			//			NSLog(@"animate: particle X is offscreen %f X(%f) %f", ParticleSystemBBox.origin.x, particle.location.x, ParticleSystemBBox.size.width);			
+				
 			particle.alive = NO;
 			continue;
 		}
 		
 		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
-			
-			//			NSLog(@"animate: particle Y is offscreen %f Y(%f) %f", ParticleSystemBBox.origin.y, particle.location.y, ParticleSystemBBox.size.height);			
+				
 			particle.alive = NO;
 			continue;
 		}
@@ -398,7 +402,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	// Take a time step in particle system state. Cull dead particles as needed.
 	for (TEIParticle* particle in _particles) {
 		
-		if (particle.alive == NO) {
+		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
+			
 			continue;
 		}
 		
@@ -419,13 +424,15 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
 			
-			particle.alive = NO;
+//			particle.alive = NO;
+			[particle setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
 			continue;
 		}
 		
 		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
 			
-			particle.alive = NO;
+//			particle.alive = NO;
+			[particle setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
 			continue;
 		}
 		
@@ -469,7 +476,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	for (TEIParticle *particle in _particles) {
 		
-		if (particle.alive == YES) {
+//		if (particle.alive == YES) {
+		if ([ [ particle valueForKey:@"alive" ] boolValue ] == YES) {
 			
 			return YES;
 			
@@ -477,7 +485,10 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 	} // for (TEIParticle *particle in _particles)
 	
-	return NO;
+	[self setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
+	
+	return [ [ self valueForKey:@"alive" ] boolValue ];
+//	return NO;
 	
 }
 
