@@ -67,10 +67,8 @@
 	NSString*		touchPhaseName;
 }
 
-@property BOOL alive;
-
+@property BOOL							alive;
 @property CGPoint						location;
-
 @property int							particleTraunch;
 @property (nonatomic, retain) NSString	*touchPhaseName;
 

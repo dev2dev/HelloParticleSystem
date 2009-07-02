@@ -19,10 +19,12 @@
 	
 	UIAccelerationValue _accelerationValue[3];
 		
-	ParticleSystem		*_touchedParticleSystem;
+	ParticleSystem		*touchedParticleSystem;
     NSMutableArray		*_particleSystems;
     NSMutableArray		*_deadParticleSystems;
 }
+
+@property (nonatomic, retain) ParticleSystem *touchedParticleSystem;
 
 - (NSString*) phaseName:(UITouchPhase) phase;
 

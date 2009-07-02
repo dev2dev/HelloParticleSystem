@@ -15,9 +15,11 @@
 
 @implementation GLViewController
 
+@synthesize touchedParticleSystem;
+
 - (void)dealloc {
 	
-	[_touchedParticleSystem release];
+	[touchedParticleSystem release];
 	
 	[_particleSystems		removeAllObjects];	
 	[_particleSystems		release];
@@ -48,7 +50,7 @@ static SystemSoundID _boomSoundIDs[3];
 - (void)viewDidLoad {
 	
 	// Prepare particle system arrays
-	_touchedParticleSystem	= nil;
+	touchedParticleSystem	= nil;
 	_particleSystems		= [[NSMutableArray alloc] init];
 	_deadParticleSystems	= [[NSMutableArray alloc] init];
 	
@@ -132,21 +134,28 @@ static SystemSoundID _boomSoundIDs[3];
 // Draw a frame
 - (void)drawView:(GLView*)view {
 	
-	
+//	if (touchedParticleSystem != nil) {
+//		
+//		NSLog(@"GLViewController.drawView - touchPhaseName(%@)", touchedParticleSystem.touchPhaseName);	
+//	} else if ([_particleSystems count] > 0) {
+//		
+//		NSLog(@"GLViewController.drawView - _particleSystems(%d) touchPhaseName(%@)", [_particleSystems count], touchedParticleSystem.touchPhaseName);	
+//	}
+		
     NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
 	
-	if (nil != _touchedParticleSystem) {
+	if (nil != touchedParticleSystem) {
 
 //		NSLog(@"GLViewController.drawView - drawing touchedParticleSystem touchPhaseName(%@)", _touchedParticleSystem.touchPhaseName);
 
-		if ([_touchedParticleSystem animate:time]) {
+		if ([touchedParticleSystem animate:time]) {
 			
-			[_touchedParticleSystem draw];
+			[touchedParticleSystem draw];
 			
 		} else {
 			
-			[_touchedParticleSystem release];
-			_touchedParticleSystem = nil;
+			[touchedParticleSystem release];
+			touchedParticleSystem = nil;
 		}
 		
 	} // if (nil != _touchedParticleSystem)
@@ -192,6 +201,26 @@ static SystemSoundID _boomSoundIDs[3];
 	
 }
 
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	
+	if (context == touchedParticleSystem) {
+
+		if ([keyPath isEqualToString:@"alive"]) {
+			
+			[self _playBoom];
+			
+			NSLog(@"GLViewController - Observing %@.%@", [object class], keyPath);
+			
+//			[object removeObserver:self forKeyPath:@"alive"];
+		}
+			
+	} else {
+		
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+	}
+		
+}
+
 // String name for touch phase
 - (NSString*) phaseName:(UITouchPhase) phase {
 	
@@ -224,7 +253,7 @@ static SystemSoundID _boomSoundIDs[3];
 // The touch phase quartet
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	
-	[self _playBoom];
+//	[self _playBoom];
 	
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
@@ -239,9 +268,17 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	_touchedParticleSystem = [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]];
-	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
+	touchedParticleSystem = [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]];
+	touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
 	
+	
+	[touchedParticleSystem addObserver:self 
+							 forKeyPath:@"alive" 
+								options:NSKeyValueObservingOptionNew 
+								context:touchedParticleSystem];
+	
+	[touchedParticleSystem setValue:[NSNumber numberWithBool:YES] forKey:@"alive"];
+
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -259,9 +296,9 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
+	touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
 	
-	_touchedParticleSystem.location = [touch locationInView:self.view];
+	touchedParticleSystem.location = [touch locationInView:self.view];
 //	[_touchedParticleSystem fill:[touch locationInView:self.view]];
 	
 }
@@ -281,13 +318,15 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
-	[_touchedParticleSystem setDecay:YES];
+	touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
+	[touchedParticleSystem setDecay:YES];
 	
-	[_particleSystems addObject:_touchedParticleSystem];
+	[_particleSystems addObject:touchedParticleSystem];
+
+	[touchedParticleSystem removeObserver:self forKeyPath:@"alive"];
 	
-	[_touchedParticleSystem release];
-	_touchedParticleSystem = nil;
+	[touchedParticleSystem release];
+	touchedParticleSystem = nil;
 	
 }
 
