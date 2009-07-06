@@ -17,14 +17,26 @@
 
 @interface GLViewController : UIViewController  <UIAccelerometerDelegate> {
 	
-	UIAccelerationValue _accelerationValue[3];
+	int testing123;
+	
+	UIAccelerationValue accelerationValueX;
+	UIAccelerationValue accelerationValueY;
+	UIAccelerationValue accelerationValueZ;
 		
-	ParticleSystem		*touchedParticleSystem;
-    NSMutableArray		*_particleSystems;
-    NSMutableArray		*_deadParticleSystems;
+	ParticleSystem		*_touchedParticleSystem;
+    NSMutableArray		*particleSystems;
+    NSMutableArray		*deadParticleSystems;
 }
 
+@property int testing123;
+
+@property UIAccelerationValue accelerationValueX;
+@property UIAccelerationValue accelerationValueY;
+@property UIAccelerationValue accelerationValueZ;
+
 @property (nonatomic, retain) ParticleSystem *touchedParticleSystem;
+@property (nonatomic, retain) NSMutableArray *particleSystems;
+@property (nonatomic, retain) NSMutableArray *deadParticleSystems;
 
 - (NSString*) phaseName:(UITouchPhase) phase;
 

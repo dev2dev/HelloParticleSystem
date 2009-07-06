@@ -252,7 +252,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	// Take a time step in particle system state. Cull dead particles as needed.
 	for (TEIParticle* particle in _particles) {
 		
-		if (particle.alive == NO) {
+		
+		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
 			continue;
 		}
 		
@@ -284,13 +285,15 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
 				
-			particle.alive = NO;
+//			particle.alive = NO;
+			[particle setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
 			continue;
 		}
 		
 		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
 				
-			particle.alive = NO;
+//			particle.alive = NO;
+			[particle setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
 			continue;
 		}
 		
@@ -332,8 +335,10 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	} // for (_particles)
 	
 	for (TEIParticle *particle in _particles) {
+
+//		if (particle.alive == YES) {
+		if ([ [ particle valueForKey:@"alive" ] boolValue ] == YES) {
 		
-		if (particle.alive == YES) {
 			
 			return YES;
 			
@@ -527,7 +532,7 @@ static inline float TEIFastCos(float x) {
     for (TEIParticle* particle in _particles) {
 		
 		// No need to draw dead particles
-		if (particle.alive == NO) {
+		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
 			continue;
 		}
 		

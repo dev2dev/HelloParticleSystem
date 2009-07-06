@@ -6,8 +6,6 @@
 //  Copyright Douglass Turner Consulting 2009. All rights reserved.
 //
 
-#import <AudioToolbox/AudioServices.h>
-
 #import "ConstantsAndMacros.h"
 #import "GLViewController.h"
 #import "GLView.h"
@@ -15,17 +13,25 @@
 
 @implementation GLViewController
 
-@synthesize touchedParticleSystem;
+@synthesize testing123;
+
+@synthesize accelerationValueX;
+@synthesize accelerationValueY;
+@synthesize accelerationValueZ;
+
+@synthesize touchedParticleSystem = _touchedParticleSystem;
+@synthesize particleSystems;
+@synthesize deadParticleSystems;
 
 - (void)dealloc {
 	
-	[touchedParticleSystem release];
+	[_touchedParticleSystem release];
 	
-	[_particleSystems		removeAllObjects];	
-	[_particleSystems		release];
+	[particleSystems		removeAllObjects];	
+	[particleSystems		release];
 	
-	[_deadParticleSystems	removeAllObjects];	
-	[_deadParticleSystems	release];
+	[deadParticleSystems	removeAllObjects];	
+	[deadParticleSystems	release];
 	
     [super dealloc];
 }
@@ -44,33 +50,18 @@
 	[glView release];
 }
 
-static SystemSoundID _boomSoundIDs[3];
-
 // The Stanford Pattern
 - (void)viewDidLoad {
 	
 	// Prepare particle system arrays
-	touchedParticleSystem	= nil;
-	_particleSystems		= [[NSMutableArray alloc] init];
-	_deadParticleSystems	= [[NSMutableArray alloc] init];
-	
-	// set up sound effects
-	NSURL *soundURL = nil;
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[1]);
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
+	particleSystems		= [[NSMutableArray alloc] init];
+	deadParticleSystems	= [[NSMutableArray alloc] init];
 
 	[ParticleSystem buildParticleTextureAtlas];
 	
 	GLView *glView = (GLView *)self.view;
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
-	
+
 }
 
 // The Stanford Pattern
@@ -85,7 +76,7 @@ static SystemSoundID _boomSoundIDs[3];
 	[glView startAnimation];
 	
 	[self enableAcclerometerEvents];
-
+	
 }
 
 // The Stanford Pattern
@@ -134,34 +125,27 @@ static SystemSoundID _boomSoundIDs[3];
 // Draw a frame
 - (void)drawView:(GLView*)view {
 	
-//	if (touchedParticleSystem != nil) {
-//		
-//		NSLog(@"GLViewController.drawView - touchPhaseName(%@)", touchedParticleSystem.touchPhaseName);	
-//	} else if ([_particleSystems count] > 0) {
-//		
-//		NSLog(@"GLViewController.drawView - _particleSystems(%d) touchPhaseName(%@)", [_particleSystems count], touchedParticleSystem.touchPhaseName);	
-//	}
-		
     NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
 	
-	if (nil != touchedParticleSystem) {
-
-//		NSLog(@"GLViewController.drawView - drawing touchedParticleSystem touchPhaseName(%@)", _touchedParticleSystem.touchPhaseName);
-
-		if ([touchedParticleSystem animate:time]) {
+	if (nil != _touchedParticleSystem) {
+		
+		NSLog(@"GLViewController.drawView _touchedParticleSystem(NON-NIL) particleSystems(%d) touchPhaseName(%@)", 
+			  [particleSystems count], _touchedParticleSystem.touchPhaseName);
+		
+		if ([_touchedParticleSystem animate:time]) {
 			
-			[touchedParticleSystem draw];
+			[_touchedParticleSystem draw];
 			
 		} else {
 			
-			[touchedParticleSystem release];
-			touchedParticleSystem = nil;
+			[_touchedParticleSystem release];
+			_touchedParticleSystem = nil;
 		}
 		
 	} // if (nil != _touchedParticleSystem)
 
 	
-    for (ParticleSystem *ps in _particleSystems) {
+    for (ParticleSystem *ps in particleSystems) {
 		
 //		NSLog(@"GLViewController.drawView - drawing       particleSystems touchPhaseName(%@)", ps.touchPhaseName);
 		
@@ -171,18 +155,18 @@ static SystemSoundID _boomSoundIDs[3];
 			
 		} else {
 			
-			[_deadParticleSystems	addObject:ps];
+			[deadParticleSystems	addObject:ps];
         }
 		
     } // for (_particleSystems)
 
 	
-	for (ParticleSystem *ps in _deadParticleSystems) {
+	for (ParticleSystem *ps in deadParticleSystems) {
 		
-        [_particleSystems removeObjectIdenticalTo:ps];
+        [particleSystems removeObjectIdenticalTo:ps];
     }
 	
-	[_deadParticleSystems removeAllObjects];
+	[deadParticleSystems removeAllObjects];
 	
 	
 	// NOTE: The background should completely fill the window, eliminating the
@@ -191,34 +175,6 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	[ParticleSystem renderParticles];
 	
-}
-
-// Boom! Boom! Boom!
-- (void)_playBoom {
-	
-    int index = (random() % 3);
-    AudioServicesPlaySystemSound(_boomSoundIDs[index]);
-	
-}
-
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	
-	if (context == touchedParticleSystem) {
-
-		if ([keyPath isEqualToString:@"alive"]) {
-			
-			[self _playBoom];
-			
-			NSLog(@"GLViewController - Observing %@.%@", [object class], keyPath);
-			
-//			[object removeObserver:self forKeyPath:@"alive"];
-		}
-			
-	} else {
-		
-		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-	}
-		
 }
 
 // String name for touch phase
@@ -252,7 +208,7 @@ static SystemSoundID _boomSoundIDs[3];
 
 // The touch phase quartet
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	
+
 //	[self _playBoom];
 	
 	// Only single touch for now
@@ -268,17 +224,15 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	touchedParticleSystem = [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]];
-	touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
-	
-	
-	[touchedParticleSystem addObserver:self 
-							 forKeyPath:@"alive" 
-								options:NSKeyValueObservingOptionNew 
-								context:touchedParticleSystem];
-	
-	[touchedParticleSystem setValue:[NSNumber numberWithBool:YES] forKey:@"alive"];
+	ParticleSystem* ps = nil;
+	ps = [[[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]] autorelease];
+	ps.touchPhaseName = [self phaseName:touch.phase];
 
+//	self.touchedParticleSystem = ps;
+	[self setValue:ps								forKeyPath:@"_touchedParticleSystem"];
+//	[self setValue:[NSNumber numberWithBool:YES]	forKeyPath:@"_touchedParticleSystem.alive"];
+	
+	
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -296,9 +250,9 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
+	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
 	
-	touchedParticleSystem.location = [touch locationInView:self.view];
+	_touchedParticleSystem.location = [touch locationInView:self.view];
 //	[_touchedParticleSystem fill:[touch locationInView:self.view]];
 	
 }
@@ -318,15 +272,13 @@ static SystemSoundID _boomSoundIDs[3];
 //		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
 //		  );
 	
-	touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
-	[touchedParticleSystem setDecay:YES];
+	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
+	[_touchedParticleSystem setDecay:YES];
 	
-	[_particleSystems addObject:touchedParticleSystem];
-
-	[touchedParticleSystem removeObserver:self forKeyPath:@"alive"];
+	[particleSystems addObject:_touchedParticleSystem];
 	
-	[touchedParticleSystem release];
-	touchedParticleSystem = nil;
+	[_touchedParticleSystem release];
+	_touchedParticleSystem = nil;
 	
 }
 
@@ -350,7 +302,7 @@ static SystemSoundID _boomSoundIDs[3];
 		
 }
 
-#define kFilteringFactor			(0.10)
+#define kFilteringFactor			( 0.1)
 #define kAccelerometerFrequency		(30.0)
 
 - (void)enableAcclerometerEvents {
@@ -373,12 +325,12 @@ static SystemSoundID _boomSoundIDs[3];
 - (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration {
 	
 	// Compute "G"
-	_accelerationValue[0] = acceleration.x * kFilteringFactor + _accelerationValue[0] * (1.0 - kFilteringFactor);
-	_accelerationValue[1] = acceleration.y * kFilteringFactor + _accelerationValue[1] * (1.0 - kFilteringFactor);
-	_accelerationValue[2] = acceleration.z * kFilteringFactor + _accelerationValue[2] * (1.0 - kFilteringFactor);
+	accelerationValueX = acceleration.x * kFilteringFactor + accelerationValueX * (1.0 - kFilteringFactor);
+	accelerationValueY = acceleration.y * kFilteringFactor + accelerationValueY * (1.0 - kFilteringFactor);
+	accelerationValueZ = acceleration.z * kFilteringFactor + accelerationValueZ * (1.0 - kFilteringFactor);
 	
 	// ParticleSystem particles live in 2D. Use x and y compoments of "G"
-	[ParticleSystem setGravity:CGPointMake(_accelerationValue[0], _accelerationValue[1])];
+	[ParticleSystem setGravity:CGPointMake(accelerationValueX, accelerationValueY)];
 }
 
 
