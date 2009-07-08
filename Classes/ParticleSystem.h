@@ -6,7 +6,7 @@
 @interface TEIParticle : NSObject {
 	
 	double birth;
-    BOOL alive;
+    BOOL _alive;
 	
 	CGPoint location;
 	CGPoint	velocity;
@@ -47,7 +47,7 @@
 
 @interface ParticleSystem : NSObject {
 	
-    BOOL alive;
+    BOOL _alive;
 
 	NSMutableArray*	_openglPackedVertices;
 	NSMutableArray*	_particles;
@@ -68,6 +68,7 @@
 }
 
 @property BOOL							alive;
+
 @property CGPoint						location;
 @property int							particleTraunch;
 @property (nonatomic, retain) NSString	*touchPhaseName;

@@ -40,7 +40,7 @@ ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float
 
 @implementation TEIParticle
 
-@synthesize alive;
+@synthesize alive=_alive;
 @synthesize birth;
 
 @synthesize location;
@@ -73,8 +73,8 @@ ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float
 	
 	if(nil != self) {
 		
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"alive"];
-//		alive = YES;
+//		[self setValue:[NSNumber numberWithBool:YES] forKey:@"alive"];
+		_alive = YES;
 		
 		// location
 		location = newLocation;
@@ -137,7 +137,7 @@ static TEITexture		*ParticleSystemParticleTexture		= nil;
 static TEITexture		*ParticleSystemBackdropTexture		= nil;
 static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 
-@synthesize alive;
+@synthesize alive=_alive;
 
 @synthesize location=_location;
 
@@ -194,8 +194,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	int c = 0;
 	for (TEIParticle *p in _particles) {
 		
-//		if (p.alive == YES) {
-		if ([ [ p valueForKey:@"alive" ] boolValue ] == YES) {
+//		if ([ [ p valueForKey:@"alive" ] boolValue ] == YES) {
+		if (p.alive == YES) {
+		
 			++c;
 		}
 		
@@ -253,7 +254,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	for (TEIParticle* particle in _particles) {
 		
 		
-		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
+//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
+		if (particle.alive == NO) {
+		
 			continue;
 		}
 		
@@ -336,8 +339,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	for (TEIParticle *particle in _particles) {
 
-//		if (particle.alive == YES) {
-		if ([ [ particle valueForKey:@"alive" ] boolValue ] == YES) {
+		if (particle.alive == YES) {
+//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == YES) {
 		
 			
 			return YES;
@@ -407,8 +410,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	// Take a time step in particle system state. Cull dead particles as needed.
 	for (TEIParticle* particle in _particles) {
 		
-		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
-			
+//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
+		if (particle.alive == NO) {
+	
 			continue;
 		}
 		
@@ -481,8 +485,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	for (TEIParticle *particle in _particles) {
 		
-//		if (particle.alive == YES) {
-		if ([ [ particle valueForKey:@"alive" ] boolValue ] == YES) {
+		if (particle.alive == YES) {
+//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == YES) {
 			
 			return YES;
 			
@@ -491,9 +495,10 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	} // for (TEIParticle *particle in _particles)
 	
 	[self setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
-	
 	return [ [ self valueForKey:@"alive" ] boolValue ];
-//	return NO;
+	
+//	_alive = NO;
+//	return _alive;
 	
 }
 
@@ -532,7 +537,9 @@ static inline float TEIFastCos(float x) {
     for (TEIParticle* particle in _particles) {
 		
 		// No need to draw dead particles
-		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
+//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
+		if (particle.alive == NO) {
+		
 			continue;
 		}
 		

@@ -19,19 +19,13 @@
 @synthesize accelerationValueY;
 @synthesize accelerationValueZ;
 
-@synthesize touchedParticleSystem = _touchedParticleSystem;
+@synthesize touchedParticleSystem=_touchedParticleSystem;
 @synthesize particleSystems;
-@synthesize deadParticleSystems;
 
 - (void)dealloc {
 	
-	[_touchedParticleSystem release];
-	
 	[particleSystems		removeAllObjects];	
 	[particleSystems		release];
-	
-	[deadParticleSystems	removeAllObjects];	
-	[deadParticleSystems	release];
 	
     [super dealloc];
 }
@@ -55,7 +49,6 @@
 	
 	// Prepare particle system arrays
 	particleSystems		= [[NSMutableArray alloc] init];
-	deadParticleSystems	= [[NSMutableArray alloc] init];
 
 	[ParticleSystem buildParticleTextureAtlas];
 	
@@ -81,7 +74,7 @@
 
 // The Stanford Pattern
 - (void)viewWillDisappear:(BOOL)animated {
-	
+		
 	//	[self rememberState];
 	//	[self saveStateToDisk];
 	
@@ -122,59 +115,54 @@
 	
 }
 
-// Draw a frame
+// Draw an OpenGL frame
 - (void)drawView:(GLView*)view {
 	
     NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
 	
-	if (nil != _touchedParticleSystem) {
-		
-		NSLog(@"GLViewController.drawView _touchedParticleSystem(NON-NIL) particleSystems(%d) touchPhaseName(%@)", 
-			  [particleSystems count], _touchedParticleSystem.touchPhaseName);
-		
-		if ([_touchedParticleSystem animate:time]) {
-			
-			[_touchedParticleSystem draw];
-			
-		} else {
-			
-			[_touchedParticleSystem release];
-			_touchedParticleSystem = nil;
+    for (ParticleSystem *ps in particleSystems) {
+				
+		// If the entire particle system is dead, ignore it.
+		if ([ [ ps valueForKey:@"alive" ] boolValue ] == NO) {
+			continue;
 		}
 		
-	} // if (nil != _touchedParticleSystem)
-
-	
-    for (ParticleSystem *ps in particleSystems) {
-		
-//		NSLog(@"GLViewController.drawView - drawing       particleSystems touchPhaseName(%@)", ps.touchPhaseName);
-		
+		// If there are remaining live particles, draw them.
 		if ([ps animate:time]) {
 			
             [ps draw];			
-			
-		} else {
-			
-			[deadParticleSystems	addObject:ps];
         }
 		
-    } // for (_particleSystems)
+    } // for (particleSystems)
 
-	
-	for (ParticleSystem *ps in deadParticleSystems) {
+	// Once all particle systems are dead, discard the lot.
+	if ([self countLiveParticleSystems] == 0) {
 		
-        [particleSystems removeObjectIdenticalTo:ps];
-    }
+		[particleSystems removeAllObjects];
+	}
 	
-	[deadParticleSystems removeAllObjects];
-	
-	
-	// NOTE: The background should completely fill the window, eliminating the
+	// NOTE: The background completely fills the window, eliminating the
 	// need for a costly clearing of depth and color every frame.
 	[ParticleSystem renderBackground];
 	
+	// Render particles
 	[ParticleSystem renderParticles];
 	
+}
+
+// How many live particle systems do we have
+- (int) countLiveParticleSystems {
+	
+	int live = 0;
+	for (ParticleSystem *ps in particleSystems) {
+		
+		if ([ [ ps valueForKey:@"alive" ] boolValue ] == YES) {
+			++live;
+		}
+		
+    } // for (deadParticleSystems)
+	
+	return live;
 }
 
 // String name for touch phase
@@ -206,32 +194,31 @@
 	return result;
 };
 
-// The touch phase quartet
+// Keep track of the currently "touched" particle system
+// so that we can up date it's location during touchesMoved:withEvent
+// and also enable decaying of the particle system during
+// touchesEnded:withEvent
+//static ParticleSystem *touched = nil;
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
-//	[self _playBoom];
-	
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
 	
-//	NSObject *o		= touch;
-//	NSLog(@"touchesBegan: touch(%p) phase(%@) tapCount(%d) time(%f) location( previous(%f %f) current(%f %f) )", 
-//		  o, 
-//		  [self phaseName:touch.phase],
-//		  touch.tapCount, 
-//		  touch.timestamp, 
-//		  [touch	previousLocationInView:self.view].x,	[touch	previousLocationInView:self.view].y,
-//		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
-//		  );
+	ParticleSystem *p = [[[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]] autorelease];
+	p.touchPhaseName = [self phaseName:touch.phase];
+//	NSLog(@"p = [[alloc] init]                                   P RetainCount(%d)", [p retainCount]);
 	
-	ParticleSystem* ps = nil;
-	ps = [[[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]] autorelease];
-	ps.touchPhaseName = [self phaseName:touch.phase];
+//	_touchedParticleSystem = p;
+	[self setValue:p forKeyPath:@"touchedParticleSystem"];
+//	self.touchedParticleSystem = p;
+//	NSLog(@"_touchedParticleSystem = p		                     P RetainCount(%d)", [p							retainCount]);
+//	NSLog(@"_touchedParticleSystem = p		_touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
+	
+	[particleSystems addObject:p];
+//	NSLog(@"[particleSystems addObject:p]		                 P RetainCount(%d)", [p							retainCount]);
+//	NSLog(@"[particleSystems addObject:p]	_touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
 
-//	self.touchedParticleSystem = ps;
-	[self setValue:ps								forKeyPath:@"_touchedParticleSystem"];
-//	[self setValue:[NSNumber numberWithBool:YES]	forKeyPath:@"_touchedParticleSystem.alive"];
-	
 	
 }
 
@@ -239,20 +226,10 @@
 	
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];	
-	
-//	NSObject *o		= touch;
-//	NSLog(@"touchesMoved: touch(%p) phase(%@) tapCount(%d) time(%f) location( previous(%f %f) current(%f %f) )", 
-//		  o, 
-//		  [self phaseName:touch.phase],
-//		  touch.tapCount, 
-//		  touch.timestamp, 
-//		  [touch	previousLocationInView:self.view].x,	[touch	previousLocationInView:self.view].y,
-//		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
-//		  );
-	
+
 	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
+	_touchedParticleSystem.location			= [touch locationInView:self.view];
 	
-	_touchedParticleSystem.location = [touch locationInView:self.view];
 //	[_touchedParticleSystem fill:[touch locationInView:self.view]];
 	
 }
@@ -261,39 +238,13 @@
 	
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
-	
-//	NSObject *o		= touch;
-//	NSLog(@"touchesEnded: touch(%p) phase(%@) tapCount(%d) time(%f) location( previous(%f %f) current(%f %f) )", 
-//		  o, 
-//		  [self phaseName:touch.phase],
-//		  touch.tapCount, 
-//		  touch.timestamp, 
-//		  [touch	previousLocationInView:self.view].x,	[touch	previousLocationInView:self.view].y,
-//		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
-//		  );
-	
+
 	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
 	[_touchedParticleSystem setDecay:YES];
-	
-	[particleSystems addObject:_touchedParticleSystem];
-	
-	[_touchedParticleSystem release];
-	_touchedParticleSystem = nil;
-	
+
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-	
-//	UITouch *touch = [touches anyObject];	
-//	NSObject *o = touch;
-//	NSLog(@"touch(%p) phase(%@) tapCount(%d) time(%f) location( previous(%f %f) current(%f %f) )", 
-//		  o, 
-//		  [self phaseName:touch.phase],
-//		  touch.tapCount, 
-//		  touch.timestamp, 
-//		  [touch	previousLocationInView:self.view].x,	[touch	previousLocationInView:self.view].y,
-//		  [touch			locationInView:self.view].x,	[touch			locationInView:self.view].y
-//		  );
 	
 	[self disableAcclerometerEvents];
 	

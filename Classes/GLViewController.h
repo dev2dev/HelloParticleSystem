@@ -23,9 +23,8 @@
 	UIAccelerationValue accelerationValueY;
 	UIAccelerationValue accelerationValueZ;
 		
-	ParticleSystem		*_touchedParticleSystem;
-    NSMutableArray		*particleSystems;
-    NSMutableArray		*deadParticleSystems;
+	ParticleSystem	*_touchedParticleSystem;
+    NSMutableArray	*particleSystems;
 }
 
 @property int testing123;
@@ -36,9 +35,10 @@
 
 @property (nonatomic, retain) ParticleSystem *touchedParticleSystem;
 @property (nonatomic, retain) NSMutableArray *particleSystems;
-@property (nonatomic, retain) NSMutableArray *deadParticleSystems;
 
 - (NSString*) phaseName:(UITouchPhase) phase;
+
+- (int) countLiveParticleSystems;
 
 - (void)drawView:(GLView*)view;
 - (void)setupView:(GLView*)view;

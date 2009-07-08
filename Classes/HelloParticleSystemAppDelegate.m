@@ -35,8 +35,8 @@ static SystemSoundID _boomSoundIDs[3];
     [window addSubview:controller.view];
     [window makeKeyAndVisible];
 	
-	[controller addObserver:self forKeyPath:@"_touchedParticleSystem"		options:0 context:NULL];
-//	[controller addObserver:self forKeyPath:@"_touchedParticleSystem.alive"	options:0 context:NULL];
+	[controller addObserver:self forKeyPath:@"touchedParticleSystem"		options:0															context:self];
+	[controller addObserver:self forKeyPath:@"touchedParticleSystem.alive"	options:(NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew) context:self];
 
 	// set up sound effects
 	NSURL *soundURL = nil;
@@ -54,9 +54,8 @@ static SystemSoundID _boomSoundIDs[3];
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 	
-	// do your stuff here...
-//	[controller removeObserver:self forKeyPath:@"_touchedParticleSystem.alive"];
-	[controller removeObserver:self forKeyPath:@"_touchedParticleSystem"];
+	[controller removeObserver:self forKeyPath:@"touchedParticleSystem.alive"];
+	[controller removeObserver:self forKeyPath:@"touchedParticleSystem"];
 
 }
 
@@ -69,26 +68,42 @@ static SystemSoundID _boomSoundIDs[3];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	
-    if ([keyPath isEqualToString:@"_touchedParticleSystem"]) {
+
+	id thang = (id)context;
+	NSLog(@"Context(%@) Object(%@)", [thang class], [object class]);
+
+    if ([keyPath isEqualToString:@"touchedParticleSystem"]) {
 		
-		// do stuff
 		NSLog(@"keyPath(%@)", keyPath);
+		return;
 		
-		[self _playBoom];
+	} // if ([keyPath isEqualToString:@"touchedParticleSystem"])
+	
+    if ([keyPath isEqualToString:@"touchedParticleSystem.alive"]) {
+
+		BOOL newValue	= [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+//		NSLog(@"Class(%@) keyPath(%@) NewValue(%d)", [object class], keyPath, newValue);
+		
+		// Play a sound announcing the birth of a particle system (alive = YES).
+		if (newValue == YES) {
+			
+			NSLog(@"KeyPath(%@) I'm alive!", keyPath);
+			[self _playBoom];
+			
+			return;
+		}
+		
+		// Eventually, play a sound announcing the death of a particle system (alive = NO).
+		if (newValue == NO) {
+			
+			NSLog(@"KeyPath(%@) I'm dead!", keyPath);
+			return;
+		}
 		
 		return;
-	} 
-	
-//    if ([keyPath isEqualToString:@"_touchedParticleSystem.alive"]) {
-//				
-//		BOOL b = controller.touchedParticleSystem.alive;
-//
-//		NSLog(@"keyPath(%@) Value(%d)", keyPath, b);
-//		
-//		
-//		return;
-//	} 
+		
+	} // if ([keyPath isEqualToString:@"touchedParticleSystem.alive"])
+
 	
 	[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 
