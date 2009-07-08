@@ -47,10 +47,13 @@
 
 @interface ParticleSystem : NSObject {
 	
-    BOOL _alive;
+	id				_target;
+	SEL				_startSelector;
+	SEL				_stopSelector;
+	
+    BOOL			_alive;
 
-	NSMutableArray*	_openglPackedVertices;
-	NSMutableArray*	_particles;
+	NSMutableArray	*_particles;
 	
 	int				_particleTraunch;
 	
@@ -64,16 +67,17 @@
     double			_lastTime;
     BOOL			_decay;
 
-	NSString*		touchPhaseName;
+	NSString		*touchPhaseName;
 }
 
-@property BOOL							alive;
-
-@property CGPoint						location;
-@property int							particleTraunch;
-@property (nonatomic, retain) NSString	*touchPhaseName;
+@property BOOL									alive;
+@property (nonatomic, retain) NSMutableArray	*particles;
+@property CGPoint								location;
+@property int									particleTraunch;
+@property (nonatomic, retain) NSString			*touchPhaseName;
 
 - (id)initAtLocation:(CGPoint)location;
+- (id)initAtLocation:(CGPoint)location target:(id)aTarget startSelector:(SEL)aStartSelector stopSelector:(SEL)aStopSelector;
 
 - (int)countLiveParticles;
 

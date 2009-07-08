@@ -5,6 +5,7 @@
 //  Created by turner on 5/26/09.
 //  Copyright Douglass Turner Consulting 2009. All rights reserved.
 //
+#import <AudioToolbox/AudioServices.h>
 
 #import "ConstantsAndMacros.h"
 #import "GLViewController.h"
@@ -44,6 +45,8 @@
 	[glView release];
 }
 
+static SystemSoundID _boomSoundIDs[3];
+
 // The Stanford Pattern
 - (void)viewDidLoad {
 	
@@ -54,7 +57,19 @@
 	
 	GLView *glView = (GLView *)self.view;
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
-
+	
+	// set up sound effects
+	NSURL *soundURL = nil;
+	
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
+	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
+	
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
+	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[1]);
+	
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
+	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
+	
 }
 
 // The Stanford Pattern
@@ -69,7 +84,7 @@
 	[glView startAnimation];
 	
 	[self enableAcclerometerEvents];
-	
+
 }
 
 // The Stanford Pattern
@@ -123,7 +138,9 @@
     for (ParticleSystem *ps in particleSystems) {
 				
 		// If the entire particle system is dead, ignore it.
-		if ([ [ ps valueForKey:@"alive" ] boolValue ] == NO) {
+		if (ps.alive == NO) {
+			
+//			NSLog(@"ps.alive == NO. Skip Drawing");
 			continue;
 		}
 		
@@ -131,14 +148,28 @@
 		if ([ps animate:time]) {
 			
             [ps draw];			
-        }
+			
+		}
 		
     } // for (particleSystems)
 
 	// Once all particle systems are dead, discard the lot.
 	if ([self countLiveParticleSystems] == 0) {
+
+		for (ParticleSystem *ps in particleSystems) {
+			
+//			for (TEIParticle *p in ps.particles) {
+//				
+//				[self stopObservingParticle:p];
+//				
+//			} // for (ps.particles)
+			
+			[self stopObservingParticleSystem:ps];
+			
+		} // for (particleSystems)
 		
 		[particleSystems removeAllObjects];
+		
 	}
 	
 	// NOTE: The background completely fills the window, eliminating the
@@ -147,6 +178,106 @@
 	
 	// Render particles
 	[ParticleSystem renderParticles];
+	
+}
+
+- (void)startObservingParticle:(TEIParticle *)p {
+	
+    [p addObserver:self
+		 forKeyPath:@"alive"
+			options:(NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew)
+			context:p];
+	
+}
+
+- (void)stopObservingParticle:(TEIParticle *)p {
+	
+    [p removeObserver:self forKeyPath:@"alive"];
+}
+
+- (void)startObservingParticleSystem:(ParticleSystem *)ps {
+	
+    [ps addObserver:self
+		 forKeyPath:@"alive"
+			options:(NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew)
+			context:ps];
+	
+}
+
+- (void)stopObservingParticleSystem:(ParticleSystem *)ps {
+	
+    [ps removeObserver:self forKeyPath:@"alive"];
+}
+
+// Boom! Boom! Boom!
+- (void)_playBoom {
+	
+    int index = (random() % 3);
+    AudioServicesPlaySystemSound(_boomSoundIDs[index]);
+	
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	
+//	id thang = (id)context;
+//	NSLog(@"Keypath(%@) Class(%@) Context(%@)", keyPath, [object class], [thang class]);
+	
+//	if ([object isKindOfClass:[ParticleSystem class]]) {
+		
+		if ([keyPath isEqualToString:@"alive"]) {
+			
+			BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+			
+			// Do something at the birth of a particle system (alive = YES).
+			if (newValue == YES) {
+				
+//				NSLog(@"This %@ is alive.", [object class]);
+				[self _playBoom];
+				
+				return;
+			}
+			
+			// Do something at the death of a particle system (alive = NO).
+			if (newValue == NO) {
+				
+//				NSLog(@"This %@ is dead.", [object class]);
+				return;
+			}
+			
+			return;
+			
+//		} // if ([object isKindOfClass:[ParticleSystem class]])
+		
+	} // if (context == ParticleSystem)
+	
+//	if ([object isKindOfClass:[TEIParticle class]]) {
+//		
+//		if ([keyPath isEqualToString:@"alive"]) {
+//			
+//			BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+//			
+//			// Do something at the birth of a particle (alive = YES).
+//			if (newValue == YES) {
+//				
+//				NSLog(@"This %@ is alive.", [object class]);
+//				return;
+//			}
+//			
+//			// Do something at the death of a particle (alive = NO).
+//			if (newValue == NO) {
+//				
+//				NSLog(@"This %@ is dead.", [object class]);
+//				return;
+//			}
+//			
+//			return;
+//			
+//		} // if ([keyPath isEqualToString:@"alive"])
+//		
+//	} // if ([object isKindOfClass:[TEIParticle class]])
+	
+	
+	[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	
 }
 
@@ -205,17 +336,40 @@
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
 	
-	ParticleSystem *p = [[[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]] autorelease];
+	ParticleSystem *p = [ [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]] autorelease ];
+	
+//	ParticleSystem *p = [
+//						 [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view] 
+//														 target:self 
+//												  startSelector:@selector(startObservingParticle:)
+//												   stopSelector:@selector(stopObservingParticle:)
+//						  ] 
+//						 autorelease];
+	
+	[self startObservingParticleSystem:p];
+	[p setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
+	
 	p.touchPhaseName = [self phaseName:touch.phase];
 //	NSLog(@"p = [[alloc] init]                                   P RetainCount(%d)", [p retainCount]);
+
 	
-//	_touchedParticleSystem = p;
-	[self setValue:p forKeyPath:@"touchedParticleSystem"];
-//	self.touchedParticleSystem = p;
+//	[self setValue:p forKeyPath:@"touchedParticleSystem"];
+	self.touchedParticleSystem = p;
+
+	
 //	NSLog(@"_touchedParticleSystem = p		                     P RetainCount(%d)", [p							retainCount]);
 //	NSLog(@"_touchedParticleSystem = p		_touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
+
 	
-	[particleSystems addObject:p];
+	
+
+	[particleSystems addObject:p];	
+//	NSUInteger i = [particleSystems indexOfObject:p];
+//	[self startObservingParticleSystem:[particleSystems objectAtIndex:i]];
+//	[[particleSystems objectAtIndex:i] setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
+
+	
+	
 //	NSLog(@"[particleSystems addObject:p]		                 P RetainCount(%d)", [p							retainCount]);
 //	NSLog(@"[particleSystems addObject:p]	_touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
 
@@ -241,6 +395,8 @@
 
 	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
 	[_touchedParticleSystem setDecay:YES];
+
+//	[self stopObservingParticleSystem:self.touchedParticleSystem];
 
 }
 

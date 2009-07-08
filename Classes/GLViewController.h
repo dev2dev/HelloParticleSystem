@@ -13,6 +13,7 @@
 #import <OpenGLES/ES1/glext.h>
 
 @class GLView;
+@class TEIParticle;
 @class ParticleSystem;
 
 @interface GLViewController : UIViewController  <UIAccelerometerDelegate> {
@@ -37,6 +38,12 @@
 @property (nonatomic, retain) NSMutableArray *particleSystems;
 
 - (NSString*) phaseName:(UITouchPhase) phase;
+
+- (void)startObservingParticle:(TEIParticle *)p;
+- (void)stopObservingParticle:(TEIParticle *)p;
+
+- (void)startObservingParticleSystem:(ParticleSystem *)ps;
+- (void)stopObservingParticleSystem:(ParticleSystem *)ps;
 
 - (int) countLiveParticleSystems;
 

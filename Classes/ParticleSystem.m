@@ -138,18 +138,14 @@ static TEITexture		*ParticleSystemBackdropTexture		= nil;
 static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 
 @synthesize alive=_alive;
-
+@synthesize particles=_particles;
 @synthesize location=_location;
-
 @synthesize particleTraunch=_particleTraunch;
 @synthesize touchPhaseName;
 
 - (void)dealloc {
 
-	[_openglPackedVertices	removeAllObjects];
 	[_particles				removeAllObjects];
-	
-	[_openglPackedVertices	release];
 	[_particles				release];
     
 	[touchPhaseName			release];
@@ -167,9 +163,12 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	if (self = [super init]) {
 		
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"alive"];
+		[self setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
+
+		_target					= nil;
+		_startSelector			= nil;
+		_stopSelector			= nil;
 		
-		_openglPackedVertices	=	[[NSMutableArray alloc] init];
 		_particles				=	[[NSMutableArray alloc] init];
 		
 		_particleTraunch		=	24;
@@ -189,12 +188,42 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
     return self;
 }
 
+- (id)initAtLocation:(CGPoint)location target:(id)aTarget startSelector:(SEL)aStartSelector stopSelector:(SEL)aStopSelector {
+	
+	if (self = [super init]) {
+		
+		[self setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
+		
+		_target					= aTarget;
+		_startSelector			= aStartSelector;
+		_stopSelector			= aStopSelector;
+		
+		_particles				=	[[NSMutableArray alloc] init];
+		
+		_particleTraunch		=	24;
+		
+		_location				= location;
+		
+		_birth					= [NSDate timeIntervalSinceReferenceDate];
+		_mostRecentTime			= [NSDate timeIntervalSinceReferenceDate];
+		
+		_initialAnimationStep	= YES;
+		
+		_decay					= NO;
+		
+		
+	}
+	
+    return self;
+	
+}
+
+
 - (int)countLiveParticles {
 	
 	int c = 0;
 	for (TEIParticle *p in _particles) {
 		
-//		if ([ [ p valueForKey:@"alive" ] boolValue ] == YES) {
 		if (p.alive == YES) {
 		
 			++c;
@@ -209,21 +238,17 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	if (incrementally == YES) {
 		
-		TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO];
+		TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO] autorelease];
 		
 		[_particles addObject:particle];
-		
-		[particle release];
 		
 	} else {
 		
 		for (int i = 0; i < _particleTraunch; i++) {
 			
-			TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES];
+			TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES] autorelease];
 			
 			[_particles addObject:particle];
-			
-			[particle release];
 			
 		} // for (_particleTraunch)
 		
@@ -254,7 +279,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	for (TEIParticle* particle in _particles) {
 		
 		
-//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
 		if (particle.alive == NO) {
 		
 			continue;
@@ -262,7 +286,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		static const float gravityScaleFactor = 120.0 * 2.0;
 		
-		//		NSLog(@"animate: ParticleSystemGravity(%f, %f)", ParticleSystemGravity.x, ParticleSystemGravity.y);
+//		NSLog(@"animate: ParticleSystemGravity(%f, %f)", ParticleSystemGravity.x, ParticleSystemGravity.y);
 		
 		// velocity
 		//		particle.velocity = CGPointMake(particle.velocity.x, particle.velocity.y + (gravityScaleFactor * step));
@@ -288,15 +312,15 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
 				
-//			particle.alive = NO;
-			[particle setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
+			particle.alive = NO;
+//			[particle setValue:[NSNumber numberWithBool:NO] forKeyPath:@"alive"];
 			continue;
 		}
 		
 		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
 				
-//			particle.alive = NO;
-			[particle setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
+			particle.alive = NO;
+//			[particle setValue:[NSNumber numberWithBool:NO] forKeyPath:@"alive"];
 			continue;
 		}
 		
@@ -339,9 +363,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	for (TEIParticle *particle in _particles) {
 
-		if (particle.alive == YES) {
-//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == YES) {
-		
+		if (particle.alive == YES) {		
 			
 			return YES;
 			
@@ -377,42 +399,31 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			
 			for (int i = 0; i < _particleTraunch; i++) {
 				
-				TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES];
+				TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES] autorelease];
+//				[_target performSelector:_startSelector withObject:particle];
 				
 				[_particles addObject:particle];
 				
-				[particle release];
-				
 			} // for (count)
-			
-//			NSLog(@"animate:     BIRTH. touchPhaseName(%@) decay(%d) initialAnimationStep(%d) particles(%d).",  
-//				  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
 			
 		} else {
 			
-			TEIParticle* particle = [[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO];
+			TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO] autorelease];
+//			[_target performSelector:_startSelector withObject:particle];
 			
 			[_particles addObject:particle];
-			
-			[particle release];
-			
-//			NSLog(@"animate: INCREMENT. touchPhaseName(%@) decay(%d) initialAnimationStep(%d) particles(%d).", 
-//				  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
 			
 		}
 		
     } // if (_decay == NO || _initialAnimationStep == YES)
-	
-//	NSLog(@"animate: Living particles(%d).", [self countLiveParticles]);
 	
 	_initialAnimationStep	= NO;
 	
 	// Take a time step in particle system state. Cull dead particles as needed.
 	for (TEIParticle* particle in _particles) {
 		
-//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
 		if (particle.alive == NO) {
-	
+			
 			continue;
 		}
 		
@@ -433,15 +444,15 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
 			
-//			particle.alive = NO;
-			[particle setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
+			particle.alive = NO;
+//			[particle setValue:[NSNumber numberWithBool:NO] forKeyPath:@"alive"];
 			continue;
 		}
 		
 		if (particle.location.y < ParticleSystemBBox.origin.y || particle.location.y > ParticleSystemBBox.size.height) {
 			
-//			particle.alive = NO;
-			[particle setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
+			particle.alive = NO;
+//			[particle setValue:[NSNumber numberWithBool:NO] forKeyPath:@"alive"];
 			continue;
 		}
 		
@@ -486,7 +497,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	for (TEIParticle *particle in _particles) {
 		
 		if (particle.alive == YES) {
-//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == YES) {
 			
 			return YES;
 			
@@ -494,7 +504,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 	} // for (TEIParticle *particle in _particles)
 	
-	[self setValue:[NSNumber numberWithBool:NO] forKey:@"alive"];
+	[self setValue:[NSNumber numberWithBool:NO] forKeyPath:@"alive"];
 	return [ [ self valueForKey:@"alive" ] boolValue ];
 	
 //	_alive = NO;
@@ -530,14 +540,9 @@ static inline float TEIFastCos(float x) {
 
 - (void)draw {
 	
-	//	if ([_particles count] > 0) {
-	//		NSLog(@"draw: touchPhaseName(%@) particles(%d)", touchPhaseName, [_particles count]);
-	//	}
-	
     for (TEIParticle* particle in _particles) {
 		
 		// No need to draw dead particles
-//		if ([ [ particle valueForKey:@"alive" ] boolValue ] == NO) {
 		if (particle.alive == NO) {
 		
 			continue;
