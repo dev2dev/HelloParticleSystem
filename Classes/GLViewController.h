@@ -6,7 +6,6 @@
 //  Copyright Douglass Turner Consulting 2009. All rights reserved.
 //
 
-
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
@@ -44,8 +43,6 @@
 
 - (void)startObservingParticleSystem:(ParticleSystem *)ps;
 - (void)stopObservingParticleSystem:(ParticleSystem *)ps;
-
-- (int) countLiveParticleSystems;
 
 - (void)drawView:(GLView*)view;
 - (void)setupView:(GLView*)view;

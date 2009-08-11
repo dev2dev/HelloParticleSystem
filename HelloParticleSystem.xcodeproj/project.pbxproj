@@ -287,6 +287,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = HelloParticleSystem_Prefix.pch;
+				GCC_THUMB_SUPPORT = YES;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = HelloParticleSystem;
 				PROVISIONING_PROFILE = "";

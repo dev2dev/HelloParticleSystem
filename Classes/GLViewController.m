@@ -5,6 +5,7 @@
 //  Created by turner on 5/26/09.
 //  Copyright Douglass Turner Consulting 2009. All rights reserved.
 //
+
 #import <AudioToolbox/AudioServices.h>
 
 #import "ConstantsAndMacros.h"
@@ -140,7 +141,6 @@ static SystemSoundID _boomSoundIDs[3];
 		// If the entire particle system is dead, ignore it.
 		if (ps.alive == NO) {
 			
-//			NSLog(@"ps.alive == NO. Skip Drawing");
 			continue;
 		}
 		
@@ -154,7 +154,9 @@ static SystemSoundID _boomSoundIDs[3];
     } // for (particleSystems)
 
 	// Once all particle systems are dead, discard the lot.
-	if ([self countLiveParticleSystems] == 0) {
+	if ([ParticleSystem totalLivingParticles] == 0) {
+
+//		NSLog(@"All particles are dead. Stop Observing.");
 
 		for (ParticleSystem *ps in particleSystems) {
 			
@@ -279,21 +281,6 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	
-}
-
-// How many live particle systems do we have
-- (int) countLiveParticleSystems {
-	
-	int live = 0;
-	for (ParticleSystem *ps in particleSystems) {
-		
-		if ([ [ ps valueForKey:@"alive" ] boolValue ] == YES) {
-			++live;
-		}
-		
-    } // for (deadParticleSystems)
-	
-	return live;
 }
 
 // String name for touch phase

@@ -9,6 +9,7 @@ static CGRect  ParticleSystemBBox;
 
 typedef struct _ParticleSystemOpenGLVertexData { short xy[2]; unsigned argb; float st[2]; } ParticleSystemOpenGLVertexData;
 
+static int ParticleSystemParticleCount = 0;
 
 #define MAX_VERTS (20000)
 static int ParticleSystemParticleVertexCount = 0;
@@ -218,6 +219,16 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 }
 
+- (BOOL)isAlive {
+	
+	if ([self countLiveParticles] == 0) {
+		
+		return NO;
+		
+	} // if ([self countLiveParticles] == 0)
+	
+	return YES;
+}
 
 - (int)countLiveParticles {
 	
@@ -396,7 +407,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		if (_birth == time) {
 			
-			
 			for (int i = 0; i < _particleTraunch; i++) {
 				
 				TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES] autorelease];
@@ -404,14 +414,18 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 				
 				[_particles addObject:particle];
 				
-			} // for (count)
+			} // for (_particleTraunch)
 			
+			ParticleSystemParticleCount += _particleTraunch;
+						
 		} else {
 			
 			TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO] autorelease];
 //			[_target performSelector:_startSelector withObject:particle];
 			
 			[_particles addObject:particle];
+			
+			++ParticleSystemParticleCount;
 			
 		}
 		
@@ -446,6 +460,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			
 			particle.alive = NO;
 //			[particle setValue:[NSNumber numberWithBool:NO] forKeyPath:@"alive"];
+			
+			--ParticleSystemParticleCount;
+			
 			continue;
 		}
 		
@@ -453,6 +470,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			
 			particle.alive = NO;
 //			[particle setValue:[NSNumber numberWithBool:NO] forKeyPath:@"alive"];
+			
+			--ParticleSystemParticleCount;
+			
 			continue;
 		}
 		
@@ -656,6 +676,10 @@ static inline float TEIFastCos(float x) {
 	}
 	
     _decay = decay;
+}
+
++ (int)totalLivingParticles {
+	return ParticleSystemParticleCount;
 }
 
 + (void)buildParticleTextureAtlas {

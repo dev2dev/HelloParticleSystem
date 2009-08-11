@@ -79,6 +79,7 @@
 - (id)initAtLocation:(CGPoint)location;
 - (id)initAtLocation:(CGPoint)location target:(id)aTarget startSelector:(SEL)aStartSelector stopSelector:(SEL)aStopSelector;
 
+- (BOOL)isAlive;
 - (int)countLiveParticles;
 
 - (void)giveBirth:(NSTimeInterval)time incrementally:(BOOL)incrementally;
@@ -91,6 +92,7 @@
 
 - (void)setDecay:(BOOL)decay;
 
++ (int)totalLivingParticles;
 + (void)buildParticleTextureAtlas;
 + (void)buildTextureAtlasIndexTable;
 + (void)buildBackdropWithBounds:(CGRect)bounds;
