@@ -15,8 +15,6 @@
 
 @implementation GLViewController
 
-@synthesize testing123;
-
 @synthesize accelerationValueX;
 @synthesize accelerationValueY;
 @synthesize accelerationValueZ;
@@ -38,12 +36,12 @@
 	CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
 	
 	GLView *glView = nil;
-	glView = [[GLView alloc] initWithFrame:applicationFrame];
 	
-	glView.controller = self;
-		
+	glView = [[[GLView alloc] initWithFrame:applicationFrame] autorelease];
+	glView.drawingDelegate = self;
+	
 	self.view = glView;
-	[glView release];
+
 }
 
 static SystemSoundID _boomSoundIDs[3];

@@ -89,15 +89,15 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				31B30A520FE699400024849F /* ConstantsAndMacros.h */,
-				31FB3AB90FE6C7EB00630959 /* ParticleSystem.h */,
-				31FB3ABA0FE6C7EB00630959 /* ParticleSystem.m */,
 				31B30AE20FE6A2D40024849F /* GLView.h */,
 				31B30AE30FE6A2D40024849F /* GLView.m */,
 				31B30A550FE699400024849F /* GLViewController.h */,
 				31B30A560FE699400024849F /* GLViewController.m */,
 				1D3623240D0F684500981E51 /* HelloParticleSystemAppDelegate.h */,
 				1D3623250D0F684500981E51 /* HelloParticleSystemAppDelegate.m */,
+				31B30A520FE699400024849F /* ConstantsAndMacros.h */,
+				31FB3AB90FE6C7EB00630959 /* ParticleSystem.h */,
+				31FB3ABA0FE6C7EB00630959 /* ParticleSystem.m */,
 				31ECF9B20FEC34CF00F0A982 /* TEITexture.h */,
 				31ECF9B30FEC34CF00F0A982 /* TEITexture.m */,
 			);

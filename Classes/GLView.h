@@ -12,9 +12,13 @@
 #import <OpenGLES/ES1/glext.h>
 #import "ConstantsAndMacros.h"
 
-@class GLViewController;
+@protocol GLViewDelegate
+- (void)drawView:(UIView *)theView;
+- (void)setupView:(UIView *)theView;
+@end
+
 @interface GLView : UIView {
-	@private
+@private
 	// The pixel dimensions of the backbuffer
 	GLint backingWidth;
 	GLint backingHeight;
@@ -25,15 +29,13 @@
 	GLuint depthRenderbuffer;
 	NSTimer *animationTimer;
 	NSTimeInterval animationInterval;
-
-	GLViewController *controller;
-	BOOL controllerSetup;
+    
+    id <GLViewDelegate> drawingDelegate;
 }
 
-@property GLint backingWidth;
-@property GLint backingHeight;
+@property (assign) IBOutlet id <GLViewDelegate> drawingDelegate;
+
 @property NSTimeInterval animationInterval;
-@property(nonatomic, assign) GLViewController *controller;
 
 -(void)startAnimation;
 -(void)stopAnimation;

@@ -10,14 +10,12 @@
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
+#import "GLView.h"
 
-@class GLView;
 @class TEIParticle;
 @class ParticleSystem;
 
-@interface GLViewController : UIViewController  <UIAccelerometerDelegate> {
-	
-	int testing123;
+@interface GLViewController : UIViewController <GLViewDelegate, UIAccelerometerDelegate> {
 	
 	UIAccelerationValue accelerationValueX;
 	UIAccelerationValue accelerationValueY;
@@ -26,8 +24,6 @@
 	ParticleSystem	*_touchedParticleSystem;
     NSMutableArray	*particleSystems;
 }
-
-@property int testing123;
 
 @property UIAccelerationValue accelerationValueX;
 @property UIAccelerationValue accelerationValueY;
