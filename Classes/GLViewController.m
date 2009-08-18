@@ -13,6 +13,8 @@
 #import "GLView.h"
 #import "ParticleSystem.h"
 
+static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
+
 @implementation GLViewController
 
 @synthesize accelerationValueX;
@@ -132,11 +134,13 @@ static SystemSoundID _boomSoundIDs[3];
 // Draw an OpenGL frame
 - (void)drawView:(GLView*)view {
 
-
-    NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
+	if (GLViewControllerCurrentTouchPhase != UITouchPhaseEnded) {
+//		[[self touchedParticleSystem] doStuff];
+	}
+	
+    NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
 	
     for (ParticleSystem *ps in particleSystems) {
-		
 				
 		// If the entire particle system is dead, ignore it.
 		if (ps.alive == NO) {
@@ -145,42 +149,35 @@ static SystemSoundID _boomSoundIDs[3];
 		}
 		
 		// If there are remaining live particles, draw them.
-		if ([ps animate:time]) {
+		if ([ps updateState:now]) {
 	
-//			NSLog(@"ParticleSystem(%d) TouchPhaseName(%@)", [particleSystems indexOfObject:ps], ps.touchPhaseName);
-
             [ps draw];			
 			
 		}
 		
     } // for (particleSystems)
 
+	
 	// Once all particle systems are dead, discard the lot.
 	if ([ParticleSystem totalLivingParticles] == 0) {
 
-//		NSLog(@"All particles are dead. Stop Observing.");
-
 		for (ParticleSystem *ps in particleSystems) {
-			
-//			for (TEIParticle *p in ps.particles) {
-//				
-//				[self stopObservingParticle:p];
-//				
-//			} // for (ps.particles)
-			
+						
 			[self stopObservingParticleSystem:ps];
 			
 		} // for (particleSystems)
 		
 		[particleSystems removeAllObjects];
 		
-	}
+	} // if ([ParticleSystem totalLivingParticles] == 0)
+
 	
 	// NOTE: The background completely fills the window, eliminating the
 	// need for a costly clearing of depth and color every frame.
 	[ParticleSystem renderBackground];
+
 	
-	// Render particles
+	// Send vertices to GPU
 	[ParticleSystem renderParticles];
 	
 }
@@ -286,7 +283,7 @@ static SystemSoundID _boomSoundIDs[3];
 }
 
 // String name for touch phase
-- (NSString*) phaseName:(UITouchPhase) phase {
+- (NSString*)phaseName:(UITouchPhase) phase {
 	
 	NSString* result = nil;
 	
@@ -314,54 +311,22 @@ static SystemSoundID _boomSoundIDs[3];
 	return result;
 };
 
-// Keep track of the currently "touched" particle system
-// so that we can up date it's location during touchesMoved:withEvent
-// and also enable decaying of the particle system during
-// touchesEnded:withEvent
-//static ParticleSystem *touched = nil;
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
 	
-	ParticleSystem *ps = [ [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]] autorelease ];
+	GLViewControllerCurrentTouchPhase = touch.phase;
 	
-//	ParticleSystem *ps = [
-//						 [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view] 
-//														 target:self 
-//												  startSelector:@selector(startObservingParticle:)
-//												   stopSelector:@selector(stopObservingParticle:)
-//						  ] 
-//						 autorelease];
+	ParticleSystem *ps = [ [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view] birthTime:[NSDate timeIntervalSinceReferenceDate]] autorelease];
 	
 	[self startObservingParticleSystem:ps];
 	[ps setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
 	
 	ps.touchPhaseName = [self phaseName:touch.phase];
-//	NSLog(@"ps = [[alloc] init]                                   P RetainCount(%d)", [ps retainCount]);
-
-	
-//	[self setValue:ps forKeyPath:@"touchedParticleSystem"];
 	self.touchedParticleSystem = ps;
 
-	
-//	NSLog(@"self.touchedParticleSystem = ps		                     P RetainCount(%d)", [ps							retainCount]);
-//	NSLog(@"self.touchedParticleSystem = ps		self.touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
-
-	
-	
-
 	[particleSystems addObject:ps];	
-//	NSUInteger i = [particleSystems indexOfObject:ps];
-//	[self startObservingParticleSystem:[particleSystems objectAtIndex:i]];
-//	[[particleSystems objectAtIndex:i] setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
-
-	
-	
-//	NSLog(@"[particleSystems addObject:ps]		                 P RetainCount(%d)", [ps							retainCount]);
-//	NSLog(@"[particleSystems addObject:ps]	self.touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
-
 	
 }
 
@@ -369,7 +334,9 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];	
-
+	
+	GLViewControllerCurrentTouchPhase = touch.phase;
+	
 	self.touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
 	self.touchedParticleSystem.location			= [touch locationInView:self.view];
 	
@@ -381,7 +348,9 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
-
+	
+	GLViewControllerCurrentTouchPhase = touch.phase;
+	
 	self.touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
 	[self.touchedParticleSystem setDecay:YES];
 
@@ -390,6 +359,10 @@ static SystemSoundID _boomSoundIDs[3];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+
+	UITouch *touch	= [touches anyObject];
+	
+	GLViewControllerCurrentTouchPhase = touch.phase;
 	
 	[self disableAcclerometerEvents];
 	

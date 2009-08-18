@@ -47,10 +47,6 @@
 
 @interface ParticleSystem : NSObject {
 	
-	id				_target;
-	SEL				_startSelector;
-	SEL				_stopSelector;
-	
     BOOL			_alive;
 
 	NSMutableArray	*_particles;
@@ -60,12 +56,7 @@
     CGPoint			_location;
 	
     NSTimeInterval	_birth;
-	NSTimeInterval	_mostRecentTime;
-	
-    BOOL			_isInitialAnimationStep;
-	NSTimeInterval	_step;
-	
-    double			_lastTime;
+    NSTimeInterval	_lastTime;
 	
     BOOL			_decay;
 
@@ -78,15 +69,14 @@
 @property int									particleTraunch;
 @property (nonatomic, retain) NSString			*touchPhaseName;
 
-- (id)initAtLocation:(CGPoint)location;
-- (id)initAtLocation:(CGPoint)location target:(id)aTarget startSelector:(SEL)aStartSelector stopSelector:(SEL)aStopSelector;
+- (id)initAtLocation:(CGPoint)location birthTime:(NSTimeInterval)birthTime;
 
 - (BOOL)isAlive;
 - (int)countLiveParticles;
 
-- (BOOL)timeStep:(NSTimeInterval)time;
+//- (void)addParticles:(CGPoint)location birthTime:(NSTimeInterval)birthTime;
 
-- (BOOL)animate:(NSTimeInterval)time;
+- (BOOL)updateState:(NSTimeInterval)time;
 - (void)draw;
 
 - (void)fill:(CGPoint)location;
