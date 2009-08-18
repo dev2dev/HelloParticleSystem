@@ -74,7 +74,7 @@
 - (BOOL)isAlive;
 - (int)countLiveParticles;
 
-//- (void)addParticles:(CGPoint)location birthTime:(NSTimeInterval)birthTime;
+- (void)addParticleAtBirthTime:(NSTimeInterval)birthTime;
 
 - (BOOL)updateState:(NSTimeInterval)time;
 - (void)draw;

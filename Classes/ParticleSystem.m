@@ -215,6 +215,13 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	return c;
 }
 
+- (void)addParticleAtBirthTime:(NSTimeInterval)birthTime {
+	
+	TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:birthTime willPush:NO] autorelease];
+	[_particles addObject:particle];
+	
+}
+
 - (BOOL)updateState:(NSTimeInterval)time {
 	
 	// Take a time step in particle system state. Cull dead particles as needed.

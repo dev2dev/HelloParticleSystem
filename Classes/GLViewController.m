@@ -133,12 +133,18 @@ static SystemSoundID _boomSoundIDs[3];
 
 // Draw an OpenGL frame
 - (void)drawView:(GLView*)view {
-
-	if (GLViewControllerCurrentTouchPhase != UITouchPhaseEnded) {
-//		[[self touchedParticleSystem] doStuff];
-	}
 	
     NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
+	
+	
+	// This behavior adds one additional particle as long as the touch phase has not ended (the finger is still touching the screen)
+	// Alternatively I could do this in the touchesMoved:withEvent: method which would add a particle as long as the finger is being
+	// dragged across the screen.
+	
+	if (GLViewControllerCurrentTouchPhase != UITouchPhaseEnded) {
+		
+		[[self touchedParticleSystem] addParticleAtBirthTime:now];
+	} // if (GLViewControllerCurrentTouchPhase != UITouchPhaseEnded)
 	
     for (ParticleSystem *ps in particleSystems) {
 				
