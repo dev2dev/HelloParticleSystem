@@ -107,7 +107,6 @@ ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float
 		alpha = 1.0f;
 		
 		// size
-//		size = 0.0f;
 		size = 1.0f;
 		
 		// randomize rotation direction
@@ -179,7 +178,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		_birth					= [NSDate timeIntervalSinceReferenceDate];
 		_mostRecentTime			= [NSDate timeIntervalSinceReferenceDate];
 		
-		_initialAnimationStep	= YES;
+		_isInitialAnimationStep	= YES;
 		
 		_decay					= NO;
 		
@@ -208,7 +207,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		_birth					= [NSDate timeIntervalSinceReferenceDate];
 		_mostRecentTime			= [NSDate timeIntervalSinceReferenceDate];
 		
-		_initialAnimationStep	= YES;
+		_isInitialAnimationStep	= YES;
 		
 		_decay					= NO;
 		
@@ -245,50 +244,22 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	return c;
 }
 
-- (void)giveBirth:(NSTimeInterval)time incrementally:(BOOL)incrementally {
+- (BOOL)timeStep:(NSTimeInterval)time {
 	
-	if (incrementally == YES) {
+	// As long as a touch is not ended, keep pumping out an additional particle each draw cycle.
+	if ( [[self touchPhaseName] isEqualToString:@"UITouchPhaseEnded"] == NO) {
 		
 		TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO] autorelease];
 		
 		[_particles addObject:particle];
 		
-	} else {
+		++ParticleSystemParticleCount;
 		
-		for (int i = 0; i < _particleTraunch; i++) {
-			
-			TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:YES] autorelease];
-			
-			[_particles addObject:particle];
-			
-		} // for (_particleTraunch)
+	} // if ( [[self touchPhaseName] isEqualToString:@"UITouchPhaseEnded"] == NO)
 		
-	}
-	
-	NSLog(@"giveBirth: touchPhaseName(%@) particles(%d).",  touchPhaseName, _decay, _initialAnimationStep, [_particles count]);
-	
-}
-
-- (BOOL)timeStep:(NSTimeInterval)time {
-	
-	NSTimeInterval step;
-	
-	if (_initialAnimationStep == YES) {
-		
-		_birth					= time;
-		step					= (NSTimeInterval)0.0;
-		_initialAnimationStep	= NO;
-		
-    } else {
-		
-		step = (time - _lastTime);
-	}
-	
-    _lastTime = time;
 	
 	// Take a time step in particle system state. Cull dead particles as needed.
 	for (TEIParticle* particle in _particles) {
-		
 		
 		if (particle.alive == NO) {
 		
@@ -297,30 +268,19 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		static const float gravityScaleFactor = 120.0 * 2.0;
 		
-//		NSLog(@"animate: ParticleSystemGravity(%f, %f)", ParticleSystemGravity.x, ParticleSystemGravity.y);
-		
 		// velocity
-		//		particle.velocity = CGPointMake(particle.velocity.x, particle.velocity.y + (gravityScaleFactor * step));
-		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * step);
-		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * step);
+		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * _step);
+		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * _step);
 		particle.velocity = CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
 		
 		
 		// take a step in time to integrate velocity into distance
-		float dx = particle.velocity.x * step;
-		float dy = particle.velocity.y * step;
+		float dx = particle.velocity.x * _step;
+		float dy = particle.velocity.y * _step;
 		
 		// add delta step to location to compute new location
 		particle.location = CGPointMake(particle.location.x + dx, particle.location.y + dy);
-		
-		
-		// fall off bottom of screen
-		//		if (particle.location.y > 500) {
-		//			
-		//			particle.alive = NO;
-		//			continue;
-		//		}
-		
+				
 		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
 				
 			particle.alive = NO;
@@ -338,7 +298,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		static const float fadeTime = 3.0 * 2.0;
 		float elapsedTimeSinceBirth	= (time - particle.birth);		
 		float fadeFraction			= MIN(1.0f, elapsedTimeSinceBirth / fadeTime);
-		
 		
 		
 		// ::::::::::::::::::::::::::::: IGNORE FADING OUT THE SPRITE FOR NOW :::::::::::::::::::::::::::::
@@ -366,7 +325,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		// rotate
 		float rotationRate = 5.0f/2.0f;
-		particle.rotation += rotationRate * step * particle.rotationDirection;
+		particle.rotation += rotationRate * _step * particle.rotationDirection;
 		
 		
 		
@@ -390,7 +349,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 	NSTimeInterval step;
 	
-	if (_initialAnimationStep == YES) {
+	if (_isInitialAnimationStep == YES) {
 		
 		_birth	= time;
 		step	= (NSTimeInterval)0.0;	
@@ -403,9 +362,11 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
     _lastTime = time;
 	
 	// bring particles to life. At birth we create a traunch of particles in one go. After birth we incrementally add a particle.
-    if (_decay == NO || _initialAnimationStep == YES) {
+    if (_decay == NO || _isInitialAnimationStep == YES) {
 		
 		if (_birth == time) {
+			
+//			NSLog(@"ParticleSystem TouchPhaseName(%@) at birth", [self touchPhaseName]);
 			
 			for (int i = 0; i < _particleTraunch; i++) {
 				
@@ -417,21 +378,23 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			} // for (_particleTraunch)
 			
 			ParticleSystemParticleCount += _particleTraunch;
-						
+			
 		} else {
 			
+//			NSLog(@"ParticleSystem TouchPhaseName(%@) while alive", [self touchPhaseName]);
+		
 			TEIParticle* particle = [[[TEIParticle alloc] initAtLocation:_location birthTime:time willPush:NO] autorelease];
 //			[_target performSelector:_startSelector withObject:particle];
 			
 			[_particles addObject:particle];
 			
 			++ParticleSystemParticleCount;
-			
-		}
-		
-    } // if (_decay == NO || _initialAnimationStep == YES)
 	
-	_initialAnimationStep	= NO;
+		}
+				
+    } // if (_decay == NO || _isInitialAnimationStep == YES)
+	
+	_isInitialAnimationStep	= NO;
 	
 	// Take a time step in particle system state. Cull dead particles as needed.
 	for (TEIParticle* particle in _particles) {
@@ -479,6 +442,12 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		static const float fadeTime = 3.0 * 2.0;
 		float elapsedTimeSinceBirth	= (time - particle.birth);		
 		float fadeFraction			= MIN(1.0f, elapsedTimeSinceBirth / fadeTime);
+		
+		
+//		if ([_particles indexOfObject:particle] == 0) {
+//			NSLog(@"particle(%d) fadeTime: %f elapsedTimeSinceBirth: %f fadeFraction: %f",  [_particles indexOfObject:particle],
+//				  fadeTime, elapsedTimeSinceBirth, fadeFraction);
+//		}
 		
 		
 		

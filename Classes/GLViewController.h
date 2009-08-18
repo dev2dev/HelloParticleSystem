@@ -32,7 +32,7 @@
 @property (nonatomic, retain) ParticleSystem *touchedParticleSystem;
 @property (nonatomic, retain) NSMutableArray *particleSystems;
 
-- (NSString*) phaseName:(UITouchPhase) phase;
+- (NSString*)phaseName:(UITouchPhase) phase;
 
 - (void)startObservingParticle:(TEIParticle *)p;
 - (void)stopObservingParticle:(TEIParticle *)p;

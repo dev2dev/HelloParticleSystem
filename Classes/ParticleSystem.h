@@ -62,9 +62,11 @@
     NSTimeInterval	_birth;
 	NSTimeInterval	_mostRecentTime;
 	
-    BOOL			_initialAnimationStep;
+    BOOL			_isInitialAnimationStep;
+	NSTimeInterval	_step;
 	
     double			_lastTime;
+	
     BOOL			_decay;
 
 	NSString		*touchPhaseName;
@@ -82,7 +84,6 @@
 - (BOOL)isAlive;
 - (int)countLiveParticles;
 
-- (void)giveBirth:(NSTimeInterval)time incrementally:(BOOL)incrementally;
 - (BOOL)timeStep:(NSTimeInterval)time;
 
 - (BOOL)animate:(NSTimeInterval)time;

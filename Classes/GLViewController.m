@@ -131,10 +131,12 @@ static SystemSoundID _boomSoundIDs[3];
 
 // Draw an OpenGL frame
 - (void)drawView:(GLView*)view {
-	
+
+
     NSTimeInterval time = [NSDate timeIntervalSinceReferenceDate];
 	
     for (ParticleSystem *ps in particleSystems) {
+		
 				
 		// If the entire particle system is dead, ignore it.
 		if (ps.alive == NO) {
@@ -144,7 +146,9 @@ static SystemSoundID _boomSoundIDs[3];
 		
 		// If there are remaining live particles, draw them.
 		if ([ps animate:time]) {
-			
+	
+//			NSLog(@"ParticleSystem(%d) TouchPhaseName(%@)", [particleSystems indexOfObject:ps], ps.touchPhaseName);
+
             [ps draw];			
 			
 		}
@@ -321,9 +325,9 @@ static SystemSoundID _boomSoundIDs[3];
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
 	
-	ParticleSystem *p = [ [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]] autorelease ];
+	ParticleSystem *ps = [ [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view]] autorelease ];
 	
-//	ParticleSystem *p = [
+//	ParticleSystem *ps = [
 //						 [[ParticleSystem alloc] initAtLocation:[touch locationInView:self.view] 
 //														 target:self 
 //												  startSelector:@selector(startObservingParticle:)
@@ -331,32 +335,32 @@ static SystemSoundID _boomSoundIDs[3];
 //						  ] 
 //						 autorelease];
 	
-	[self startObservingParticleSystem:p];
-	[p setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
+	[self startObservingParticleSystem:ps];
+	[ps setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
 	
-	p.touchPhaseName = [self phaseName:touch.phase];
-//	NSLog(@"p = [[alloc] init]                                   P RetainCount(%d)", [p retainCount]);
+	ps.touchPhaseName = [self phaseName:touch.phase];
+//	NSLog(@"ps = [[alloc] init]                                   P RetainCount(%d)", [ps retainCount]);
 
 	
-//	[self setValue:p forKeyPath:@"touchedParticleSystem"];
-	self.touchedParticleSystem = p;
+//	[self setValue:ps forKeyPath:@"touchedParticleSystem"];
+	self.touchedParticleSystem = ps;
 
 	
-//	NSLog(@"_touchedParticleSystem = p		                     P RetainCount(%d)", [p							retainCount]);
-//	NSLog(@"_touchedParticleSystem = p		_touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
+//	NSLog(@"self.touchedParticleSystem = ps		                     P RetainCount(%d)", [ps							retainCount]);
+//	NSLog(@"self.touchedParticleSystem = ps		self.touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
 
 	
 	
 
-	[particleSystems addObject:p];	
-//	NSUInteger i = [particleSystems indexOfObject:p];
+	[particleSystems addObject:ps];	
+//	NSUInteger i = [particleSystems indexOfObject:ps];
 //	[self startObservingParticleSystem:[particleSystems objectAtIndex:i]];
 //	[[particleSystems objectAtIndex:i] setValue:[NSNumber numberWithBool:YES] forKeyPath:@"alive"];
 
 	
 	
-//	NSLog(@"[particleSystems addObject:p]		                 P RetainCount(%d)", [p							retainCount]);
-//	NSLog(@"[particleSystems addObject:p]	_touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
+//	NSLog(@"[particleSystems addObject:ps]		                 P RetainCount(%d)", [ps							retainCount]);
+//	NSLog(@"[particleSystems addObject:ps]	self.touchedParticleSystem RetainCount(%d)", [self.touchedParticleSystem	retainCount]);
 
 	
 }
@@ -366,10 +370,10 @@ static SystemSoundID _boomSoundIDs[3];
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];	
 
-	_touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
-	_touchedParticleSystem.location			= [touch locationInView:self.view];
+	self.touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
+	self.touchedParticleSystem.location			= [touch locationInView:self.view];
 	
-//	[_touchedParticleSystem fill:[touch locationInView:self.view]];
+//	[self.touchedParticleSystem fill:[touch locationInView:self.view]];
 	
 }
 
@@ -378,8 +382,8 @@ static SystemSoundID _boomSoundIDs[3];
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
 
-	_touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
-	[_touchedParticleSystem setDecay:YES];
+	self.touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
+	[self.touchedParticleSystem setDecay:YES];
 
 //	[self stopObservingParticleSystem:self.touchedParticleSystem];
 
