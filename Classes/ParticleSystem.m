@@ -342,7 +342,7 @@ static inline float TEIFastCos(float x) {
 	
 }
 
-- (void)draw {
+- (void)prepareVerticesforRendering {
 	
     for (TEIParticle* particle in _particles) {
 		

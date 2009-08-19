@@ -77,7 +77,7 @@
 - (void)addParticleAtBirthTime:(NSTimeInterval)birthTime;
 
 - (BOOL)updateState:(NSTimeInterval)time;
-- (void)draw;
+- (void)prepareVerticesforRendering;
 
 - (void)fill:(CGPoint)location;
 

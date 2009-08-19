@@ -34,9 +34,6 @@
 
 - (NSString*)phaseName:(UITouchPhase) phase;
 
-- (void)startObservingParticle:(TEIParticle *)p;
-- (void)stopObservingParticle:(TEIParticle *)p;
-
 - (void)startObservingParticleSystem:(ParticleSystem *)ps;
 - (void)stopObservingParticleSystem:(ParticleSystem *)ps;
 

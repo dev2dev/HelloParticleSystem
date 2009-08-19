@@ -62,13 +62,22 @@ static SystemSoundID _boomSoundIDs[3];
 	// set up sound effects
 	NSURL *soundURL = nil;
 	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
+//	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[1]);
+//	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
+	
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
 	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[1]);
 	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
 	
 }
@@ -136,7 +145,6 @@ static SystemSoundID _boomSoundIDs[3];
 	
     NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
 	
-	
 	// This behavior adds one additional particle as long as the touch phase has not ended (the finger is still touching the screen)
 	// Alternatively I could do this in the touchesMoved:withEvent: method which would add a particle as long as the finger is being
 	// dragged across the screen.
@@ -146,25 +154,28 @@ static SystemSoundID _boomSoundIDs[3];
 		[[self touchedParticleSystem] addParticleAtBirthTime:now];
 	} // if (GLViewControllerCurrentTouchPhase != UITouchPhaseEnded)
 	
+	// Update the state of all particle systems
     for (ParticleSystem *ps in particleSystems) {
 				
-		// If the entire particle system is dead, ignore it.
 		if (ps.alive == NO) {
 			
+			// If the entire particle system is dead, ignore it.
 			continue;
-		}
+			
+		} // if (ps.alive == NO)
 		
-		// If there are remaining live particles, draw them.
+		// Update the particle system state. If live particles remain, draw them.
 		if ([ps updateState:now]) {
 	
-            [ps draw];			
+			// Apply the changes in model state to the vertices that will be rendered by the GPU
+            [ps prepareVerticesforRendering];			
 			
-		}
+		} // if ([ps updateState:now])
 		
     } // for (particleSystems)
 
 	
-	// Once all particle systems are dead, discard the lot.
+	// Once all particle systems are dead, stop observing and remove them.
 	if ([ParticleSystem totalLivingParticles] == 0) {
 
 		for (ParticleSystem *ps in particleSystems) {
@@ -188,20 +199,6 @@ static SystemSoundID _boomSoundIDs[3];
 	
 }
 
-- (void)startObservingParticle:(TEIParticle *)p {
-	
-    [p addObserver:self
-		 forKeyPath:@"alive"
-			options:(NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew)
-			context:p];
-	
-}
-
-- (void)stopObservingParticle:(TEIParticle *)p {
-	
-    [p removeObserver:self forKeyPath:@"alive"];
-}
-
 - (void)startObservingParticleSystem:(ParticleSystem *)ps {
 	
     [ps addObserver:self
@@ -221,7 +218,7 @@ static SystemSoundID _boomSoundIDs[3];
 	
     int index = (random() % 3);
     AudioServicesPlaySystemSound(_boomSoundIDs[index]);
-	
+		
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
