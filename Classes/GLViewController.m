@@ -7,7 +7,7 @@
 //
 
 #import <AudioToolbox/AudioServices.h>
-
+#import <AVFoundation/AVFoundation.h>
 #import "ConstantsAndMacros.h"
 #import "GLViewController.h"
 #import "GLView.h"
@@ -46,7 +46,9 @@ static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
 
 }
 
-static SystemSoundID _boomSoundIDs[3];
+//static SystemSoundID GLViewControllerSoundFX[3];
+
+static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 
 // The Stanford Pattern
 - (void)viewDidLoad {
@@ -61,24 +63,34 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	// set up sound effects
 	NSURL *soundURL = nil;
+
+	
 	
 //	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
-//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[0]);
 //	
 //	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
-//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[1]);
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[1]);
 //	
 //	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
-//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[2]);
+
+	
+	
+	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[0]);
+//	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[1]);
+//	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[2]);
+
+	
 	
 	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[1]);
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
+	GLViewControllerSoundFXPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:nil];
 	
 }
 
@@ -216,8 +228,18 @@ static SystemSoundID _boomSoundIDs[3];
 // Boom! Boom! Boom!
 - (void)_playBoom {
 	
-    int index = (random() % 3);
-    AudioServicesPlaySystemSound(_boomSoundIDs[index]);
+	if (GLViewControllerSoundFXPlayer.playing) {
+		[GLViewControllerSoundFXPlayer stop];
+		return;
+	}
+	
+	if (!GLViewControllerSoundFXPlayer.playing) {
+		[GLViewControllerSoundFXPlayer play];
+		return;
+	}
+	
+//    int index = (random() % 3);
+//    AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
 		
 }
 
