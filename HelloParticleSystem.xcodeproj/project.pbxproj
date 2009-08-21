@@ -15,6 +15,7 @@
 		312CDD880FF569490007E3D7 /* swirl-rose.png in Resources */ = {isa = PBXBuildFile; fileRef = 312CDD870FF569490007E3D7 /* swirl-rose.png */; };
 		312CDDB20FF56C390007E3D7 /* kids_grid_3x3_translucent.png in Resources */ = {isa = PBXBuildFile; fileRef = 312CDDB10FF56C390007E3D7 /* kids_grid_3x3_translucent.png */; };
 		3141558E0FF8681C00F3ACFB /* mash.png in Resources */ = {isa = PBXBuildFile; fileRef = 3141558D0FF8681C00F3ACFB /* mash.png */; };
+		3145098A103E23D3008FEEA7 /* heima_xylaphone_loop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 31450989103E23D3008FEEA7 /* heima_xylaphone_loop.mp3 */; };
 		314560F80FF7EA3600A1E198 /* farrow-design-2x2-translucent.png in Resources */ = {isa = PBXBuildFile; fileRef = 314560F70FF7EA3600A1E198 /* farrow-design-2x2-translucent.png */; };
 		314560FA0FF7EA8100A1E198 /* case-identity.png in Resources */ = {isa = PBXBuildFile; fileRef = 314560F90FF7EA8100A1E198 /* case-identity.png */; };
 		314560FD0FF7EAC900A1E198 /* farrow-design-2x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 314560FC0FF7EAC900A1E198 /* farrow-design-2x2.png */; };
@@ -46,6 +47,7 @@
 		312CDD870FF569490007E3D7 /* swirl-rose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "swirl-rose.png"; path = "../HelloTexture/swirl-rose.png"; sourceTree = SOURCE_ROOT; };
 		312CDDB10FF56C390007E3D7 /* kids_grid_3x3_translucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kids_grid_3x3_translucent.png; path = artwork/kids_grid_3x3_translucent.png; sourceTree = "<group>"; };
 		3141558D0FF8681C00F3ACFB /* mash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mash.png; path = artwork/mash.png; sourceTree = "<group>"; };
+		31450989103E23D3008FEEA7 /* heima_xylaphone_loop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = heima_xylaphone_loop.mp3; sourceTree = "<group>"; };
 		314560F70FF7EA3600A1E198 /* farrow-design-2x2-translucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "farrow-design-2x2-translucent.png"; path = "artwork/farrow-design-2x2-translucent.png"; sourceTree = "<group>"; };
 		314560F90FF7EA8100A1E198 /* case-identity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "case-identity.png"; path = "artwork/case-identity.png"; sourceTree = "<group>"; };
 		314560FC0FF7EAC900A1E198 /* farrow-design-2x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "farrow-design-2x2.png"; path = "artwork/farrow-design-2x2.png"; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 		31FB3AF40FE6CA2B00630959 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				31450989103E23D3008FEEA7 /* heima_xylaphone_loop.mp3 */,
 				31F01A32103C61C500A56253 /* funky_drummer.mp3 */,
 				31F01A33103C61C500A56253 /* k_and_r_gotta_passion.mp3 */,
 				31FB3B010FE6CA4700630959 /* firework_2.wav */,
@@ -244,6 +247,7 @@
 				3141558E0FF8681C00F3ACFB /* mash.png in Resources */,
 				31F01A34103C61C500A56253 /* funky_drummer.mp3 in Resources */,
 				31F01A35103C61C500A56253 /* k_and_r_gotta_passion.mp3 in Resources */,
+				3145098A103E23D3008FEEA7 /* heima_xylaphone_loop.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

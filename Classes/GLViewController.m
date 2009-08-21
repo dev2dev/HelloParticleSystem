@@ -71,13 +71,13 @@ static SystemSoundID _boomSoundIDs[3];
 //	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
 //	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
 	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"k_and_r_gotta_passion" ofType:@"mp3"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
 	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"k_and_r_gotta_passion" ofType:@"mp3"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[1]);
 	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"k_and_r_gotta_passion" ofType:@"mp3"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
 	
 }
