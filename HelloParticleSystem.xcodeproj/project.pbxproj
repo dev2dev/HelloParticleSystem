@@ -20,6 +20,12 @@
 		314560FA0FF7EA8100A1E198 /* case-identity.png in Resources */ = {isa = PBXBuildFile; fileRef = 314560F90FF7EA8100A1E198 /* case-identity.png */; };
 		314560FD0FF7EAC900A1E198 /* farrow-design-2x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 314560FC0FF7EAC900A1E198 /* farrow-design-2x2.png */; };
 		315FA3EC0FE6CB9B0059E81D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 315FA3EB0FE6CB9B0059E81D /* AudioToolbox.framework */; };
+		317507BF1041FB4700EB808C /* funky_drummer.caf in Resources */ = {isa = PBXBuildFile; fileRef = 317507B91041FB4700EB808C /* funky_drummer.caf */; };
+		317507C01041FB4700EB808C /* funky_drummer.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 317507BA1041FB4700EB808C /* funky_drummer.mp3 */; };
+		317507C11041FB4700EB808C /* heima_xylaphone_loop.caf in Resources */ = {isa = PBXBuildFile; fileRef = 317507BB1041FB4700EB808C /* heima_xylaphone_loop.caf */; };
+		317507C21041FB4700EB808C /* heima_xylaphone_loop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 317507BC1041FB4700EB808C /* heima_xylaphone_loop.mp3 */; };
+		317507C31041FB4700EB808C /* k_and_r_gotta_passion.caf in Resources */ = {isa = PBXBuildFile; fileRef = 317507BD1041FB4700EB808C /* k_and_r_gotta_passion.caf */; };
+		317507C41041FB4700EB808C /* k_and_r_gotta_passion.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 317507BE1041FB4700EB808C /* k_and_r_gotta_passion.mp3 */; };
 		31B30A500FE699060024849F /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31B30A4F0FE699060024849F /* MainWindow.xib */; };
 		31B30A580FE699400024849F /* GLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B30A560FE699400024849F /* GLViewController.m */; };
 		31B30A680FE69C020024849F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31B30A660FE69C020024849F /* OpenGLES.framework */; };
@@ -28,8 +34,6 @@
 		31E31A7D0FF114E000B81100 /* kids_grid_3x3.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E31A7A0FF114E000B81100 /* kids_grid_3x3.png */; };
 		31E31A7F0FF114E000B81100 /* particles_dugla.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E31A7C0FF114E000B81100 /* particles_dugla.png */; };
 		31ECF9B40FEC34CF00F0A982 /* TEITexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 31ECF9B30FEC34CF00F0A982 /* TEITexture.m */; };
-		31F01A34103C61C500A56253 /* funky_drummer.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 31F01A32103C61C500A56253 /* funky_drummer.mp3 */; };
-		31F01A35103C61C500A56253 /* k_and_r_gotta_passion.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 31F01A33103C61C500A56253 /* k_and_r_gotta_passion.mp3 */; };
 		31FB3ABC0FE6C7EB00630959 /* ParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FB3ABA0FE6C7EB00630959 /* ParticleSystem.m */; };
 		31FB3B040FE6CA4700630959 /* firework_2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 31FB3B010FE6CA4700630959 /* firework_2.wav */; };
 		31FB3B050FE6CA4700630959 /* firework_3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 31FB3B020FE6CA4700630959 /* firework_3.wav */; };
@@ -52,6 +56,12 @@
 		314560F90FF7EA8100A1E198 /* case-identity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "case-identity.png"; path = "artwork/case-identity.png"; sourceTree = "<group>"; };
 		314560FC0FF7EAC900A1E198 /* farrow-design-2x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "farrow-design-2x2.png"; path = "artwork/farrow-design-2x2.png"; sourceTree = "<group>"; };
 		315FA3EB0FE6CB9B0059E81D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		317507B91041FB4700EB808C /* funky_drummer.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = funky_drummer.caf; sourceTree = "<group>"; };
+		317507BA1041FB4700EB808C /* funky_drummer.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = funky_drummer.mp3; sourceTree = "<group>"; };
+		317507BB1041FB4700EB808C /* heima_xylaphone_loop.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = heima_xylaphone_loop.caf; sourceTree = "<group>"; };
+		317507BC1041FB4700EB808C /* heima_xylaphone_loop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = heima_xylaphone_loop.mp3; sourceTree = "<group>"; };
+		317507BD1041FB4700EB808C /* k_and_r_gotta_passion.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = k_and_r_gotta_passion.caf; sourceTree = "<group>"; };
+		317507BE1041FB4700EB808C /* k_and_r_gotta_passion.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = k_and_r_gotta_passion.mp3; sourceTree = "<group>"; };
 		31B30A4F0FE699060024849F /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		31B30A520FE699400024849F /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantsAndMacros.h; sourceTree = "<group>"; };
 		31B30A550FE699400024849F /* GLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLViewController.h; sourceTree = "<group>"; };
@@ -64,8 +74,6 @@
 		31E31A7C0FF114E000B81100 /* particles_dugla.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = particles_dugla.png; path = artwork/particles_dugla.png; sourceTree = "<group>"; };
 		31ECF9B20FEC34CF00F0A982 /* TEITexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEITexture.h; sourceTree = "<group>"; };
 		31ECF9B30FEC34CF00F0A982 /* TEITexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEITexture.m; sourceTree = "<group>"; };
-		31F01A32103C61C500A56253 /* funky_drummer.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = funky_drummer.mp3; sourceTree = "<group>"; };
-		31F01A33103C61C500A56253 /* k_and_r_gotta_passion.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = k_and_r_gotta_passion.mp3; sourceTree = "<group>"; };
 		31FB3AB90FE6C7EB00630959 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
 		31FB3ABA0FE6C7EB00630959 /* ParticleSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticleSystem.m; sourceTree = "<group>"; };
 		31FB3B010FE6CA4700630959 /* firework_2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = firework_2.wav; sourceTree = "<group>"; };
@@ -168,8 +176,12 @@
 		31FB3AF40FE6CA2B00630959 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				31F01A32103C61C500A56253 /* funky_drummer.mp3 */,
-				31F01A33103C61C500A56253 /* k_and_r_gotta_passion.mp3 */,
+				317507B91041FB4700EB808C /* funky_drummer.caf */,
+				317507BA1041FB4700EB808C /* funky_drummer.mp3 */,
+				317507BB1041FB4700EB808C /* heima_xylaphone_loop.caf */,
+				317507BC1041FB4700EB808C /* heima_xylaphone_loop.mp3 */,
+				317507BD1041FB4700EB808C /* k_and_r_gotta_passion.caf */,
+				317507BE1041FB4700EB808C /* k_and_r_gotta_passion.mp3 */,
 				31FB3B010FE6CA4700630959 /* firework_2.wav */,
 				31FB3B020FE6CA4700630959 /* firework_3.wav */,
 				31FB3B030FE6CA4700630959 /* firework_6.wav */,
@@ -246,8 +258,12 @@
 				314560FA0FF7EA8100A1E198 /* case-identity.png in Resources */,
 				314560FD0FF7EAC900A1E198 /* farrow-design-2x2.png in Resources */,
 				3141558E0FF8681C00F3ACFB /* mash.png in Resources */,
-				31F01A34103C61C500A56253 /* funky_drummer.mp3 in Resources */,
-				31F01A35103C61C500A56253 /* k_and_r_gotta_passion.mp3 in Resources */,
+				317507BF1041FB4700EB808C /* funky_drummer.caf in Resources */,
+				317507C01041FB4700EB808C /* funky_drummer.mp3 in Resources */,
+				317507C11041FB4700EB808C /* heima_xylaphone_loop.caf in Resources */,
+				317507C21041FB4700EB808C /* heima_xylaphone_loop.mp3 in Resources */,
+				317507C31041FB4700EB808C /* k_and_r_gotta_passion.caf in Resources */,
+				317507C41041FB4700EB808C /* k_and_r_gotta_passion.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

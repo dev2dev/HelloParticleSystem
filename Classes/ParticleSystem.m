@@ -17,9 +17,13 @@ static ParticleSystemOpenGLVertexData ParticleSystemParticleVertices[MAX_VERTS];
 
 // Background rectangular card
 static ParticleSystemOpenGLVertexData ParticleSystemBackdropRectangeVertices[4];
+static GLubyte ParticleSystemBackdropRectangeVertexIndices[] = 
+{
+	0, 1, 2,
+	2, 1, 3
+};
 
-static void 
-ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb, int *counter) {
+static void ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, float x, float y, float s, float t, unsigned argb, int *counter) {
 	
 	// spatial vertex
     vertices[(*counter)].xy[0] = (short)x;
@@ -581,12 +585,16 @@ static inline float TEIFastCos(float x) {
     glTexCoordPointer(2, GL_FLOAT,         sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemBackdropRectangeVertices[0].st  );
     glColorPointer(   4, GL_UNSIGNED_BYTE, sizeof(ParticleSystemOpenGLVertexData), &ParticleSystemBackdropRectangeVertices[0].argb);
 	
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, ParticleSystemBackdropRectangeVertexIndices); 
+	
+//	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
 }
 
-static int maxParticleVerticesRendered = 0;
 + (void)renderParticles {
+
+	static int maxParticleVerticesRendered = 0;
 
 	if (maxParticleVerticesRendered < ParticleSystemParticleVertexCount) {
 		maxParticleVerticesRendered = ParticleSystemParticleVertexCount;
