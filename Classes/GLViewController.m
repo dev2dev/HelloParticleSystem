@@ -111,8 +111,7 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	 [GLViewControllerSoundFXPlayer stop]; // Does not reset currentTime; sending play resumes
 	 
 	 */
-	
-	
+		
 }
 
 // Boom! Boom! Boom!
