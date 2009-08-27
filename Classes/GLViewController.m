@@ -7,7 +7,7 @@
 //
 
 #import <AudioToolbox/AudioServices.h>
-
+#import <AVFoundation/AVFoundation.h>
 #import "ConstantsAndMacros.h"
 #import "GLViewController.h"
 #import "GLView.h"
@@ -46,7 +46,9 @@ static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
 
 }
 
-static SystemSoundID _boomSoundIDs[3];
+static SystemSoundID GLViewControllerSoundFX[3];
+
+static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 
 // The Stanford Pattern
 - (void)viewDidLoad {
@@ -61,16 +63,21 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	// set up sound effects
 	NSURL *soundURL = nil;
+
 	
-//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
-//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
-//	
-//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
-//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[1]);
-//	
-//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
-//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
 	
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
+	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[0]);
+	
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
+	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[1]);
+	
+	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
+	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[2]);
+
+	
+	
+<<<<<<< HEAD:Classes/GLViewController.m
 	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"k_and_r_gotta_passion" ofType:@"mp3"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[0]);
 	
@@ -79,6 +86,52 @@ static SystemSoundID _boomSoundIDs[3];
 	
 	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"k_and_r_gotta_passion" ofType:@"mp3"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &_boomSoundIDs[2]);
+=======
+	NSError *error;
+	
+	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
+	GLViewControllerSoundFXPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
+
+	
+	NSString *audioFile = [NSString stringWithFormat:@"%@/%@.caf", [[NSBundle mainBundle] resourcePath], @"heima_xylaphone_loop"];
+	NSData *audioData = [NSData dataWithContentsOfMappedFile:audioFile];
+	GLViewControllerSoundFXPlayer = [(AVAudioPlayer*)[AVAudioPlayer alloc] initWithData:audioData error:&error];
+	
+	if (GLViewControllerSoundFXPlayer == nil) {
+		NSLog([error description]);
+	}
+	
+	// Doesn't seem to help very much ...
+	[GLViewControllerSoundFXPlayer prepareToPlay];
+	
+	// Total hack. Makes sound play instantly
+	[GLViewControllerSoundFXPlayer play];
+	[GLViewControllerSoundFXPlayer stop];
+	
+//	GLViewControllerSoundFXPlayer.delegate = self;
+	
+	
+	
+	/*
+	 GLViewControllerSoundFXPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
+	 NSLog(@"%f seconds played so far", GLViewControllerSoundFXPlayer.currentTime);
+	 GLViewControllerSoundFXPlayer.currentTime = 10; // jump to the 10 second mark
+	 [GLViewControllerSoundFXPlayer pause];
+	 [GLViewControllerSoundFXPlayer stop]; // Does not reset currentTime; sending play resumes
+	 
+	 */
+		
+}
+
+// Boom! Boom! Boom!
+- (void)GLViewControllerPlaySoundFX {
+	
+	[GLViewControllerSoundFXPlayer play];
+	
+//    int index = (random() % 3);
+//    AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
+>>>>>>> av_audio_player:Classes/GLViewController.m
 	
 }
 
@@ -213,14 +266,6 @@ static SystemSoundID _boomSoundIDs[3];
     [ps removeObserver:self forKeyPath:@"alive"];
 }
 
-// Boom! Boom! Boom!
-- (void)_playBoom {
-	
-    int index = (random() % 3);
-    AudioServicesPlaySystemSound(_boomSoundIDs[index]);
-		
-}
-
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
 //	id thang = (id)context;
@@ -236,7 +281,7 @@ static SystemSoundID _boomSoundIDs[3];
 			if (newValue == YES) {
 				
 //				NSLog(@"This %@ is alive.", [object class]);
-				[self _playBoom];
+				[self GLViewControllerPlaySoundFX];
 				
 				return;
 			}
