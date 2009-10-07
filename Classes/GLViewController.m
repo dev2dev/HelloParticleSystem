@@ -43,19 +43,18 @@ static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
 	glView.drawingDelegate = self;
 	
 	self.view = glView;
-
+	
 }
 
 static SystemSoundID GLViewControllerSoundFX[3];
 
-static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 
 // The Stanford Pattern
 - (void)viewDidLoad {
 	
 	// Prepare particle system arrays
 	particleSystems		= [[NSMutableArray alloc] init];
-
+	
 	[ParticleSystem buildParticleTextureAtlas];
 	
 	GLView *glView = (GLView *)self.view;
@@ -63,8 +62,6 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	
 	// set up sound effects
 	NSURL *soundURL = nil;
-
-	
 	
 	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[0]);
@@ -74,54 +71,16 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	
 	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
 	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[2]);
+	
 
-	
-	
-	NSError *error;
-	
-	
-//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
-	GLViewControllerSoundFXPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
-
-	
-	NSString *audioFile = [NSString stringWithFormat:@"%@/%@.caf", [[NSBundle mainBundle] resourcePath], @"heima_xylaphone_loop"];
-	NSData *audioData = [NSData dataWithContentsOfMappedFile:audioFile];
-	GLViewControllerSoundFXPlayer = [(AVAudioPlayer*)[AVAudioPlayer alloc] initWithData:audioData error:&error];
-	
-	if (GLViewControllerSoundFXPlayer == nil) {
-		NSLog([error description]);
-	}
-	
-	// Doesn't seem to help very much ...
-	[GLViewControllerSoundFXPlayer prepareToPlay];
-	
-	// Total hack. Makes sound play instantly
-	[GLViewControllerSoundFXPlayer play];
-	[GLViewControllerSoundFXPlayer stop];
-	
-//	GLViewControllerSoundFXPlayer.delegate = self;
-	
-	
-	
-	/*
-	 GLViewControllerSoundFXPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
-	 NSLog(@"%f seconds played so far", GLViewControllerSoundFXPlayer.currentTime);
-	 GLViewControllerSoundFXPlayer.currentTime = 10; // jump to the 10 second mark
-	 [GLViewControllerSoundFXPlayer pause];
-	 [GLViewControllerSoundFXPlayer stop]; // Does not reset currentTime; sending play resumes
-	 
-	 */
-		
 }
 
 // Boom! Boom! Boom!
 - (void)GLViewControllerPlaySoundFX {
 	
-//	[GLViewControllerSoundFXPlayer play];
-	
-    int index = (random() % 3);
-    AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
-	
+	int index = (random() % 3);
+	AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
+
 }
 
 // The Stanford Pattern
@@ -131,17 +90,17 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	
 	// Do stuff
 	GLView *glView = (GLView *)self.view;
-
+	
 	glView.animationInterval = 1.0 / kRenderingFrequency;
 	[glView startAnimation];
 	
 	[self enableAcclerometerEvents];
-
+	
 }
 
 // The Stanford Pattern
 - (void)viewWillDisappear:(BOOL)animated {
-		
+	
 	//	[self rememberState];
 	//	[self saveStateToDisk];
 	
@@ -171,7 +130,7 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
     glEnable(GL_TEXTURE_2D);
 	
     glEnable(GL_BLEND);
-
+	
 	glBlendFunc(GL_ONE,			GL_ONE_MINUS_SRC_ALPHA);
 	
 	
@@ -198,7 +157,7 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	
 	// Update the state of all particle systems
     for (ParticleSystem *ps in particleSystems) {
-				
+		
 		if (ps.alive == NO) {
 			
 			// If the entire particle system is dead, ignore it.
@@ -208,20 +167,20 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 		
 		// Update the particle system state. If live particles remain, draw them.
 		if ([ps updateState:now]) {
-	
+			
 			// Apply the changes in model state to the vertices that will be rendered by the GPU
             [ps prepareVerticesforRendering];			
 			
 		} // if ([ps updateState:now])
 		
     } // for (particleSystems)
-
+	
 	
 	// Once all particle systems are dead, stop observing and remove them.
 	if ([ParticleSystem totalLivingParticles] == 0) {
-
+		
 		for (ParticleSystem *ps in particleSystems) {
-						
+			
 			[self stopObservingParticleSystem:ps];
 			
 		} // for (particleSystems)
@@ -229,12 +188,12 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 		[particleSystems removeAllObjects];
 		
 	} // if ([ParticleSystem totalLivingParticles] == 0)
-
+	
 	
 	// NOTE: The background completely fills the window, eliminating the
 	// need for a costly clearing of depth and color every frame.
 	[ParticleSystem renderBackground];
-
+	
 	
 	// Send vertices to GPU
 	[ParticleSystem renderParticles];
@@ -257,62 +216,62 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
-//	id thang = (id)context;
-//	NSLog(@"Keypath(%@) Class(%@) Context(%@)", keyPath, [object class], [thang class]);
+	//	id thang = (id)context;
+	//	NSLog(@"Keypath(%@) Class(%@) Context(%@)", keyPath, [object class], [thang class]);
 	
-//	if ([object isKindOfClass:[ParticleSystem class]]) {
+	//	if ([object isKindOfClass:[ParticleSystem class]]) {
+	
+	if ([keyPath isEqualToString:@"alive"]) {
 		
-		if ([keyPath isEqualToString:@"alive"]) {
+		BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+		
+		// Do something at the birth of a particle system (alive = YES).
+		if (newValue == YES) {
 			
-			BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-			
-			// Do something at the birth of a particle system (alive = YES).
-			if (newValue == YES) {
-				
-//				NSLog(@"This %@ is alive.", [object class]);
-				[self GLViewControllerPlaySoundFX];
-				
-				return;
-			}
-			
-			// Do something at the death of a particle system (alive = NO).
-			if (newValue == NO) {
-				
-//				NSLog(@"This %@ is dead.", [object class]);
-				return;
-			}
+			//				NSLog(@"This %@ is alive.", [object class]);
+			[self GLViewControllerPlaySoundFX];
 			
 			return;
+		}
+		
+		// Do something at the death of a particle system (alive = NO).
+		if (newValue == NO) {
 			
-//		} // if ([object isKindOfClass:[ParticleSystem class]])
+			//				NSLog(@"This %@ is dead.", [object class]);
+			return;
+		}
+		
+		return;
+		
+		//		} // if ([object isKindOfClass:[ParticleSystem class]])
 		
 	} // if (context == ParticleSystem)
 	
-//	if ([object isKindOfClass:[TEIParticle class]]) {
-//		
-//		if ([keyPath isEqualToString:@"alive"]) {
-//			
-//			BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-//			
-//			// Do something at the birth of a particle (alive = YES).
-//			if (newValue == YES) {
-//				
-//				NSLog(@"This %@ is alive.", [object class]);
-//				return;
-//			}
-//			
-//			// Do something at the death of a particle (alive = NO).
-//			if (newValue == NO) {
-//				
-//				NSLog(@"This %@ is dead.", [object class]);
-//				return;
-//			}
-//			
-//			return;
-//			
-//		} // if ([keyPath isEqualToString:@"alive"])
-//		
-//	} // if ([object isKindOfClass:[TEIParticle class]])
+	//	if ([object isKindOfClass:[TEIParticle class]]) {
+	//		
+	//		if ([keyPath isEqualToString:@"alive"]) {
+	//			
+	//			BOOL newValue = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+	//			
+	//			// Do something at the birth of a particle (alive = YES).
+	//			if (newValue == YES) {
+	//				
+	//				NSLog(@"This %@ is alive.", [object class]);
+	//				return;
+	//			}
+	//			
+	//			// Do something at the death of a particle (alive = NO).
+	//			if (newValue == NO) {
+	//				
+	//				NSLog(@"This %@ is dead.", [object class]);
+	//				return;
+	//			}
+	//			
+	//			return;
+	//			
+	//		} // if ([keyPath isEqualToString:@"alive"])
+	//		
+	//	} // if ([object isKindOfClass:[TEIParticle class]])
 	
 	
 	[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -349,7 +308,7 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 };
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-
+	
 	// Only single touch for now
 	UITouch *touch	= [touches anyObject];
 	
@@ -362,7 +321,7 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	
 	ps.touchPhaseName = [self phaseName:touch.phase];
 	self.touchedParticleSystem = ps;
-
+	
 	[particleSystems addObject:ps];	
 	
 }
@@ -377,7 +336,7 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	self.touchedParticleSystem.touchPhaseName	= [self phaseName:touch.phase];
 	self.touchedParticleSystem.location			= [touch locationInView:self.view];
 	
-//	[self.touchedParticleSystem fill:[touch locationInView:self.view]];
+	//	[self.touchedParticleSystem fill:[touch locationInView:self.view]];
 	
 }
 
@@ -390,13 +349,13 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	
 	self.touchedParticleSystem.touchPhaseName = [self phaseName:touch.phase];	
 	[self.touchedParticleSystem setDecay:YES];
-
-//	[self stopObservingParticleSystem:self.touchedParticleSystem];
-
+	
+	//	[self stopObservingParticleSystem:self.touchedParticleSystem];
+	
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-
+	
 	UITouch *touch	= [touches anyObject];
 	
 	GLViewControllerCurrentTouchPhase = touch.phase;
@@ -405,7 +364,7 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	
 	GLView *glView = (GLView *)self.view;
 	[glView stopAnimation];
-		
+	
 }
 
 #define kFilteringFactor			( 0.1)
