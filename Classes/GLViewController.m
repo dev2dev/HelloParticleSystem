@@ -12,6 +12,7 @@
 #import "GLViewController.h"
 #import "GLView.h"
 #import "ParticleSystem.h"
+#import "SoundFXOperation.h"
 
 static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
 
@@ -25,6 +26,9 @@ static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
 @synthesize particleSystems;
 
 - (void)dealloc {
+	
+    [operationQueue release];
+	operationQueue = nil;
 	
 	[particleSystems		removeAllObjects];	
 	[particleSystems		release];
@@ -46,9 +50,12 @@ static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
 
 }
 
-static SystemSoundID GLViewControllerSoundFX[3];
+//static SystemSoundID GLViewControllerSoundFX[3];
 
-static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
+static AVAudioPlayer	*GLViewControllerSoundFXPlayers[3];
+
+//static NSData			*audioData = nil;
+static NSData			*audioDataList[3];
 
 // The Stanford Pattern
 - (void)viewDidLoad {
@@ -60,64 +67,80 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 	
 	GLView *glView = (GLView *)self.view;
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
-	
+
+	operationQueue = [[NSOperationQueue alloc] init];
+
 	// set up sound effects
-	NSURL *soundURL = nil;
+//	NSURL *soundURL = nil;
+	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[0]);
+//	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[1]);
+//	
+//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
+//	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[2]);
+	
 
-	
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[0]);
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[1]);
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[2]);
+	NSMutableArray *audioFiles = [[[NSMutableArray alloc] init] autorelease];
+    [audioFiles addObject:@"funky_drummer"];
+    [audioFiles addObject:@"heima_xylaphone_loop"];
+    [audioFiles addObject:@"k_and_r_gotta_passion"];
 
-	
-	
-	NSError *error;
-	
-	
-//	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"funky_drummer" ofType:@"mp3"]];
-	GLViewControllerSoundFXPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
+	for (int i = 0; i < 3; i++) {
 
-	
-	NSString *audioFile = [NSString stringWithFormat:@"%@/%@.caf", [[NSBundle mainBundle] resourcePath], @"heima_xylaphone_loop"];
-	NSData *audioData = [NSData dataWithContentsOfMappedFile:audioFile];
-	GLViewControllerSoundFXPlayer = [(AVAudioPlayer*)[AVAudioPlayer alloc] initWithData:audioData error:&error];
-	
-	if (GLViewControllerSoundFXPlayer == nil) {
-		NSLog([error description]);
+		NSString *str		= [NSString stringWithFormat:@"%@/%@.caf", [[NSBundle mainBundle] resourcePath], [audioFiles objectAtIndex:i]];
+		audioDataList[i]	= [NSData dataWithContentsOfMappedFile:str];
+
+		NSError *error;
+		
+		GLViewControllerSoundFXPlayers[i] = [[AVAudioPlayer alloc] initWithData:audioDataList[i] error:&error];
+		
+		if (GLViewControllerSoundFXPlayers[i] == nil) {
+			NSLog([error description]);
+		}
+		
+		// Doesn't seem to help very much ...
+		[GLViewControllerSoundFXPlayers[i] prepareToPlay];
+		
+		// Total hack. Makes sound play instantly
+		[GLViewControllerSoundFXPlayers[i] play];
+		[GLViewControllerSoundFXPlayers[i] stop];
+		
 	}
 	
-	// Doesn't seem to help very much ...
-	[GLViewControllerSoundFXPlayer prepareToPlay];
-	
-	// Total hack. Makes sound play instantly
-	[GLViewControllerSoundFXPlayer play];
-	[GLViewControllerSoundFXPlayer stop];
 	
 //	GLViewControllerSoundFXPlayer.delegate = self;
 	
+//	// 0.0/1.0 == min/max volume
+//	GLViewControllerSoundFXPlayer.volume = 0.5;
+//
+//	NSLog(@"%f seconds played so far", GLViewControllerSoundFXPlayer.currentTime);
+//
+//	// jump to the 10 second mark
+//	GLViewControllerSoundFXPlayer.currentTime = 10;
+//	
+//	[GLViewControllerSoundFXPlayer pause];
+//	
+//	// Does NOT reset currentTime. Calling play will resume at the same location
+//	[GLViewControllerSoundFXPlayer stop]; 
+
+
 	
 	
-	/*
-	 GLViewControllerSoundFXPlayer.volume = 0.5; // 0.0 - no volume; 1.0 full volume
-	 NSLog(@"%f seconds played so far", GLViewControllerSoundFXPlayer.currentTime);
-	 GLViewControllerSoundFXPlayer.currentTime = 10; // jump to the 10 second mark
-	 [GLViewControllerSoundFXPlayer pause];
-	 [GLViewControllerSoundFXPlayer stop]; // Does not reset currentTime; sending play resumes
-	 
-	 */
-		
+	
 }
 
 // Boom! Boom! Boom!
-- (void)GLViewControllerPlaySoundFX {
+- (void)playSoundFX {
 	
-	[GLViewControllerSoundFXPlayer play];
+	static int i = 0;
+	
+	[GLViewControllerSoundFXPlayers[ i++ ] play];	
+//	[operationQueue addOperation:[[[SoundFXOperation alloc] initWithPlayer:GLViewControllerSoundFXPlayers[ i++ ]] autorelease]];	
+	if (i == 3) i = 0;
+	
 	
 //    int index = (random() % 3);
 //    AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
@@ -270,7 +293,7 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 			if (newValue == YES) {
 				
 //				NSLog(@"This %@ is alive.", [object class]);
-				[self GLViewControllerPlaySoundFX];
+				[self playSoundFX];
 				
 				return;
 			}

@@ -14,6 +14,7 @@
 
 @class TEIParticle;
 @class ParticleSystem;
+@class SoundFXOperation;
 
 @interface GLViewController : UIViewController <GLViewDelegate, UIAccelerometerDelegate> {
 	
@@ -23,6 +24,8 @@
 		
 	ParticleSystem	*_touchedParticleSystem;
     NSMutableArray	*particleSystems;
+	
+	NSOperationQueue *operationQueue;
 }
 
 @property UIAccelerationValue accelerationValueX;
@@ -34,6 +37,7 @@
 
 - (NSString*)phaseName:(UITouchPhase) phase;
 
+- (void)playSoundFX;
 - (void)startObservingParticleSystem:(ParticleSystem *)ps;
 - (void)stopObservingParticleSystem:(ParticleSystem *)ps;
 
