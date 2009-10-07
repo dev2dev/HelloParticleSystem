@@ -117,10 +117,10 @@ static AVAudioPlayer *GLViewControllerSoundFXPlayer = nil;
 // Boom! Boom! Boom!
 - (void)GLViewControllerPlaySoundFX {
 	
-	[GLViewControllerSoundFXPlayer play];
+//	[GLViewControllerSoundFXPlayer play];
 	
-//    int index = (random() % 3);
-//    AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
+    int index = (random() % 3);
+    AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
 	
 }
 
