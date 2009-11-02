@@ -63,14 +63,10 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	GLView *glView = (GLView *)self.view;
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
 
-	
-	// List of sounds
 	NSArray *soundList = [[[NSArray alloc] initWithObjects:
-						@"GiggleGirl",
-						@"GiggleNasal",
-						@"GiggleNaughty",
-						@"GigglePair",
-						nil] autorelease];
+						   @"GiggleGirl1", @"GiggleNasal", @"GiggleNaughty", @"GigglePair", 
+						   @"GiggleGirl1", @"GiggleNasal", @"GiggleNaughty", @"GigglePair", 
+						   nil] autorelease];
 	
 	soundListLength = [soundList count];
 	
@@ -84,13 +80,13 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	
 }
 
-static int sequentialIndex = 0;
+//static int sequentialIndex = 0;
 - (void)GLViewControllerPlaySoundFX {
 	
-//	int index = arc4random() % kSoundCount;
+	int index = arc4random() % soundListLength;
 	
-	int index = sequentialIndex++;	
-	index %= soundListLength;
+//	int index = sequentialIndex++;	
+//	index %= soundListLength;
 	
 	NSLog(@"Sound: %d", index);
 	AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
