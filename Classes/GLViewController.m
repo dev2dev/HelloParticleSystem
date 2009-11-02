@@ -46,7 +46,10 @@ static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
 	
 }
 
-static SystemSoundID GLViewControllerSoundFX[3];
+static NSUInteger soundListLength = 0;
+
+// Don't bother malloc'ing. soundListLength will manage the number of sounds. 
+static SystemSoundID GLViewControllerSoundFX[128];
 
 
 // The Stanford Pattern
@@ -59,26 +62,37 @@ static SystemSoundID GLViewControllerSoundFX[3];
 	
 	GLView *glView = (GLView *)self.view;
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
-	
-	// set up sound effects
-	NSURL *soundURL = nil;
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_6" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[0]);
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_2" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[1]);
-	
-	soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"firework_3" ofType:@"wav"]];
-	AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[2]);
-	
 
+	
+	// List of sounds
+	NSArray *soundList = [[[NSArray alloc] initWithObjects:
+						@"GiggleGirl",
+						@"GiggleNasal",
+						@"GiggleNaughty",
+						@"GigglePair",
+						nil] autorelease];
+	
+	soundListLength = [soundList count];
+	
+	int i = 0;
+	for (NSString *sound in soundList) {
+		
+		NSURL *soundURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:sound ofType:@"caf"]];
+		AudioServicesCreateSystemSoundID((CFURLRef)soundURL, &GLViewControllerSoundFX[i++]);
+		
+	} // for (soundList)
+	
 }
 
-// Boom! Boom! Boom!
+static int sequentialIndex = 0;
 - (void)GLViewControllerPlaySoundFX {
 	
-	int index = (random() % 3);
+//	int index = arc4random() % kSoundCount;
+	
+	int index = sequentialIndex++;	
+	index %= soundListLength;
+	
+	NSLog(@"Sound: %d", index);
 	AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
 
 }
