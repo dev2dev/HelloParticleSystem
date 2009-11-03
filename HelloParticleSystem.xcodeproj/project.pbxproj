@@ -21,7 +21,6 @@
 		314560FD0FF7EAC900A1E198 /* farrow-design-2x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 314560FC0FF7EAC900A1E198 /* farrow-design-2x2.png */; };
 		315FA3EC0FE6CB9B0059E81D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 315FA3EB0FE6CB9B0059E81D /* AudioToolbox.framework */; };
 		31AFCFB8109F72C7001CFE0E /* GiggleGirl1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31AFCFB3109F72C7001CFE0E /* GiggleGirl1.caf */; };
-		31AFCFB9109F72C7001CFE0E /* GiggleGirl2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31AFCFB4109F72C7001CFE0E /* GiggleGirl2.caf */; };
 		31AFCFBA109F72C7001CFE0E /* GiggleNasal.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31AFCFB5109F72C7001CFE0E /* GiggleNasal.caf */; };
 		31AFCFBB109F72C7001CFE0E /* GiggleNaughty.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31AFCFB6109F72C7001CFE0E /* GiggleNaughty.caf */; };
 		31AFCFBC109F72C7001CFE0E /* GigglePair.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31AFCFB7109F72C7001CFE0E /* GigglePair.caf */; };
@@ -30,6 +29,7 @@
 		31B30A680FE69C020024849F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31B30A660FE69C020024849F /* OpenGLES.framework */; };
 		31B30A690FE69C020024849F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31B30A670FE69C020024849F /* QuartzCore.framework */; };
 		31B30AE40FE6A2D40024849F /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B30AE30FE6A2D40024849F /* GLView.m */; };
+		31E0754910A0882A00DC1D65 /* GiggleMix-Lots.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31E0754810A0882A00DC1D65 /* GiggleMix-Lots.caf */; };
 		31E31A7D0FF114E000B81100 /* kids_grid_3x3.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E31A7A0FF114E000B81100 /* kids_grid_3x3.png */; };
 		31E31A7F0FF114E000B81100 /* particles_dugla.png in Resources */ = {isa = PBXBuildFile; fileRef = 31E31A7C0FF114E000B81100 /* particles_dugla.png */; };
 		31ECF9B40FEC34CF00F0A982 /* TEITexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 31ECF9B30FEC34CF00F0A982 /* TEITexture.m */; };
@@ -53,7 +53,6 @@
 		314560FC0FF7EAC900A1E198 /* farrow-design-2x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "farrow-design-2x2.png"; path = "artwork/farrow-design-2x2.png"; sourceTree = "<group>"; };
 		315FA3EB0FE6CB9B0059E81D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		31AFCFB3109F72C7001CFE0E /* GiggleGirl1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GiggleGirl1.caf; sourceTree = "<group>"; };
-		31AFCFB4109F72C7001CFE0E /* GiggleGirl2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GiggleGirl2.caf; sourceTree = "<group>"; };
 		31AFCFB5109F72C7001CFE0E /* GiggleNasal.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GiggleNasal.caf; sourceTree = "<group>"; };
 		31AFCFB6109F72C7001CFE0E /* GiggleNaughty.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GiggleNaughty.caf; sourceTree = "<group>"; };
 		31AFCFB7109F72C7001CFE0E /* GigglePair.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GigglePair.caf; sourceTree = "<group>"; };
@@ -65,6 +64,7 @@
 		31B30A670FE69C020024849F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		31B30AE20FE6A2D40024849F /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
 		31B30AE30FE6A2D40024849F /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
+		31E0754810A0882A00DC1D65 /* GiggleMix-Lots.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GiggleMix-Lots.caf"; sourceTree = "<group>"; };
 		31E31A7A0FF114E000B81100 /* kids_grid_3x3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kids_grid_3x3.png; path = artwork/kids_grid_3x3.png; sourceTree = "<group>"; };
 		31E31A7C0FF114E000B81100 /* particles_dugla.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = particles_dugla.png; path = artwork/particles_dugla.png; sourceTree = "<group>"; };
 		31ECF9B20FEC34CF00F0A982 /* TEITexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEITexture.h; sourceTree = "<group>"; };
@@ -168,8 +168,8 @@
 		31FB3AF40FE6CA2B00630959 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				31E0754810A0882A00DC1D65 /* GiggleMix-Lots.caf */,
 				31AFCFB3109F72C7001CFE0E /* GiggleGirl1.caf */,
-				31AFCFB4109F72C7001CFE0E /* GiggleGirl2.caf */,
 				31AFCFB5109F72C7001CFE0E /* GiggleNasal.caf */,
 				31AFCFB6109F72C7001CFE0E /* GiggleNaughty.caf */,
 				31AFCFB7109F72C7001CFE0E /* GigglePair.caf */,
@@ -244,10 +244,10 @@
 				314560FD0FF7EAC900A1E198 /* farrow-design-2x2.png in Resources */,
 				3141558E0FF8681C00F3ACFB /* mash.png in Resources */,
 				31AFCFB8109F72C7001CFE0E /* GiggleGirl1.caf in Resources */,
-				31AFCFB9109F72C7001CFE0E /* GiggleGirl2.caf in Resources */,
 				31AFCFBA109F72C7001CFE0E /* GiggleNasal.caf in Resources */,
 				31AFCFBB109F72C7001CFE0E /* GiggleNaughty.caf in Resources */,
 				31AFCFBC109F72C7001CFE0E /* GigglePair.caf in Resources */,
+				31E0754910A0882A00DC1D65 /* GiggleMix-Lots.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -51,7 +51,6 @@ static NSUInteger soundListLength = 0;
 // Don't bother malloc'ing. soundListLength will manage the number of sounds. 
 static SystemSoundID GLViewControllerSoundFX[128];
 
-
 // The Stanford Pattern
 - (void)viewDidLoad {
 	
@@ -64,8 +63,13 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	[ParticleSystem buildBackdropWithBounds:[glView bounds]];
 
 	NSArray *soundList = [[[NSArray alloc] initWithObjects:
-						   @"GiggleGirl1", @"GiggleNasal", @"GiggleNaughty", @"GigglePair", 
-						   @"GiggleGirl1", @"GiggleNasal", @"GiggleNaughty", @"GigglePair", 
+						   @"GiggleGirl1", 
+						   @"GiggleNasal", 
+						   @"GiggleNaughty", 
+						   @"GigglePair",
+						   @"GigglePair",
+						   @"GiggleMix-Lots",
+						   @"GiggleMix-Lots",
 						   nil] autorelease];
 	
 	soundListLength = [soundList count];
@@ -80,16 +84,29 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	
 }
 
-//static int sequentialIndex = 0;
 - (void)GLViewControllerPlaySoundFX {
 	
-	int index = arc4random() % soundListLength;
-	
+//	static int sequentialIndex = 0;
 //	int index = sequentialIndex++;	
 //	index %= soundListLength;
+
 	
+	
+	
+	static int previousIndex = -1;
+	int index;
+	index = arc4random() % soundListLength;
+	if (index == previousIndex) {
+		
+		index = arc4random() % soundListLength;
+//		index = (index + 1) % soundListLength;
+		
+	} // if (index == previousIndex)
+	previousIndex = index;
+
 	NSLog(@"Sound: %d", index);
 	AudioServicesPlaySystemSound(GLViewControllerSoundFX[index]);
+	
 
 }
 
