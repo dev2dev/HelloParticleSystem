@@ -17,17 +17,18 @@ static UITouchPhase GLViewControllerCurrentTouchPhase = 0;
 
 @implementation GLViewController
 
-@synthesize accelerationValueX;
-@synthesize accelerationValueY;
-@synthesize accelerationValueZ;
-
-@synthesize touchedParticleSystem=_touchedParticleSystem;
-@synthesize particleSystems;
+@synthesize accelerationValueX = _accelerationValueX;
+@synthesize accelerationValueY = _accelerationValueY;
+@synthesize accelerationValueZ = _accelerationValueZ;
+@synthesize touchedParticleSystem = _touchedParticleSystem;
+@synthesize particleSystems = _particleSystems;
 
 - (void)dealloc {
 	
-	[particleSystems		removeAllObjects];	
-	[particleSystems		release];
+    [_touchedParticleSystem	release], _touchedParticleSystem	= nil;
+
+	[_particleSystems		removeAllObjects];	
+    [_particleSystems		release], _particleSystems			= nil;
 	
     [super dealloc];
 }
@@ -55,7 +56,7 @@ static SystemSoundID GLViewControllerSoundFX[128];
 - (void)viewDidLoad {
 	
 	// Prepare particle system arrays
-	particleSystems		= [[NSMutableArray alloc] init];
+	self.particleSystems = [[[NSMutableArray alloc] init] autorelease];
 	
 	[ParticleSystem buildParticleTextureAtlas];
 	
@@ -183,7 +184,7 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	} // if (GLViewControllerCurrentTouchPhase != UITouchPhaseEnded)
 	
 	// Update the state of all particle systems
-    for (ParticleSystem *ps in particleSystems) {
+    for (ParticleSystem *ps in self.particleSystems) {
 		
 		if (ps.alive == NO) {
 			
@@ -206,13 +207,13 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	// Once all particle systems are dead, stop observing and remove them.
 	if ([ParticleSystem totalLivingParticles] == 0) {
 		
-		for (ParticleSystem *ps in particleSystems) {
+		for (ParticleSystem *ps in self.particleSystems) {
 			
 			[self stopObservingParticleSystem:ps];
 			
 		} // for (particleSystems)
 		
-		[particleSystems removeAllObjects];
+		[self.particleSystems removeAllObjects];
 		
 	} // if ([ParticleSystem totalLivingParticles] == 0)
 	
@@ -349,7 +350,7 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	ps.touchPhaseName = [self phaseName:touch.phase];
 	self.touchedParticleSystem = ps;
 	
-	[particleSystems addObject:ps];	
+	[self.particleSystems addObject:ps];	
 	
 }
 
@@ -414,15 +415,19 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	
 }
 
-- (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration {
+- (void)accelerometer:(UIAccelerometer*)accelerometer 
+		didAccelerate:(UIAcceleration*)acceleration {
 	
 	// Compute "G"
-	accelerationValueX = acceleration.x * kFilteringFactor + accelerationValueX * (1.0 - kFilteringFactor);
-	accelerationValueY = acceleration.y * kFilteringFactor + accelerationValueY * (1.0 - kFilteringFactor);
-	accelerationValueZ = acceleration.z * kFilteringFactor + accelerationValueZ * (1.0 - kFilteringFactor);
+	self.accelerationValueX = 
+	acceleration.x * kFilteringFactor + self.accelerationValueX * (1.0 - kFilteringFactor);
+	self.accelerationValueY = 
+	acceleration.y * kFilteringFactor + self.accelerationValueY * (1.0 - kFilteringFactor);
+	self.accelerationValueZ = 
+	acceleration.z * kFilteringFactor + self.accelerationValueZ * (1.0 - kFilteringFactor);
 	
 	// ParticleSystem particles live in 2D. Use x and y compoments of "G"
-	[ParticleSystem setGravity:CGPointMake(accelerationValueX, accelerationValueY)];
+	[ParticleSystem setGravity:CGPointMake(self.accelerationValueX, self.accelerationValueY)];
 }
 
 

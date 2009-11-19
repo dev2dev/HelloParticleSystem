@@ -40,7 +40,12 @@ static void ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, fl
 	(*counter)++;
 }
 
+// alias_wavefront_diagnostic
+//#define TEXTURE_ATLAS_NXN_DIMENSION (8)
+
+// kids_grid_3x3_translucent
 #define TEXTURE_ATLAS_NXN_DIMENSION (3)
+
 #define NUM_TEXTURES (TEXTURE_ATLAS_NXN_DIMENSION * TEXTURE_ATLAS_NXN_DIMENSION)
 
 @implementation TEIParticle
@@ -244,7 +249,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		// velocity
 		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * timeStep);
 		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * timeStep);
-		particle.velocity = CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
+		particle.velocity = 
+		CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
 		
 		
 		// take a step in time to integrate velocity into distance
@@ -252,7 +258,8 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		float dy = particle.velocity.y * timeStep;
 		
 		// add delta step to location to compute new location
-		particle.location = CGPointMake(particle.location.x + dx, particle.location.y + dy);		
+		particle.location = 
+		CGPointMake(particle.location.x + dx, particle.location.y + dy);		
 		
 		if (particle.location.x < ParticleSystemBBox.origin.x || particle.location.x > ParticleSystemBBox.size.width) {
 			
@@ -472,18 +479,9 @@ static inline float TEIFastCos(float x) {
 
 + (void)buildParticleTextureAtlas {
 	
-//	ParticleSystemParticleTexture = 
-//	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3"				extension:@"png" mipmap:YES ];
-	
-	ParticleSystemParticleTexture = 
-	[ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"	extension:@"png" mipmap:YES ];
-	
-//	ParticleSystemParticleTexture = 
-//	[ [TEITexture alloc] initWithImageFile:@"farrow-design-2x2"	extension:@"png" mipmap:YES ];
-	
-//	ParticleSystemParticleTexture = 
-//	[ [TEITexture alloc] initWithImageFile:@"particles_dugla"			extension:@"png" mipmap:YES ];
-	
+//	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"alias_wavefront_diagnostic"	extension:@"png" mipmap:YES ];	
+	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"		extension:@"png" mipmap:YES ];
+		
 	[self buildTextureAtlasIndexTable];
 		
 }
@@ -564,7 +562,8 @@ static inline float TEIFastCos(float x) {
 	ParticleSystemBackdropTexture = 
 //	[ [TEITexture alloc] initWithImageFile:@"mandrill"		extension:@"png" mipmap:YES ];
 //	[ [TEITexture alloc] initWithImageFile:@"swirl-rose"	extension:@"png" mipmap:YES ];
-	[ [TEITexture alloc] initWithImageFile:@"case-identity"	extension:@"png" mipmap:YES ];
+//	[ [TEITexture alloc] initWithImageFile:@"case-identity"	extension:@"png" mipmap:YES ];
+	[ [TEITexture alloc] initWithImageFile:@"playful"		extension:@"png" mipmap:YES ];
 //	[ [TEITexture alloc] initWithImageFile:@"mash"	extension:@"png" mipmap:YES ];
 	
 }
@@ -619,7 +618,6 @@ static inline float TEIFastCos(float x) {
 	ParticleSystemGravity.x = gravityVector.x / length;
 	ParticleSystemGravity.y = gravityVector.y / length;
 	
-	// !!! NOTE !!!
 	// Flip the y-component of the gravity vector to be consistent with the screen space coordinate
 	// system used in ParticleSystem. Gravity is world space. ParticleSystem is screen space.
 	ParticleSystemGravity.y = -(ParticleSystemGravity.y);
