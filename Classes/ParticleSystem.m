@@ -1,8 +1,9 @@
 
 #import <OpenGLES/ES1/gl.h>
 #import "ParticleSystem.h"
+#import "ConstantsAndMacros.h"
 
-static CGPoint ParticleSystemGravity = { 0.0, 1.0 };
+static CGPoint ParticleSystemGravity = { 0.0, 0.0 };
 
 static float ParticleSystemBBoxBorder = 20.0;
 static CGRect  ParticleSystemBBox;
@@ -90,18 +91,14 @@ static void ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, fl
 		
 		// rotation
 		
-		// Original ngmoco
-//		float angle = (arc4random() % 360) * (M_PI / 180.0f);
-		
-		// Dugla
-		float angle = (arc4random() % 360);
+		float radians = m3dDegToRad( (arc4random() % 360) );
 		
 		// scalefactor
 		float scale = 30.0f + (arc4random() % 120);
 		
 		// velocity
-		velocity.x = cosf(angle) * scale;
-		velocity.y = sinf(angle) * scale;
+		velocity.x = cosf(radians) * scale;
+		velocity.y = sinf(radians) * scale;
 		
 		// Original ngmoco
 //		if (push == YES) {
@@ -244,13 +241,12 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 			continue;
 		}
 		
-		static const float gravityScaleFactor = 120.0 * 2.0;
+		static const float gravityScaleFactor = 120.0 * 2.0 * 2.0 * 2.0;
 		
 		// velocity
 		float dv_x = (ParticleSystemGravity.x * gravityScaleFactor * timeStep);
 		float dv_y = (ParticleSystemGravity.y * gravityScaleFactor * timeStep);
-		particle.velocity = 
-		CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
+		particle.velocity = CGPointMake(particle.velocity.x + dv_x, particle.velocity.y + dv_y);
 		
 		
 		// take a step in time to integrate velocity into distance
@@ -303,7 +299,7 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 		
 		
 		// rotate
-		float rotationRate = 5.0f/2.0f;
+		float rotationRate = 5.0f/0.75f;
 		particle.rotation += rotationRate * timeStep * particle.rotationDirection;
 		
 	} // for (_particles)
@@ -365,7 +361,8 @@ static inline float TEIFastCos(float x) {
 		
 		
         // half width and height
-        float w = particle.size * 42.0f;
+//        float w = particle.size * 42.0f ;
+        float w = particle.size * 80.0f * (65.0/100.0);
 		
 		// Jiggle the sprites
         float radians = particle.rotation + (M_PI / 4.0f) * particle.rotationDirection;
@@ -481,6 +478,7 @@ static inline float TEIFastCos(float x) {
 	
 //	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"alias_wavefront_diagnostic"	extension:@"png" mipmap:YES ];	
 	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"		extension:@"png" mipmap:YES ];
+//	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3"					extension:@"png" mipmap:YES ];
 		
 	[self buildTextureAtlasIndexTable];
 		
@@ -614,9 +612,8 @@ static inline float TEIFastCos(float x) {
 
 + (void)setGravity:(CGPoint)gravityVector {
 	
-	float length = sqrtf(gravityVector.x * gravityVector.x + gravityVector.y * gravityVector.y);
-	ParticleSystemGravity.x = gravityVector.x / length;
-	ParticleSystemGravity.y = gravityVector.y / length;
+	ParticleSystemGravity.x = gravityVector.x;
+	ParticleSystemGravity.y = gravityVector.y;
 	
 	// Flip the y-component of the gravity vector to be consistent with the screen space coordinate
 	// system used in ParticleSystem. Gravity is world space. ParticleSystem is screen space.

@@ -159,13 +159,11 @@ static SystemSoundID GLViewControllerSoundFX[128];
 	
     glEnable(GL_BLEND);
 	
-	glBlendFunc(GL_ONE,			GL_ONE_MINUS_SRC_ALPHA);
-	
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
-	
 	
 }
 
@@ -418,13 +416,11 @@ static SystemSoundID GLViewControllerSoundFX[128];
 - (void)accelerometer:(UIAccelerometer*)accelerometer 
 		didAccelerate:(UIAcceleration*)acceleration {
 	
+	
 	// Compute "G"
-	self.accelerationValueX = 
-	acceleration.x * kFilteringFactor + self.accelerationValueX * (1.0 - kFilteringFactor);
-	self.accelerationValueY = 
-	acceleration.y * kFilteringFactor + self.accelerationValueY * (1.0 - kFilteringFactor);
-	self.accelerationValueZ = 
-	acceleration.z * kFilteringFactor + self.accelerationValueZ * (1.0 - kFilteringFactor);
+	self.accelerationValueX = acceleration.x * kFilteringFactor + self.accelerationValueX * (1.0 - kFilteringFactor);
+	self.accelerationValueY = acceleration.y * kFilteringFactor + self.accelerationValueY * (1.0 - kFilteringFactor);
+	self.accelerationValueZ = acceleration.z * kFilteringFactor + self.accelerationValueZ * (1.0 - kFilteringFactor);
 	
 	// ParticleSystem particles live in 2D. Use x and y compoments of "G"
 	[ParticleSystem setGravity:CGPointMake(self.accelerationValueX, self.accelerationValueY)];
