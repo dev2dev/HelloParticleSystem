@@ -3,6 +3,32 @@
 #import "ParticleSystem.h"
 #import "ConstantsAndMacros.h"
 
+static inline float VFPFastAbs(float x) { 
+	return (x < 0) ? -x : x; 
+}
+
+static inline float VFPFastSin(float x) {
+	
+	// fast sin function; maximum error is 0.001
+	const float P = 0.225f;
+	
+	x = x * M_1_PI;
+	int k = (int) roundf(x);
+	x = x - k;
+    
+	float y = (4.0f - 4.0f * VFPFastAbs(x)) * x;
+    
+	y = P * (y * VFPFastAbs(y) - y) + y;
+    
+	return (k&1) ? -y : y;
+}
+
+static inline float TEIFastCos(float x) {
+	
+	return VFPFastSin(x + M_PI_2);
+	
+}
+
 static CGPoint ParticleSystemGravity = { 0.0, 0.0 };
 
 static float ParticleSystemBBoxBorder = 20.0;
@@ -46,6 +72,7 @@ static void ParticleSystemAddVertex(ParticleSystemOpenGLVertexData* vertices, fl
 
 // kids_grid_3x3_translucent
 #define TEXTURE_ATLAS_NXN_DIMENSION (3)
+//#define TEXTURE_ATLAS_NXN_DIMENSION (2)
 
 #define NUM_TEXTURES (TEXTURE_ATLAS_NXN_DIMENSION * TEXTURE_ATLAS_NXN_DIMENSION)
 
@@ -323,32 +350,6 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 	
 }
 
-static inline float VFPFastAbs(float x) { 
-	return (x < 0) ? -x : x; 
-}
-
-static inline float VFPFastSin(float x) {
-	
-	// fast sin function; maximum error is 0.001
-	const float P = 0.225f;
-	
-	x = x * M_1_PI;
-	int k = (int) roundf(x);
-	x = x - k;
-    
-	float y = (4.0f - 4.0f * VFPFastAbs(x)) * x;
-    
-	y = P * (y * VFPFastAbs(y) - y) + y;
-    
-	return (k&1) ? -y : y;
-}
-
-static inline float TEIFastCos(float x) {
-	
-	return VFPFastSin(x + M_PI_2);
-	
-}
-
 - (void)prepareVerticesforRendering {
 	
     for (TEIParticle* particle in _particles) {
@@ -362,7 +363,7 @@ static inline float TEIFastCos(float x) {
 		
         // half width and height
 //        float w = particle.size * 42.0f ;
-        float w = particle.size * 80.0f * (65.0/100.0);
+        float w = particle.size * 80.0f * (55.0/100.0);
 		
 		// Jiggle the sprites
         float radians = particle.rotation + (M_PI / 4.0f) * particle.rotationDirection;
@@ -477,9 +478,10 @@ static inline float TEIFastCos(float x) {
 + (void)buildParticleTextureAtlas {
 	
 //	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"alias_wavefront_diagnostic"	extension:@"png" mipmap:YES ];	
+//	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"candycane_scalar_disk_2x2"		extension:@"png" mipmap:YES ];
 	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3_translucent"		extension:@"png" mipmap:YES ];
 //	ParticleSystemParticleTexture = [ [TEITexture alloc] initWithImageFile:@"kids_grid_3x3"					extension:@"png" mipmap:YES ];
-		
+
 	[self buildTextureAtlasIndexTable];
 		
 }

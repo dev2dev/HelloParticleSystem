@@ -15,10 +15,12 @@
 		311356D110B59DF000329270 /* mash_inverted.png in Resources */ = {isa = PBXBuildFile; fileRef = 311356CF10B59DF000329270 /* mash_inverted.png */; };
 		311356D210B59DF000329270 /* playful.png in Resources */ = {isa = PBXBuildFile; fileRef = 311356D010B59DF000329270 /* playful.png */; };
 		3116ACCD103C9C8900661283 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3116ACCC103C9C8900661283 /* AVFoundation.framework */; };
+		3118750010FE1EC200488DEC /* HelloParticleSystemIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 311874FF10FE1EC200488DEC /* HelloParticleSystemIcon.png */; };
 		312CDDB20FF56C390007E3D7 /* kids_grid_3x3_translucent.png in Resources */ = {isa = PBXBuildFile; fileRef = 312CDDB10FF56C390007E3D7 /* kids_grid_3x3_translucent.png */; };
 		314560FA0FF7EA8100A1E198 /* case-identity.png in Resources */ = {isa = PBXBuildFile; fileRef = 314560F90FF7EA8100A1E198 /* case-identity.png */; };
 		315FA3EC0FE6CB9B0059E81D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 315FA3EB0FE6CB9B0059E81D /* AudioToolbox.framework */; };
 		3175680C10AF04EC00450A53 /* alias_wavefront_diagnostic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3175680B10AF04EC00450A53 /* alias_wavefront_diagnostic.png */; };
+		3194AE2610D71E8200398582 /* candycane_scalar_disk_2x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3194AE2510D71E8200398582 /* candycane_scalar_disk_2x2.png */; };
 		31AFCFB8109F72C7001CFE0E /* GiggleGirl1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31AFCFB3109F72C7001CFE0E /* GiggleGirl1.caf */; };
 		31AFCFBA109F72C7001CFE0E /* GiggleNasal.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31AFCFB5109F72C7001CFE0E /* GiggleNasal.caf */; };
 		31AFCFBB109F72C7001CFE0E /* GiggleNaughty.caf in Resources */ = {isa = PBXBuildFile; fileRef = 31AFCFB6109F72C7001CFE0E /* GiggleNaughty.caf */; };
@@ -46,10 +48,12 @@
 		311356CF10B59DF000329270 /* mash_inverted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mash_inverted.png; sourceTree = "<group>"; };
 		311356D010B59DF000329270 /* playful.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playful.png; sourceTree = "<group>"; };
 		3116ACCC103C9C8900661283 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		311874FF10FE1EC200488DEC /* HelloParticleSystemIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelloParticleSystemIcon.png; sourceTree = "<group>"; };
 		312CDDB10FF56C390007E3D7 /* kids_grid_3x3_translucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kids_grid_3x3_translucent.png; path = artwork/kids_grid_3x3_translucent.png; sourceTree = "<group>"; };
 		314560F90FF7EA8100A1E198 /* case-identity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "case-identity.png"; path = "artwork/case-identity.png"; sourceTree = "<group>"; };
 		315FA3EB0FE6CB9B0059E81D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		3175680B10AF04EC00450A53 /* alias_wavefront_diagnostic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alias_wavefront_diagnostic.png; sourceTree = "<group>"; };
+		3194AE2510D71E8200398582 /* candycane_scalar_disk_2x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = candycane_scalar_disk_2x2.png; sourceTree = "<group>"; };
 		31AFCFB3109F72C7001CFE0E /* GiggleGirl1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GiggleGirl1.caf; sourceTree = "<group>"; };
 		31AFCFB5109F72C7001CFE0E /* GiggleNasal.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GiggleNasal.caf; sourceTree = "<group>"; };
 		31AFCFB6109F72C7001CFE0E /* GiggleNaughty.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GiggleNaughty.caf; sourceTree = "<group>"; };
@@ -143,6 +147,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				311874FF10FE1EC200488DEC /* HelloParticleSystemIcon.png */,
 				31B30A4F0FE699060024849F /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
@@ -178,6 +183,7 @@
 		31FB3B070FE6CA4C00630959 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				3194AE2510D71E8200398582 /* candycane_scalar_disk_2x2.png */,
 				311356CF10B59DF000329270 /* mash_inverted.png */,
 				311356D010B59DF000329270 /* playful.png */,
 				3175680B10AF04EC00450A53 /* alias_wavefront_diagnostic.png */,
@@ -244,6 +250,8 @@
 				3175680C10AF04EC00450A53 /* alias_wavefront_diagnostic.png in Resources */,
 				311356D110B59DF000329270 /* mash_inverted.png in Resources */,
 				311356D210B59DF000329270 /* playful.png in Resources */,
+				3194AE2610D71E8200398582 /* candycane_scalar_disk_2x2.png in Resources */,
+				3118750010FE1EC200488DEC /* HelloParticleSystemIcon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

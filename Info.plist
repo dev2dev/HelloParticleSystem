@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>HelloParticleSystemIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.theelasticimage.helloparticlesystem</string>
 	<key>CFBundleInfoDictionaryVersion</key>
