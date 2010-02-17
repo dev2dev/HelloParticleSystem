@@ -563,9 +563,9 @@ static NSMutableArray	*ParticleSystemTextureCoordinates	= nil;
 //	[ [TEITexture alloc] initWithImageFile:@"mandrill"		extension:@"png" mipmap:YES ];
 //	[ [TEITexture alloc] initWithImageFile:@"swirl-rose"	extension:@"png" mipmap:YES ];
 //	[ [TEITexture alloc] initWithImageFile:@"case-identity"	extension:@"png" mipmap:YES ];
-	[ [TEITexture alloc] initWithImageFile:@"playful"		extension:@"png" mipmap:YES ];
-//	[ [TEITexture alloc] initWithImageFile:@"mash"	extension:@"png" mipmap:YES ];
-	
+//	[ [TEITexture alloc] initWithImageFile:@"playful"		extension:@"png" mipmap:YES ];
+	[ [TEITexture alloc] initWithImageFile:@"colored_thread_using_thread_scalar_dots"	extension:@"png" mipmap:YES ];
+
 }
 
 + (TEITexture *)particleTexture {

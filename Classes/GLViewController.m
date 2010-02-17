@@ -6,6 +6,7 @@
 //  Copyright Douglass Turner Consulting 2009. All rights reserved.
 //
 
+#import "AccelerometerSimulation.h"
 #import <AudioToolbox/AudioServices.h>
 #import <AVFoundation/AVFoundation.h>
 #import "ConstantsAndMacros.h"
