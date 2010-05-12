@@ -43,8 +43,6 @@
 
 @end
 
-
-
 @interface ParticleSystem : NSObject {
 	
     BOOL			_alive;

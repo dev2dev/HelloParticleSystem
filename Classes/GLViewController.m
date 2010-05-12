@@ -243,10 +243,10 @@ static SystemSoundID GLViewControllerSoundFX[128];
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
-	//	id thang = (id)context;
-	//	NSLog(@"Keypath(%@) Class(%@) Context(%@)", keyPath, [object class], [thang class]);
-	
-	//	if ([object isKindOfClass:[ParticleSystem class]]) {
+//	id thang = (id)context;
+//	NSLog(@"Keypath(%@) Class(%@) Context(%@)", keyPath, [object class], [thang class]);
+//	
+//	if ([object isKindOfClass:[ParticleSystem class]]) {
 	
 	if ([keyPath isEqualToString:@"alive"]) {
 		
